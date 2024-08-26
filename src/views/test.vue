@@ -7,23 +7,27 @@
                         <HeaderIns />
 
                         <div class="main-body">
-                            <div class="main-row">
+                            <div class="main-row1">
                                 <div class="main-col">
-                                    1
+                                    <div class="main-col-header">价格排行</div>
+                                    <div class="main-col-con">
+                                        <BoardIns />
+                                    </div>
                                 </div>
                                 <div class="main-col">
-                                    2
+                                    <div class="main-col-header">近期销量</div>
+                                    <div class="main-col-con">
+                                        <BarChartIns />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="main-row">
-                                <div class="mid-up">
-                                    市场总数 品种总数 品类总数 数据总量
-                                </div>
-                               <MapIns />
-                            </div>
-                            <div class="main-row">
+                            <MainBodyMid />
+                            <div class="main-row1">
                                 <div class="main-col">
-                                    3
+                                    <div class="main-col-header">市场销量</div>
+                                    <div class="main-col-con">
+                                        <RoseIns />
+                                    </div>
                                 </div>
                                 <div class="main-col">
                                     4
@@ -80,7 +84,10 @@
 <script setup>
 import HeaderIns from "@/views/Header.vue"
 import BodyIns from "@/views/Body.vue"
-import MapIns from "@/views/Map.vue"
+import RoseIns from "@/views/RoseMap.vue"
+import MainBodyMid from "@/views/Main-body-mid.vue"
+import BarChartIns from "./BarChart.vue"
+import BoardIns from "./Board.vue"
 import { ref, onMounted, reactive, defineProps, toRefs, watch } from "vue";
 const fullpageRef = ref();
 const options = reactive({
@@ -117,41 +124,59 @@ const moveToFn = () => { // 向 第几页 滚动
     // fullpage_api.moveTo(3, 0);
     // fullpage_api.moveTo(3);
 }
+
+
+
+
+
+
+
 </script>
 <style lang="less" scoped>
-.fp-watermark {
-    display: none !important;
-}
-
 .home-container {
     display: flex;
     width: 100%;
-    height:100vh;
+    height: 100vh;
     flex-direction: column;
 }
 
-.main-body{
+.main-body {
     display: flex;
     width: 100%;
-    background-color:#BACEC6 ;
-    flex-direction:row;
-    flex:1;
+    background-color: #BACEC6;
+    flex-direction: row;
+    flex: 1;
+    justify-content: space-between;
 }
-.main-row{
+
+.main-row1 {
     display: flex;
-    background-color:#BACEC6 ;
-    flex-direction:column;
-    flex:1;
+    background-color: #BACEC6;
+    flex-direction: column;
+    width: 25%;
 }
-.main-col{
+
+.main-col {
     display: flex;
     justify-content: space-between;
-    background-color:#D2DEC7 ;
-    flex:1;
+    background-color: #BACEC6;
+    flex: 1;
+    flex-direction: column;
 }
-.mid-up{
-    height: auto;
-    font-size: medium;
+
+.main-col-con {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-col-header {
+    height: 15%;
+    display: flex;
+    justify-content: center;
     color: #000000;
+    align-items: center;
+    font-size: larger;
 }
 </style>

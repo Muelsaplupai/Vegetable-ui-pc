@@ -1,12 +1,12 @@
 
 <template>
-    <div ref="monthlyIndicators" style="width: 600px; height: 400px;"></div>
+    <div ref="monthlyIndicators" style="width: 80%; height: 80%;"></div>
   </template>
   
   <script setup lang="ts">
   import { ref, onMounted, onUnmounted, nextTick } from 'vue';
   import * as echarts from 'echarts';
-  
+
   // 创建一个响应式引用来保存DOM元素
   let chartInstance:any = null;
   const monthlyIndicators = ref(null);
@@ -54,8 +54,8 @@
             borderRadius: [5, 5, 0, 0], // 只有顶部圆角
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               // 设置渐变色
-              { offset: 0, color: '#bdd1f6' },
-              { offset: 1, color: '#4282ff' },
+              { offset: 0, color: '#89B3B6' },
+              { offset: 1, color: '#123850' },
             ]),
           },
         },
@@ -67,7 +67,7 @@
           barWidth: '30%', // 调整柱子宽度
           itemStyle: {
             borderRadius: [5, 5, 0, 0], // 只有顶部圆角
-            color: '#ebf2ff', // 设置柱子颜色
+            color: '#B7C39D', // 设置柱子颜色
           },
         },
       ],

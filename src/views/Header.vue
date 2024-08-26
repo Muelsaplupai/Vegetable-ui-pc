@@ -62,7 +62,6 @@ export default {
 .el-logo{
     background-color:#EEDAAF;
 }
-
 .user{
     display: flex;
     border-radius: 50%;
@@ -88,6 +87,9 @@ export default {
     outline: 0px;
     align-items: center;
     background-color: #527865;
+}
+span{
+    color:#527865;
 }
 .search-right{
     width:15%;
