@@ -8,6 +8,11 @@ const routes = [
     name:"home",
     component: ()=>import ('../views/test.vue')
   },
+  {
+    path: "/detail",
+    name:"detail",
+    component: ()=>import ('../views/detail.vue')
+  },
 ];
 
 const router = createRouter({
