@@ -18,7 +18,8 @@ export const useMap = (
   const genAdcodeMap = (features: any[]) => {
     features.forEach((feature) => {
       const { name, adcode, level } = feature.properties;
-      adcodeMap[name] = { adcode, level };
+      const formattedName = name.replace(/省$/, '');
+      adcodeMap[formattedName] = { adcode, level };
     });
   };
   // 注册地图
@@ -37,23 +38,34 @@ export const useMap = (
   };
   // 地图点击回调
   const handleMapClick = (params: any) => {
-    const { adcode, level } = adcodeMap[params.name];
+    const name = params.name; // 点击区域的名称
+    const formattedName = name.replace(/省$/, ''); // 去掉名称中的“省”字
+    const { adcode, level } = adcodeMap[formattedName];
+    // 输出省份和市
+    if (level === "district") {
+      console.log(`您点击了市级区域: ${formattedName}`);
+    } else if (level === "province") {
+      console.log(`您点击了省级区域: ${formattedName}`);
+    } else {
+      console.log(`您点击了未知区域: ${formattedName}`);
+    }
     if (level === "district") return;
     resetLineData();
-    registerMap({ name: params.name, adcode }).then(() => {
-      currentMap.name = params.name;
+    registerMap({ name: formattedName, adcode }).then(() => {
+      currentMap.name = formattedName;
       currentMap.adcode = adcode;
-      currentMap.navList.push({ name: params.name, adcode, level });
-      setOption({ geo: { map: params.name, zoom: 1, center: undefined }, series: [{ data: [] }, { data: [] }] });
+      currentMap.navList.push({ name: formattedName, adcode, level });
+      setOption({ geo: { map: formattedName, zoom: 1, center: undefined }, series: [{ data: [] }, { data: [] }] });
     });
   };
   // 地图层级切换回调
   const handleLevelChange = (params: (typeof currentMap.navList)[number], index: number) => {
+    const formattedName = params.name.replace(/省$/, ''); // 去掉名称中的“省”字
     currentMap.navList.splice(index + 1, 9);
-    currentMap.name = params.name;
+    currentMap.name = formattedName;
     currentMap.adcode = params.adcode;
     resetLineData();
-    setOption({ geo: { map: params.name, zoom: 1, center: undefined }, series: [{ data: [] }, { data: [] }] });
+    setOption({ geo: { map:formattedName, zoom: 1, center: undefined }, series: [{ data: [] }, { data: [] }] });
   };
 
   return {

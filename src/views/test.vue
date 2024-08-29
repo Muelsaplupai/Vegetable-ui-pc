@@ -209,9 +209,13 @@ function test() {
 }
 
 function predictbegin(){
-  bus.emit("preBegin", "AnalysisAndPredictIns");
-  router.push({ path: "/detail" });
-  
+  router.push({ path: "/detail/analysis" });
+}
+function searchbegin(){
+  router.push({ path: "/detail/search" });
+}
+function newsbegin(){
+  router.push({ path: "/detail/news" });
 }
 </script>
 <style lang="less" scoped>
