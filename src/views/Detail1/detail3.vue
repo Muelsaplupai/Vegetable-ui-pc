@@ -15,12 +15,12 @@
 <script setup>
 import HeaderIns from "@/views/Header.vue"
 import HeadermainIns from "@/views/Main-1/Header-main.vue"
-import BodyIns from "@/views/Body.vue"
+import BodyIns from "@/views/Detail1/Body3.vue"
 import RoseIns from "@/views/Main-2/RoseMap.vue"
 import MainBodyMid from "@/views/Main-2/Main-body-mid.vue"
-import BarChartIns from "./Main-2/BarChart.vue"
-import BoardIns from "./Main-2/Board.vue"
-import RollIns from "./Main-2/RollNews.vue"
+import BarChartIns from "../Main-2/BarChart.vue"
+import BoardIns from "../Main-2/Board.vue"
+import RollIns from "../Main-2/RollNews.vue"
 import VideoBackground from 'vue-responsive-video-background-player';
 import { ref, onMounted, onUnmounted, reactive, defineProps, toRefs, watch } from "vue";
 import { Apple } from "@element-plus/icons-vue"

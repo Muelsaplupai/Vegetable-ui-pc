@@ -1,4 +1,5 @@
 <template>
+  <button @click="testq">111</button>
   <EasyDataTable
     :headers="headers"
     :items="items"
@@ -10,44 +11,41 @@
     alternating
   />
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import type { Header, Item } from "vue3-easy-data-table";
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { Header, Item } from "vue3-easy-data-table";
 import EasyDataTable from "vue3-easy-data-table"; // 确保你的路径和名称正确
+import axios from "axios";
 
-export default defineComponent({
-  components: {
-    EasyDataTable,
-  },
-  setup() {
-    const headers: Header[] = [
-      { text: "标题", value: "name" },
-      { text: "作者", value: "height"},
-      { text: "时间", value: "weight", sortable: true },
-    ];
+const apiUrl = "http://192.168.63.221:8081/api/article";
+//"https://apifoxmock.com/m1/5019871-4679592-default/article"
+//"http://192.168.63.221:8081/api/article";
+//
+const headers: Header[] = [
+  { text: "ID", value: "id" },
+  { text: "标题", value: "title" },
+  { text: "作者", value: "height" },
+  { text: "时间", value: "weight", sortable: true },
+];
 
-    const items: Item[] = [
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      { name: "饺子饺子饺饺子，饺子饺子饺饺子", height: "Nio", weight:7-24},
-      
-    ];
-
-    return {
-      headers,
-      items,
-    };
-  },
+function testq() {
+  console.debug(itemstest.value);
+  getTableList();
+}
+const items = ref<Item[]>([]);
+let itemstest = ref([]);
+const getTableList = async () => {
+  try {
+    const response = await axios.get(apiUrl);
+    items.value = response.data.data.articleList;
+    console.debug("catch");
+    console.debug(response.data.data.articleList);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+onMounted(() => {
+  getTableList();
 });
 </script>
 
@@ -58,16 +56,16 @@ export default defineComponent({
 
   --easy-table-header-font-size: 14px;
   --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #FFFFFF;
+  --easy-table-header-font-color: #ffffff;
   --easy-table-header-background-color: #527865;
 
   --easy-table-header-item-padding: 10px 15px;
 
   --easy-table-body-even-row-font-color: #ffffff;
-  --easy-table-body-even-row-background-color: #B0BE97;
+  --easy-table-body-even-row-background-color: #b0be97;
 
-  --easy-table-body-row-font-color: #FFFFFF;
-  --easy-table-body-row-background-color: #8AADA6;
+  --easy-table-body-row-font-color: #ffffff;
+  --easy-table-body-row-background-color: #8aada6;
   --easy-table-body-row-height: 50px;
   --easy-table-body-row-font-size: 14px;
 
@@ -77,7 +75,7 @@ export default defineComponent({
   --easy-table-body-item-padding: 10px 15px;
 
   --easy-table-footer-background-color: #527865;
-  --easy-table-footer-font-color: #FFFFFF;
+  --easy-table-footer-font-color: #ffffff;
   --easy-table-footer-font-size: 14px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;

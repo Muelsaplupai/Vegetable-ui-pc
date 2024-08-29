@@ -34,20 +34,20 @@ import MapIns from "@/views/Map.vue"
 
 .main-row2{
     display: flex;
-    background-color:#BACEC6 ;
+    background-color:transparent ;
     flex-direction:column;
     width:50%;
 }.mid-up{
     height: 22%;
     font-size: medium;
     color: #000000;
-    background-color: #BACEC6;
+    background-color:transparent;
     display: flex;
     justify-content: space-between;
     margin:0 75px;
 }
 .mid-up-item{
-    background-color: #BACEC6;
+    background-color: transparent;
     font-size:larger;
     display: flex;
     align-items: center;

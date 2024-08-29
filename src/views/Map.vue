@@ -32,7 +32,7 @@
   
   // 图表静态配置
   const chartOptions: echarts.EChartsOption = {
-    backgroundColor: "#BACEC6",
+    
     // 参考https://echarts.apache.org/zh/option.html#geo
     geo: {
       map: currentMap.name,
