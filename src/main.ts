@@ -10,6 +10,8 @@ import VideoBackground from 'vue-responsive-video-background-player';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
+import "@/assets/font/xjlFont.css";
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

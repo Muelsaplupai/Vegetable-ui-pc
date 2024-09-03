@@ -45,12 +45,12 @@ const chartOptions: echarts.EChartsOption = {
     map: currentMap.name,
     roam: true,
     scaleLimit: {
-      min: 1,
+      min: 1.3,
       max: 10,
     },
     label: {
       show: true,
-      color: "#000000",
+      color: "#FFFFFF",
       formatter: function (params) {
         // 去掉“省”字
         return params.name.replace(/省|市|自治区|特别行政区/g, "");
@@ -67,11 +67,11 @@ const chartOptions: echarts.EChartsOption = {
         colorStops: [
           {
             offset: 0,
-            color: "#FFD9A3",
+            color: "#194955",
           },
           {
             offset: 1,
-            color: "#6D8D72",
+            color: "#194955",
           },
         ],
       },
@@ -156,12 +156,12 @@ body {
   position: relative;
   .map-info {
     height: 300px;
-    color: red;
+    color: #194955;
     font-weight: 600;
     font-size: 18px;
     position: absolute;
     top: 0;
-    left: 0;
+    left: 10%;
     z-index: 9;
     .nav-item {
       .item-title {

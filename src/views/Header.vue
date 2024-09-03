@@ -3,22 +3,35 @@
     ><!-- 头部区 -->
     <div>
       <img src="../assets/logo.png" alt="" height="90px" />
-      <span>农产品市场大数据系统</span>
     </div>
 
-    <div class="search-box">
-      <input type="text" class="search-left" />
-      <button class="search-right" @click="search">
-        <el-icon :size="20">
-          <Search />
-        </el-icon>
-      </button>
-    </div>
+    <div class="title">
+        <div class="title-left">
+          <router-link to="/detail/mainmap">
+            <div class="nav">首页大屏</div>
+          </router-link>
+          <router-link to="/detail/search">
+            <div class="nav">价格查询</div>
+          </router-link>
+          <router-link to="/detail/analysis">
+            <div class="nav">产品分析</div>
+          </router-link>
+          <router-link to="/detail/news">
+            <div class="nav">农讯指南</div>
+          </router-link>
+          <router-link to="/detail/advice">
+            <div class="nav">企业市场</div>
+          </router-link>
+          <router-link to="/detail/advice">
+            <div class="nav">供需出口</div>
+          </router-link>
+        </div>
+      </div>
 
-    <div flex-end>
-      <span>注册/登录</span>
+    <div flex-end >
+      <div style="font-size: 80%; margin-right: 10%; width:100px; color:#527865">登录/注册</div>
       <button class="user" @click="reg">
-        <el-icon :size="size" :color="color">
+        <el-icon style="color: #ffffff;">
           <User />
         </el-icon>
       </button>
@@ -32,10 +45,7 @@ let isOpen = ref('Expand');
 function reg() {
   console.debug("reg");
 }
-function test()
-{
-    isOpen.value='Collapse';
-}
+
 function search() {
   console.debug("search");
 }
@@ -124,5 +134,28 @@ span {
   border-top-right-radius: 25px;
   outline: none;
   align-items: center;
+}
+
+.title {
+  height: 70px;
+  width: 900px;
+  background-color: transparent;
+  margin-bottom: 30px;
+}
+.title-left {
+  width: 900px;
+  height: 48px;
+  background: transparent;
+  display: flex;
+  margin-bottom: 10px;
+}
+.nav {
+  font-size: 16px;
+  color: #527865;
+  width: 100px;
+}
+.nav:hover {
+  color: #527865;
+  font-weight: 600;
 }
 </style>

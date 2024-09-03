@@ -1,63 +1,104 @@
 <template>
-    <div class="main-row2">
-        <div class="mid-up">
-            <div class="mid-up-item">
-                市场总数<br><br>
-                xx
-            </div>
-            <div class="mid-up-item">
-                品种总数<br><br>
-                xx
-            </div>
-            <div class="mid-up-item">
-                品类总数<br><br>
-                xx
-            </div>
-            <div class="mid-up-item">
-                数据总量<br><br>
-                xx
-            </div>
-
-        </div>
-        <div class="mid-bottom">
-            <MapIns />
-        </div>
-
+  <div class="main-row2">
+    <div class="mid-up">
+      <div class="mid-up-item1">
+        市场总数<br /><br />
+        {{ data1 }}
+      </div>
+      <div class="mid-up-item">
+        品种总数<br /><br />
+        {{ data2 }}
+      </div>
+      <div class="mid-up-item">
+        品类总数<br /><br />
+        {{ data3 }}
+      </div>
+      <div class="mid-up-item2">
+        数据总量<br /><br />
+        {{ data4 }}
+      </div>
     </div>
+    <div class="mid-bottom">
+      <MapIns />
+    </div>
+  </div>
 </template>
 
 <script setup>
-import MapIns from "@/views/Map.vue"
+import MapIns from "@/views/Map.vue";
+import axios from "axios";
+import { onMounted, ref } from 'vue';  
+import * as echarts from 'echarts';  
+
+const data1=ref(0);
+
+const data2=ref(0);
+
+const data3=ref(0);
+
+const data4=ref(0);
+
+const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/data";  
+onMounted(async () => {
+  try {
+    const response = await axios.get(apiUrl);
+
+    console.debug("catchdata");
+    console.debug(response.data);
+    data1.value=response.data.data.pzCount;
+    data2.value=response.data.data.marketCount;
+    data3.value=response.data.data.articleCount;
+    data4.value=response.data.data.dataCount;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
 </script>
 
 <style scoped>
-
-.main-row2{
-    display: flex;
-    background-color:transparent ;
-    flex-direction:column;
-    width:50%;
-}.mid-up{
-    height: 22%;
-    font-size: medium;
-    color: #000000;
-    background-color:transparent;
-    display: flex;
-    justify-content: space-between;
-    margin:0 75px;
+.main-row2 {
+  display: flex;
+  background-color: transparent;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
 }
-.mid-up-item{
-    background-color: transparent;
-    font-size:larger;
-    display: flex;
-    align-items: center;
-
-}.mid-bottom{
-    height: 78%;
-
-    font-size: medium;
-    color: #000000;
-    
+.mid-up {
+  height: 22%;
+  width: 90%;
+  font-size: medium;
+  color: #000000;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 75px;
+  margin-top: 20px;
+  border-radius: 20px;
+  color: #194955;
 }
-
+.mid-up-item {
+  background-color: transparent;
+  font-size: 150%;
+  display: flex;
+  align-items: center;
+}
+.mid-up-item1 {
+  background-color: transparent;
+  font-size: 150%;
+  display: flex;
+  align-items: center;
+}
+.mid-up-item2 {
+  background-color: transparent;
+  font-size: 150%;
+  display: flex;
+  align-items: center;
+}
+.mid-bottom {
+  height: 78%;
+  width: 90%;
+  font-size: medium;
+  color: #000000;
+}
 </style>

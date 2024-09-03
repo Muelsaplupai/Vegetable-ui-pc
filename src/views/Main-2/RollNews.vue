@@ -17,6 +17,9 @@
             <div>3</div>
             <div>4</div>
             <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
         </div>
     </div>
 </template>
@@ -44,8 +47,8 @@ export default {
         position: relative;
         background-color: #a4ffcc;
         /* 父容器需要有明确的高度 */
-        height: 150px;
-        width: 200px;
+        height: 200px;
+        width: 300px;
         margin: auto;
         overflow: hidden;
     }
@@ -67,7 +70,7 @@ export default {
         width: 100%;
         /* 滚动的项目需要有具体的高度 */
         height: 30px;
-        background-color: #067B9E;
+        background-color: #81b0b2;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -75,7 +78,7 @@ export default {
     }
 
     .container > .scroll-list > div:nth-child(2n) {
-        background-color: #30A4A1;
+        background-color: #e2f2f6;
     }
 
     @keyframes scroll {

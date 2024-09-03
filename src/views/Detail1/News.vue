@@ -1,15 +1,18 @@
 <template>
-  <button @click="testq">111</button>
-  <EasyDataTable
-    :headers="headers"
-    :items="items"
-    theme-color="#1d90ff"
-    table-class-name="customize-table"
-    header-text-direction="center"
-    body-text-direction="center"
-    :rows-per-page="10"
-    alternating
-  />
+  <div>
+    <button @click="testq">111</button>
+    <EasyDataTable
+      :headers="headers"
+      :items="items"
+      theme-color="#1d90ff"
+      table-class-name="customize-table"
+      header-text-direction="center"
+      body-text-direction="center"
+      :rows-per-page="10"
+      alternating
+      table-min-height="550"
+    />
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
@@ -37,9 +40,9 @@ let itemstest = ref([]);
 const getTableList = async () => {
   try {
     const response = await axios.get(apiUrl);
-    items.value = response.data.data.articleList;
+    items.value = response.data.data;
     console.debug("catch");
-    console.debug(response.data.data.articleList);
+    console.debug(response.data.data);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

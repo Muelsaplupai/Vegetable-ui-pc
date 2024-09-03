@@ -1,0 +1,153 @@
+<template>
+  <div class="line">
+    <div class="line1">
+      <div class="line2">
+        <div class="text3">
+          <div class="spstyle1">农产品批发价格200指数</div>
+          <div class="spstyle2">188</div>
+          <div class="spstyle3" >-0.01 较昨日</div>
+          <div class="spstyle3" >-0.01 较前日</div>
+          <div class="spstyle3" >-0.01 较5天前</div>
+        </div>
+      </div>
+    </div>
+    <div class="line1">
+      <div class="line2">
+        <img src="@/assets/logo15.png" class="sleimg1" />
+        <div class="text1">
+          <div class="special-style1">粮食指数</div>
+          <div class="special-style2">188</div>
+          <div class="special-style3">-0.01 较昨日</div>
+        </div>
+      </div>
+      <div class="line2">
+        <img src="@/assets/logo16.png" class="sleimg" />
+        <div class="text2">
+          <div class="special-style1">食用油指数</div>
+          <div class="special-style2">188</div>
+          <div class="special-style3">-0.01 较昨日</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+</script>
+
+<style scoped>
+.line {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-left: 80px;
+  margin-top: 20px;
+  margin-right: 70px;
+}
+
+.line1 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.line2 {
+  width: 250px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.sleimg {
+  width: 70px;
+  height: 70px;
+  margin-top: 10%;
+}
+.sleimg1 {
+  width: 60px;
+  height: 60px;
+  margin-top: 10%;
+  margin-left: 5px;
+}
+.special-style1 {
+  font-size: 90%;
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.special-style2 {
+  font-size: 170%;
+  font-weight: 500;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.text1 {
+  color: #527865;
+  font-size: 140%;
+  margin-top: 10px;
+  display: flex;
+  margin-left: 20px;
+  flex-direction: column;
+}
+.text2 {
+  color: #527865;
+  font-size: 140%;
+  margin-top: 10px;
+  display: flex;
+  margin-left: 15px;
+  flex-direction: column;
+}
+.text3 {
+  color: #527865;
+  font-size: 140%;
+  margin-top: 10px;
+  display: flex;
+  margin-left: 40px;
+  flex-direction: column;
+}
+.special-style3 {
+  font-size: 90%;
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.spstyle1 {
+  font-size: 90%;
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.spstyle2 {
+  font-size: 200%;
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  margin-left: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+.spstyle3 {
+  font-size: 90%;
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+</style>

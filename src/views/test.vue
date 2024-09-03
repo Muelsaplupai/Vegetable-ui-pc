@@ -9,61 +9,108 @@
             <div>
               <video-background
                 ref="videobackground"
-                src="src/assets/test1.mp4"
+                src="src/assets/back1.mp4"
                 style="max-height: 100%; height: 100vh"
               >
                 <div class="maintext">
-                  创意无限<br /><br />
-                  力启未来
+                  智 领 南 山<br /><br />
+                  数 赢 未 来
                   <LoginIns />
                   <RegisterIns />
                 </div>
                 <br /><br /><br />
-                <button class="mainbutton" @click="loading">点击详情</button>
+                <button class="mainbutton" @click="loading">进入详情 - 总览数据</button>
               </video-background>
             </div>
           </el-container>
         </div>
       </div>
       <div class="section">
-        <div class="mainimg"></div>
-        <div class="mainimg2"></div>
-        <el-container class="home-container2">
-          <div class="main-body">
-            <div class="main-row1">
-              <div class="main-col">
-                <div class="main-col-header">价格排行</div>
-                <div class="main-col-con">
-                  <BoardIns />
-                </div>
-              </div>
-              <div class="main-col">
-                <div class="main-col-header">近期销量</div>
-                <div class="main-col-con">
-                  <BarChartIns />
-                </div>
-              </div>
+        <transition name="slide-up">
+          <div class="text3" v-show="isActive1 === true">
+            <div class="maintext31">
+              重新定义<br /><br />
+              数据预测
             </div>
-            <MainBodyMid />
-            <div class="main-row1">
-              <div class="main-col">
-                <div class="main-col-header">市场销量</div>
-                <div class="main-col-con">
-                  <RoseIns />
-                </div>
-              </div>
-              <div class="main-col">
-                <div class="main-col-header">市场销量</div>
-                <div class="main-col-con">
-                  <RollIns />
-                </div>
-              </div>
-            </div>
+            <br /><br /><br />
+            <button class="pagethirdbutton1" @click="predictbegin">点击详情</button>
           </div>
-        </el-container>
+        </transition>
+        <transition name="slide-up">
+          <div class="text3" v-show="isActive2 === true">
+            <div class="maintext31">
+              大千世界<br /><br />
+              监控全局
+            </div>
+            <br /><br /><br />
+            <button class="pagethirdbutton1" @click="predictbegin">点击详情</button>
+          </div></transition
+        >
+        <transition name="slide-up" v-show="isActive3 === true">
+          <div class="text3" >
+            <div class="maintext31">
+              最新动态<br /><br />
+              洞悉未来
+            </div>
+            <br /><br /><br />
+            <button class="pagethirdbutton1" @click="predictbegin">点击详情</button>
+          </div></transition
+        >
+        <div
+          class="bottomtexttop"
+          v-show="isActive1 === false && isActive2 === false && isActive3 === false"
+        ></div>
+        <div
+          class="bottomtexttoptextback"
+          v-show="isActive1 === false && isActive2 === false && isActive3 === false"
+        >
+          <div class="bottomtexttopsmalltext">解决方案</div>
+          <div class="bottomtexttoptext">
+            为<span class="special-style">农产品交易</span>提供解决方案
+          </div>
+        </div>
+        <div class="bottomtextback"></div>
+        <div class="bottomtext">
+          <button
+            class="bottomtextItem"
+            :class="{ active: isActive1 }"
+            @click="cycleclick(0)"
+          >
+            数据查询
+          </button>
+          <button
+            class="bottomtextItem"
+            :class="{ active: isActive2 }"
+            @click="cycleclick(1)"
+          >
+            预测分析
+          </button>
+          <button
+            class="bottomtextItem"
+            :class="{ active: isActive3 }"
+            @click="cycleclick(2)"
+          >
+            新闻动态
+          </button>
+        </div>
+        <div class="container">
+          <transition-group name="expand" tag="div" class="divs">
+            <div
+              v-for="(width, index) in widths"
+              :key="index"
+              :style="{
+                width: width,
+                backgroundSize: 'cover',
+                backgroundPosition: 'top right',
+                transition: 'width 1s ease',
+              }"
+              :class="'div' + index"
+            ></div>
+          </transition-group>
+        </div>
       </div>
-      <div class="section">
-        <div class="slide">
+      <!-- <div class="section">
+        <div class="slide" style="width: 500px">
           <div class="text3">
             <div class="maintext31">
               重新定义<br /><br />
@@ -103,7 +150,7 @@
             <el-container class="home-container33"> </el-container>
           </div>
         </div>
-      </div>
+      </div> -->
     </full-page>
   </div>
 </template>
@@ -124,7 +171,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import bus from "@/views/Main-1/bus";
 // 替换为你的 Apifox Mock URL
-const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/prvc";
+const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/price/twoindex";
 const items = ref([]);
 
 onMounted(async () => {
@@ -132,7 +179,7 @@ onMounted(async () => {
     const response = await axios.get(apiUrl);
     items.value = response.data;
     console.debug("catch");
-    console.debug(response.data.data.prvcList[0]);
+    console.debug(response.data);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -143,10 +190,76 @@ const videobackground = ref();
 
 let index = ref();
 let indexleave = ref();
+
+const isActive1 = ref(false);
+const isActive2 = ref(false);
+const isActive3 = ref(false);
+const setActive = (index) => {
+  // 重置所有按钮的状态
+  isActive1.value = false;
+  isActive2.value = false;
+  isActive3.value = false;
+
+  // 根据传入的索引设置对应按钮的状态
+  switch (index) {
+    case 2:
+      isActive1.value = true;
+      break;
+    case 3:
+      isActive2.value = true;
+      break;
+    case 1:
+      isActive3.value = true;
+      break;
+  }
+};
+
+const widths = ref(["520px", "520px", "520px"]); // 初始宽度
+const colors = ref(["red", "blue", "green"]); // 为每个div设置不同的背景颜色
+const images = ref([
+  "@/assets/background2.jpg",
+  "@/assets/background5.jpg",
+  "@/assets/background4.jpg",
+]); // 为每个div设置不同的背景颜色
+
+const currentIndex = ref(0);
+const booljus = ref(true);
+const cycleAnimations = () => {
+  setTimeout(() => {
+    setActive(currentIndex.value+1);
+    }, 0);
+  
+  const newWidths = ["520px", "520px", "520px"]; // 重置宽度
+  newWidths[currentIndex.value] = "1560px"; // 当前索引的div扩展
+
+  newWidths[(currentIndex.value + 1) % 3] = "0px";
+  newWidths[(currentIndex.value + 2) % 3] = "0px";
+
+  // 更新状态和宽度
+  currentIndex.value = (currentIndex.value + 1) % 3;
+  widths.value = newWidths;
+  console.debug( currentIndex.value);
+};
+const cycleclick = (value) => {
+  setTimeout(() => {
+      setActive(value + 1);
+    }, 0);
+  const newWidths = ["520px", "520px", "520px"]; // 重置宽度
+  newWidths[value] = "1560px"; // 当前索引的div扩展
+
+  newWidths[(value + 1) % 3] = "0px";
+  newWidths[(value + 2) % 3] = "0px";
+
+  // 更新状态和宽度
+  currentIndex.value = (value + 1) % 3;
+  console.debug(currentIndex.value);
+  widths.value = newWidths;
+};
 const options = reactive({
   licenseKey: "OPEN-SOURCE-GPLV3-LICENSE",
   //是否显示导航，默认为false
   navigation: false,
+  controlArrows: false,
   //为每个section设置背景色
   // sectionsColor: [
   //     "#BACEC6", "#BACEC6", "#BACEC6",
@@ -155,14 +268,21 @@ const options = reactive({
   // ],
   afterLoad: (origin, destination, direction) => {
     index = destination.index + 1;
+    //console.debug('!!!'+index.value);
     if (index === 1) {
       testw(index);
     }
   },
   onLeave: (origin, destination, direction) => {
     indexleave = origin.index + 1;
-    console.debug(indexleave);
-    if (index === 1) {
+    //console.debug('???'+indexleave);
+    if (index === 2) {
+      const temwidths = ["520px", "520px", "520px"]; // 初始宽度
+      widths.value = temwidths;
+      currentIndex.value = 0;
+      isActive1.value = false;
+      isActive2.value = false;
+      isActive3.value = false;
     }
   },
 });
@@ -208,15 +328,50 @@ function test() {
   console.debug(showmask.value);
 }
 
-function predictbegin(){
+function predictbegin() {
   router.push({ path: "/detail/analysis" });
 }
-function searchbegin(){
+function searchbegin() {
   router.push({ path: "/detail/search" });
 }
-function newsbegin(){
+function newsbegin() {
   router.push({ path: "/detail/news" });
 }
+
+// 创建响应式变量
+const initialIndex = ref(0); // 假设这是你的初始索引
+
+
+// 监听鼠标滚动事件
+function handleScroll(e) {
+  // 判断滚动方向
+  let direction = e.deltaY > 0 ? "down" : "up";
+  //console.debug(e.deltaY);
+  // 处理滚动逻辑
+  // if (direction === "down" && e.deltaY >= 100 && index === 2) {
+  //   rightFn();
+  // }
+
+  // if (direction === "up" && e.deltaY <= -100 && index === 2) {
+  //   //fullpageRef?.value?.api.setAllowScrolling(false);
+  //   leftFn();
+  // }
+
+  if (direction === "down" && e.deltaY >= 100 && index === 2 && booljus.value) {
+    booljus.value = false;
+    //console.debug("111111!!!!!!");
+
+    cycleAnimations();
+    setTimeout(() => {
+      booljus.value = true;
+    }, 1000);
+  }
+}
+
+// 组件挂载时添加事件监听器
+onMounted(() => {
+  window.addEventListener("wheel", handleScroll); // 注意：'mousewheel' 在某些浏览器中可能不被支持，建议使用 'wheel'
+});
 </script>
 <style lang="less" scoped>
 .home-container {
@@ -281,26 +436,9 @@ function newsbegin(){
 
 .main-col {
   display: flex;
-  justify-content: space-between;
   background-color: transparent;
   flex: 1;
   flex-direction: column;
-}
-
-.main-col-con {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-}
-
-.main-col-header {
-  height: 15%;
-  display: flex;
-  justify-content: center;
-  color: #000000;
-  align-items: center;
-  font-size: larger;
 }
 
 .maintext {
@@ -314,13 +452,12 @@ function newsbegin(){
 }
 .maintext31 {
   display: flex;
-  margin-top: 300px;
-  justify-content: center;
+  margin-top: 220px;
+  margin-left: 100px;
   color: #527865;
   align-items: center;
   font-size: 350%;
   font-weight: 800;
-  margin-left: 80%;
 }
 .maintext32 {
   display: flex;
@@ -344,11 +481,14 @@ function newsbegin(){
 }
 .text3 {
   position: absolute;
-  color: #527865;
-  z-index: 9;
+  margin-left: 0;
+  color: #ffffff;
+  z-index: 12;
+  transform: translateY(0);
+  transition: transform 0.75s ease; /* 平滑过渡效果 */
 }
 .mainbutton {
-  width: 170px;
+  width: 210px;
   height: 40px;
   font-size: 150%;
   font-weight: 300;
@@ -358,6 +498,7 @@ function newsbegin(){
   z-index: 9;
   align-items: center;
   justify-content: center;
+  border-radius: 10px;
 }
 .pagethirdbutton1 {
   margin-left: 680px;
@@ -370,7 +511,7 @@ function newsbegin(){
   color: #527865;
   z-index: 9;
   align-items: center;
-  justify-content: center;
+  margin-left: 100px;
 }
 .pagethirdbutton2 {
   margin-left: 680px;
@@ -400,7 +541,7 @@ function newsbegin(){
 }
 .mainimg {
   text-align: center;
-  background-image: url("@/assets/background1.jpg");
+  background-image: url("@/assets/background6.jpg");
   z-index: 1;
   width: 100%; //大小设置为100%
   height: 100%; //大小设置为100%
@@ -413,7 +554,7 @@ function newsbegin(){
   width: 100%; //大小设置为100%
   height: 100%; //大小设置为100%
   background-size: 100% 100%;
-  opacity: 0.75;
+  opacity: 0.8;
   background-color: #bacec6;
   position: absolute;
 }
@@ -438,4 +579,156 @@ function newsbegin(){
   height: 100%; //大小设置为100%
   background-size: 100% 100%;
 }
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: transparent;
+}
+
+.divs {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.div0 {
+  flex: 0 0 auto; /* 禁用flex的伸缩性，使div保持固定宽度 */
+  height: 1000px;
+  background-position: center; /* 确保背景图片居中 */
+  z-index: 9;
+  background-image: url("@/assets/background7.jpg");
+  /* 注意：我们不在这里设置transition，而是在v-for中的:style中设置 */
+}
+.div1 {
+  flex: 0 0 auto; /* 禁用flex的伸缩性，使div保持固定宽度 */
+  height: 1000px;
+  background-position: center; /* 确保背景图片居中 */
+  z-index: 9;
+  background-image: url("@/assets/background8.jpg");
+  /* 注意：我们不在这里设置transition，而是在v-for中的:style中设置 */
+}
+.div2 {
+  flex: 0 0 auto; /* 禁用flex的伸缩性，使div保持固定宽度 */
+  height: 1000px;
+  background-position: center; /* 确保背景图片居中 */
+  z-index: 9;
+  background-image: url("@/assets/background2.jpg");
+  /* 注意：我们不在这里设置transition，而是在v-for中的:style中设置 */
+}
+/* 定义过渡效果 */
+.expand-enter-active,
+.expand-leave-active {
+  transition: width 2s ease;
+}
+.expand-enter-from,
+.expand-leave-to {
+  width: 0; /* 对于离开动画，我们实际上不需要设置这个，因为Vue会处理 */
+}
+.expand-enter-to,
+.expand-leave-from {
+  /* 这里不需要特别设置，因为宽度是动态绑定的 */
+}
+//第二张的底部
+.bottomtext {
+  position: absolute;
+  background-color: transparent;
+  height: 100px;
+  width: 100%;
+  margin-top: 650px;
+  z-index: 11;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+}
+.bottomtextback {
+  position: absolute;
+  background-color: #527865;
+  height: 100px;
+  width: 100%;
+  margin-top: 650px;
+  z-index: 10;
+  opacity: 0.5;
+}
+.bottomtexttop {
+  position: absolute;
+  background-color: #527865;
+  height: 650px;
+  width: 100%;
+  margin-bottom: 100px;
+  z-index: 10;
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bottomtexttoptextback {
+  position: absolute;
+  background-color: transparent;
+  height: 650px;
+  width: 100%;
+  margin-bottom: 100px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.bottomtexttoptext {
+  z-index: 13;
+  color: #ffffff;
+  font-size: 500%;
+  font-weight: 900;
+}
+.bottomtexttopsmalltext {
+  z-index: 13;
+  color: #ffffff;
+  font-size: 150%;
+  font-weight: 600;
+  margin-bottom: 1%;
+}
+.special-style {
+  z-index: 13;
+  color: #b0d468;
+  font-size: 100%;
+  font-weight: 900;
+}
+.bottomtextItem {
+  background-color: transparent;
+  height: 100px;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-size: 150%;
+  color: #ffffff;
+}
+.bottomtextItem:hover {
+  font-weight: 900;
+  font-size: 150%;
+  color: #b0d468;
+}
+.bottomtextItem.active {
+  font-weight: 900;
+  color: #b0d468;
+  font-size: 150%;
+}
+
+.slide-up-enter-active {
+  transition: transform 0.75s;
+}
+.slide-up-leave-active {
+  transition: transform 0s;
+}
+.slide-up-enter-from {
+  /* 向上移动的距离，可以根据需要调整 */
+  transform: translateY(50px);
+}
+
 </style>

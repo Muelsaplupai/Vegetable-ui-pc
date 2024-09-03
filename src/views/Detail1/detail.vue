@@ -1,7 +1,8 @@
 <template>
 
-
-    <div style="text-align: center">
+<div class="mainimg"></div>
+  <div class="mainimg2"></div>
+    <div style="text-align: center; background-color: #BACEC6;">
         <el-container class="home-container">
             <HeaderIns />
 
@@ -13,7 +14,7 @@
 
 </template>
 <script setup>
-import HeaderIns from "@/views/Header.vue"
+import HeaderIns from "@/views/Main-1/Header-main.vue"
 import HeadermainIns from "@/views/Main-1/Header-main.vue"
 import BodyIns from "@/views/Detail1/Body.vue"
 import RoseIns from "@/views/Main-2/RoseMap.vue"
@@ -198,13 +199,26 @@ function loading() {
     justify-content: center;
 }
 
+
 .mainimg {
-    text-align: center;
-    background-image: url("@/assets/background1.jpg");
-    z-index: 1;
-    width: 100%; //大小设置为100%
-    height: 100%; //大小设置为100%
-    background-size: 100% 100%;
+  text-align: center;
+  background-image: url("@/assets/background6.jpg");
+  z-index: 1;
+  width: 100%; //大小设置为100%
+  height: 100%; //大小设置为100%
+  background-size: 100% 100%;
+  position: absolute;
+  border-radius: 10px;
+}
+.mainimg2 {
+  text-align: center;
+  z-index: 2;
+  width: 100%; //大小设置为100%
+  height: 100%; //大小设置为100%
+  background-size: 100% 100%;
+  opacity: 0.8;
+  background-color: #bacec6;
+  position: absolute;
 }
 
 .mainimg31 {

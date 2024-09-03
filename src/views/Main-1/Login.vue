@@ -161,7 +161,7 @@ function logpwd() {
   width: 25%;
   margin-top: 7%;
   margin-left: 5%;
-  border-radius: 30px;
+  border-radius: 5px;
   flex-direction: column;
 }
 .closeBtn {
