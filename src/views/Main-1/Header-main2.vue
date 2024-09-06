@@ -8,19 +8,19 @@
       <div class="title">
         <div class="title-left">
           <router-link to="/detail/mainmap">
-            <div class="nav">数据大屏</div>
+            <div class="nav" :class="{ active: isActive1 }">数据大屏</div>
           </router-link>
           <router-link to="/detail/search">
-            <div class="nav">价格查询</div>
+            <div class="nav" :class="{ active: isActive2 }">价格查询</div>
           </router-link>
           <router-link to="/detail/analysis">
-            <div class="nav">产品分析</div>
+            <div class="nav" :class="{ active: isActive3 }">产品分析</div>
           </router-link>
           <router-link to="/detail/news">
-            <div class="nav">农讯指南</div>
+            <div class="nav" :class="{ active: isActive4 }">农讯指南</div>
           </router-link>
           <router-link to="/detail/company">
-            <div class="nav">企业市场</div>
+            <div class="nav" :class="{ active: isActive5 }">企业市场</div>
           </router-link>
           <router-link to="/">
             <div class="nav">回到主页</div>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div flex-end>
-      <button class="regbutton" @click="reg">{{username}}</button>
+      <button class="regbutton" @click="reg">{{ username }}</button>
       <button class="user" @click="reg">
         <el-icon style="color: #ffffff">
           <User />
@@ -40,26 +40,64 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import bus from "./bus";
+import { defineComponent, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 const username=ref("登录/注册");
 onMounted(() => {
-  bus.on("username", (e: any) => {
+  bus.on("username1", (e: any) => {
     // 传参由回调函数中的形参接受
     const name=e;
     username.value = name;
   });
 });
+
 const reg = () => {
   bus.emit("loginBegin", "true");
   bus.emit("maskBegin", "true");
 };
+const isActive1 = ref();
+const isActive2 = ref();
+const isActive3 = ref();
+const isActive4 = ref();
+const isActive5 = ref();
+const router = useRouter();
+watch(
+  () => router.currentRoute.value.path,
+  (toPath) => {
+    //要执行的方法
+    console.log("router", router.currentRoute.value.fullPath);
+    changeact(router.currentRoute.value.fullPath);
+  },
+  { immediate: true, deep: true }
+);
+
+function changeact(tem) {
+  if (tem === "/detail/news") {
+    isActive1.value=isActive2.value=isActive3.value=isActive4.value=isActive5.value=false;
+    isActive4.value=true;
+  } else if (tem === "/detail/analysis") {
+    isActive1.value=isActive2.value=isActive3.value=isActive4.value=isActive5.value=false;
+    isActive3.value=true;
+  } else if (tem === "/detail/search") {
+    isActive1.value=isActive2.value=isActive3.value=isActive4.value=isActive5.value=false;
+    isActive2.value=true;
+  } else if (tem === "/detail/mainmap") {
+    isActive1.value=isActive2.value=isActive3.value=isActive4.value=isActive5.value=false;
+    isActive1.value=true;
+  } else if (tem === "/detail/company") {
+    isActive1.value=isActive2.value=isActive3.value=isActive4.value=isActive5.value=false;
+    isActive5.value=true;
+  }
+}
+
 </script>
 
 <style lang="less" scoped>
 .back {
-  background-color: #bacec6;
-  opacity: 0.4;
+  background-color: #155f3a;
+  opacity: 0.75;
   height: 70px;
   position: absolute;
   z-index: 1;
@@ -70,7 +108,7 @@ const reg = () => {
   display: flex; //设置显示为flex布局
   justify-content: space-between; //设置为flex左右布局
   padding-left: 0; //左内边距为0（Logo贴左边）
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(2px);
   font-size: 23px;
 
   > div {
@@ -132,9 +170,13 @@ span {
   color: #527865;
   width: 100px;
 }
+.nav.active {
+  color: #527865;
+  font-weight: 1000;
+}
 .nav:hover {
   color: #527865;
-  font-weight: 600;
+  font-weight: 1000;
 }
 a {
   width: 70px;
@@ -189,7 +231,7 @@ a {
   border: none;
 }
 
-.regbutton:hover{
+.regbutton:hover {
   font-weight: 800;
 }
 </style>

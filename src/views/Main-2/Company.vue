@@ -1,359 +1,326 @@
 <template>
   <div class="back"></div>
   <div class="container">
-    <div class="items">
-      <div v-for="(item, index) in List1" :key="index" class="item">
-        <a :href="item.link" target="_blank" class="title">{{ item.title }}</a>
-        <div class="content">{{ item.brief }}</div>
-        <div class="date">{{ item.releaseDate }}</div>
+    <div class="selectContainer">
+      <div class="typeSelect">
+        <div class="text1">类型:</div>
+        <el-radio-group v-model="radio1" class="select1">
+          <el-radio value="1" size="large">供应</el-radio>
+          <el-radio value="2" size="large">求购</el-radio>
+          <el-radio value="3" size="large">供应和求购</el-radio>
+        </el-radio-group>
+      </div>
+      <div class="prvcSelect">
+        <div class="text1">省份:</div>
+        <el-select v-model="selectedProvince" placeholder="请选择省份" class="select2">
+          <el-option
+            style="width: 100px"
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </div>
     </div>
+
+    <el-scrollbar class="marketScrollbar">
+      <div v-for="(items, rowIndex) in list" :key="rowIndex" class="row">
+        <div v-for="(item, colIndex) in items" :key="colIndex" class="cell">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              flex-direction: column;
+              justify-content: space-between;
+              align-items: self-start;
+              margin-bottom: 5%;
+              margin-top: 5%;
+            "
+          >
+            <div style="font-size: 200%; font-weight: 600; text-align: center">
+              蔬菜加工供应及求购
+            </div>
+            <div style="display: flex; flex-direction: row; align-items: center">
+              <div
+                class="sleimg"
+                style="display: flex; flex-direction: row; align-items: center"
+              ></div>
+              <div style="margin-left: 20px">李军先生</div>
+            </div>
+            <div style="display: flex; flex-direction: row; align-items: center">
+              <div
+                class="sleimg2"
+                style="display: flex; flex-direction: row; align-items: center"
+              ></div>
+              <div style="margin-left: 20px">13369911556</div>
+            </div>
+            <div>新疆 > 昌吉 > 昌吉 > 歧峰农贸市场</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-pagination-block">
+        <el-pagination
+          v-model:current-page="pageNum"
+          :page-size="pageSize"
+          :size="size"
+          :disabled="disabled"
+          :background="background"
+          layout="total, prev, pager, next"
+          :total="totalLine"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-scrollbar>
   </div>
+
+  <!-- <div v-for="index in 10" :key="index">
+        <el-card class="marketCard">
+          <template #header>
+            <div class="card-header">
+              <span>111</span>
+            </div>
+          </template>
+          <p v-for="o in 4" :key="o" class="text item">{{ "List item " + o }}</p>
+          <template #footer>Footer content</template>
+        </el-card>
+      </div> -->
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
-import axios from "axios"; // 确保已安装axios
-const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/article/news";
-const apiUrl1 = "https://apifoxmock.com/m1/5019871-4679592-default/article/guide";
-const dataToSend = {
-  key1: "value1",
-  key2: "value2",
-  key3: "value3",
-  key4: "value4",
+<script lang="ts" setup>
+import { ref, onMounted } from "vue";
+import type { ComponentSize } from "element-plus";
+import { ElSelect, ElOption } from "element-plus";
+import axios from "axios";
+
+const finalL1 = ref();
+const list = [
+  ["Item 1-1", "Item 1-2", "Item 1-3", "Item 1-4"],
+  ["Item 2-1", "Item 2-2", "Item 2-3", "Item 2-4"],
+  ["Item 3-1", "Item 3-2", "Item 3-3", "Item 3-4"],
+];
+const pageSize = ref(10);
+const pageNum = ref(1);
+const totalLine = ref(50);
+const size = ref<ComponentSize>("default");
+const background = ref(false);
+const disabled = ref(false);
+const radio1 = ref("1");
+const value = ref("");
+const selectedProvince = ref();
+
+const handleCurrentChange = (val) => {
+  console.log(`current page: ${val}`);
+  pageNum.value = val; // 更新当前页码
+  // search(); // 根据新的当前页码获取数据
 };
 
-const config = {
-  headers: {
-    "Content-Type": "application/json",
-    // 其他需要设置的header
-    Authorization: "Bearer your_token_here", // 示例：使用Bearer token
-  },
-};
-const dataToSend1 = {
-  key1: "value1",
-  key2: "value2",
-  key3: "value3",
-  key4: "value4",
-};
-const token = ref("your_token_here");
-const config1 = {
-  headers: {
-    "Content-Type": "application/json",
-    // 其他需要设置的header
-    Authorization: "Bearer ${token.value}", // 示例：使用Bearer token
-  },
-};
-const charts = ref(null);
-const List = ref();
-const List1 = ref();
+const options = [
+  { value: "北京", label: "北京" },
+  { value: "天津", label: "天津" },
+  { value: "河北", label: "河北" },
+  { value: "山西", label: "山西" },
+  { value: "内蒙古", label: "内蒙古" },
+  { value: "辽宁", label: "辽宁" },
+  { value: "吉林", label: "吉林" },
+  { value: "黑龙江", label: "黑龙江" },
+  { value: "上海", label: "上海" },
+  { value: "江苏", label: "江苏" },
+  { value: "浙江", label: "浙江" },
+  { value: "安徽", label: "安徽" },
+  { value: "福建", label: "福建" },
+  { value: "江西", label: "江西" },
+  { value: "山东", label: "山东" },
+  { value: "河南", label: "河南" },
+  { value: "湖北", label: "湖北" },
+  { value: "湖南", label: "湖南" },
+  { value: "广东", label: "广东" },
+  { value: "广西", label: "广西" },
+  { value: "海南", label: "海南" },
+  { value: "重庆", label: "重庆" },
+  { value: "四川", label: "四川" },
+  { value: "贵州", label: "贵州" },
+  { value: "云南", label: "云南" },
+  { value: "西藏", label: "西藏" },
+  { value: "陕西", label: "陕西" },
+  { value: "甘肃", label: "甘肃" },
+  { value: "青海", label: "青海" },
+  { value: "宁夏", label: "宁夏" },
+  { value: "新疆", label: "新疆" },
+  { value: "台湾", label: "台湾" },
+  { value: "香港", label: "香港" },
+  { value: "澳门", label: "澳门" },
+];
+
+const enterpriseList = ref();
+
 onMounted(async () => {
   try {
+    const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/brief/enterprise";
     const postData = {
-      message: dataToSend, // 假设API期望一个名为"message"的字段
+      //
     };
-    const postData1 = {
-      message: dataToSend1, // 假设API期望一个名为"message"的字段
-    };
-    const response = await axios.post(apiUrl, postData, config);
-    //console.log(response.data.data);
-    const response1 = await axios.post(apiUrl1, postData1, config1);
-    // console.log("Success fetching data2:");
-    //console.log(response1.data.data);
 
-    List.value = response.data.data;
-    List1.value = response1.data.data;
+    const response = await axios.post(apiUrl, postData);
+    //console.log(response.data.data);
+
+    enterpriseList.value = response.data.data;
+    console.log(response.data.data);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 });
-
-// 图片数组
-const images = [
-  ` /vue3-echarts-map/src/assets/background1.jpg`,
-  ` /vue3-echarts-map/src/assets/background2.jpg`,
-  ` /vue3-echarts-map/src/assets/background3.jpg`,
-];
-const links = ref([
-  {
-    url: "https://www.example.com",
-    text:
-      "王小兵主任出席2024中国国际大数据产业博览会“激活数据要素价值 赋能乡村全面振兴”交流活动并致辞",
-  },
-  {
-    url: "https://vuejs.org",
-    text:
-      "王小兵主任出席2024中国国际大数据产业博览会“激活数据要素价值 赋能乡村全面振兴”交流活动并致辞",
-  },
-  {
-    url: "https://github.com",
-    text:
-      "王小兵主任出席2024中国国际大数据产业博览会“激活数据要素价值 赋能乡村全面振兴”交流活动并致辞",
-  },
-  // 如果text未提供，将默认使用url作为显示文本
-  {
-    url: "https://www.npmjs.com",
-    text:
-      "王小兵主任出席2024中国国际大数据产业博览会“激活数据要素价值 赋能乡村全面振兴”交流活动并致辞",
-  },
-]);
-// 当前显示的图片索引
-const currentIndex = ref(0);
-
-// 计算属性，用于获取当前显示的图片
-const currentImage = computed(() => images[currentIndex.value]);
-
-// 设置轮播定时器
-let intervalId = null;
-
-// 组件挂载时启动定时器
-onMounted(() => {
-  intervalId = setInterval(() => {
-    currentIndex.value = (currentIndex.value + 1) % images.length;
-    //console.debug(currentIndex.value)
-  }, 5000); // 每5秒切换一次
-});
-
-// 组件卸载时清除定时器
-onUnmounted(() => {
-  if (intervalId) {
-    clearInterval(intervalId);
-  }
-});
-
-// 假设这是你的所有项目数据
-const allItems = ref([
-  {
-    url: "https://example.com/1",
-    title: "Title 1",
-    content: "Content 1",
-    date: "2023-01-01",
-  },
-  {
-    url: "https://example.com/2",
-    title: "Title 2",
-    content: "Content 2",
-    date: "2023-01-02",
-  },
-  {
-    url: "https://example.com/3",
-    title: "Title 3",
-    content: "Content 3",
-    date: "2023-01-03",
-  },
-  {
-    url: "https://example.com/4",
-    title: "Title 4",
-    content: "Content 4",
-    date: "2023-01-04",
-  },
-  // ... 更多项目
-]);
-
-// 控制当前显示的索引
-const currentIndex2 = ref(0);
-
-// 控制一次显示多少个项目
-const visibleCount = ref(4);
-
-// 计算属性，用于获取当前应该显示的项目
-const visibleItems = computed(() => {
-  const start = currentIndex2.value;
-  const end = start + visibleCount.value;
-  return allItems.value.slice(start, end);
-});
-
-// 上一项
-function prev() {
-  if (currentIndex2.value > 0) {
-    currentIndex2.value--;
-  }
-}
-
-// 下一项
-function next() {
-  if (currentIndex2.value + visibleCount.value < allItems.value.length) {
-    currentIndex2.value++;
-  }
-}
 </script>
 
 <style scoped>
-.toptitle {
-  font-size: 200%;
-  font-weight: 900;
-  z-index: 20;
-  z-index: 20;
-  color: #527865;
-  margin-left: 48.8%;
+.back {
+  background-color: rgba(186, 206, 198, 0.6); /* 透明背景色 */
+  z-index: 19;
   position: absolute;
-}
-.topline {
-  display: flex;
-  flex-direction: row;
-  margin-top: 7%;
-  z-index: 20;
-  position: absolute;
-  min-width: 0;
-  overflow: hidden;
-}
-.slider-container {
-  width: 25%; /* 根据需要调整 */
-  height: auto; /* 根据图片大小或需要调整 */
-  overflow: hidden;
-  z-index: 20;
-  margin-left: 18%;
-}
-
-.slider-image {
-  width: 100%; /* 使图片宽度充满容器 */
-  height: auto; /* 保持图片宽高比 */
-  display: block; /* 防止图片下方出现空隙 */
-}
-
-.ullist {
-  padding: 0;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  margin-left: 6%;
-  margin-top: 3%;
-  width: 500px;
-  min-width: 0;
-
-}
-
-li {
-  list-style-type: disc;
-  margin: 10px 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.aup {
-  display: flex;
-  justify-content: flex-start;
-  text-decoration: none;
-  color: #527865;
-  font-size: 120%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 400px;
-  min-width: 0;
-}
-
-.aup:hover {
-  color: #ffffff;
-  font-weight: 400;
-}
-.special-style {
-  color: #527865;
+  width: 95%;
+  height: 650px;
+  margin-top: 4%;
+  margin-left: 0;
+  border-radius: 10px;
 }
 
 .container {
-  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   z-index: 20;
-  margin-top: 400px;
-  width: 420px;
-  margin-left: 550px;
-}
-
-.items {
+  margin-top: 80px; /* 留出标签高度 */
+  width: 80%;
+  margin-left: 8%;
+  height: 100%;
   display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
-  gap: 30px;
-  padding: 10px;
-  margin-right: 10px;
-  min-width: 0;
-  min-height: 0;
+  justify-content: space-between; /* 让元素之间均匀分布 */
 }
 
-.item {
+.typeSelect {
+  font-size: 14px; /* 可根据需要调整字体大小 */
+  margin-left: 5%;
+  color: #333; /* 可根据需要调整颜色 */
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 5px;
-  padding: 10px;
-  background-color: #d7ede4;
-
-  height: 270px;
-  width: 220px;
-  border-radius: 10px;
+  flex-direction: row;
+  width: 400px;
 }
 
-.title {
-  font-weight: bold;
-  text-decoration: none;
-  color: #527865;
-  font-size: 120%;
+.prvcSelect {
+  font-size: 14px; /* 可根据需要调整字体大小 */
+  margin-left: 3%;
+  color: #333; /* 可根据需要调整颜色 */
+  width: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.selectContainer {
+  background-color: #f4f8f6;
   width: 100%;
-  word-break: break-all;
-  word-wrap: break-word;
-  white-space: normal;
+  height: 50px;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  margin-left: 15px;
-  margin-right: 15px;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 5px;
 }
-.contitle {
-  text-decoration: none;
-  color: #527865;
-  margin-right: 870px;
+
+.marketScrollbar {
+  height: 100%;
   width: 100%;
-  font-size: 200%;
-  margin-bottom: 10px;
-  font-weight: 900;
+  flex: 4;
+  margin-top: 1%;
+  display: flex;
 }
 
-.content {
-  font-size: 0.9em;
-  color: #527865;
-  text-align: left;
-  word-break: break-all;
-  word-wrap: break-word;
-  white-space: normal;
-  margin-left: 15px;
-  margin-right: 15px;
-}
-.date {
-  position: absolute;
-  font-size: 0.9em;
-  color: #527865;
-  margin-top: 230px;
-  margin-left: 15px;
-  margin-right: 15px;
+.marketCard {
+  max-width: 800px;
+  align-items: right;
+  margin-bottom: 20px; /* 设置卡片之间的垂直间距 */
 }
 
-.back {
-  background-color: #bacec6;
-  z-index: 19;
-  position: absolute;
-  width: 1200px;
-  height: 650px;
-  margin-top: 4%;
-  margin-left: 10%;
-  border-radius: 10px;
+.select1 {
+  display: flex;
+  width: 450px;
+}
+.select2 {
+  height: 30px;
+  width: 120px;
+}
+.text1 {
+  display: flex;
+  text-align: center;
+  width: 100px;
+  height: 100%;
+  align-items: center;
 }
 
-.back2 {
-  background-color: #d7ede4;
+.row {
   z-index: 20;
-  opacity: 0.6;
-  position: absolute;
-  width: 1040px;
-  height: 310px;
-  margin-top: 5.3%;
-  margin-left: 15.5%;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  width: 100%;
+}
+
+.cell {
+  background-color: #f4f8f6;
+  z-index: 20;
+  width: 600px;
+  height: 130px;
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #1d382d;
+  color: #1d382d;
+  margin-bottom: 35px;
+  transition: background-color 0.5s ease;
+  border-radius: 2px;
+  .sleimg {
+    width: 30px;
+    height: 30px;
+    background-image: url("@/assets/logoCom1.png");
+    background-size: 100%;
+    z-index: 40;
+  }
+  .sleimg2 {
+    width: 30px;
+    height: 30px;
+    background-image: url("@/assets/logoCom2.png");
+    background-size: 100%;
+    z-index: 40;
+  }
+}
+.cell:hover {
+  background-color: #527865;
+  z-index: 20;
+  width: 600px;
+  height: 130px;
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #ffffff;
+  color: #ffffff;
+  transition: background-color 0.5s ease;
+  border-radius: 2px;
+  .sleimg {
+    width: 30px;
+    height: 30px;
+    background-image: url("@/assets/logoCom12.png");
+    background-size: 100%;
+    z-index: 40;
+  }
+  .sleimg2 {
+    width: 30px;
+    height: 30px;
+    background-image: url("@/assets/logoCom22.png");
+    background-size: 100%;
+    z-index: 40;
+  }
+}
+.demo-pagination-block {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>

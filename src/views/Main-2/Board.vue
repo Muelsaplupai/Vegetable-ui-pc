@@ -1,5 +1,5 @@
 <template>  
-  <div id="bar" style="width: 100%; height: 90%;"></div>  
+  <div id="bar" style="width: 100%; height: 100%;"></div>  
 </template>  
   
 <script setup>  
@@ -7,8 +7,8 @@ import { onMounted, ref } from 'vue';
 import * as echarts from 'echarts';  
 import axios from 'axios'; // 确保已安装axios  
   
-const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/price/rise";  
-const dataToSend = "这是我要发送的字符串"; // 要发送的字符串 
+const apiUrl = "http://192.168.63.221:8080/api/price/rise";  
+const dataToSend = "江苏"; // 要发送的字符串 
 // const xValue = ref([1, 1, 1, 2, 3]);  
 // const yValue = ref(["陕西移动", "山西移动", "北京移动", "山东移动", "河北移动"]);  
   
@@ -17,7 +17,7 @@ const List=ref();
 onMounted(async () => {  
   try {  
     const postData = {  
-      message: dataToSend // 假设API期望一个名为"message"的字段  
+      prvc: dataToSend // 假设API期望一个名为"message"的字段  
     }; 
     const response = await axios.post(apiUrl, postData, {  
       headers: {  
@@ -53,11 +53,11 @@ onMounted(async () => {
       axisLabel: {  
         inside: false,  
         verticalAlign: "middle",  
-        lineHeight: 20,  
+        lineHeight: 26,  
         color: "#194955",  
         textStyle: {  
-          fontSize: 24,  
-          fontWeight: "bold",  
+          fontSize: 26,  
+          fontWeight: 800,  
         },  
         formatter: function (value, index) {  
           if (index > 2) {  
@@ -69,10 +69,14 @@ onMounted(async () => {
         rich: {  
           other: {  
             color: "#194955",  
-            opacity: 0.57,  
+            opacity: 0.57, 
+            fontWeight:800, 
+            fontSize: 16,  
           },  
           first: {  
             color: "#194955",  
+            fontWeight:800,
+            fontSize: 16,  
           },  
         },  
       },  
@@ -87,16 +91,21 @@ onMounted(async () => {
       },  
       axisLine: {  
         show: false,  
-      },  
-      axisLabel: {  
-        color: "#194955",  
-      },  
+      },   
+      axisLabel: {
+        padding: [10, 0, 0, -15], //文字左右定位
+        textStyle: {
+          color: "#194955",
+          fontSize: "13",
+          itemSize: "",
+        },
+      },
     },  
     grid: {  
       top: "10%",  
       bottom: "20%",  
-      left: "20%",  
-      right: "20%",  
+      left: "30%",  
+      right: "10%",  
     },  
     series: [  
       {  
@@ -108,15 +117,18 @@ onMounted(async () => {
           normal: {  
             borderRadius: [3, 20, 20, 3],  
             color: function (params) {  
-              if (params.dataIndex === 5) {  
-                return "#B3DA61";  
-              } else if (params.dataIndex === 4) {  
-                return "#CDE460";  
+              if (params.dataIndex === 4) {  
+                return "#527865";  
               } else if (params.dataIndex === 3) {  
-                return "#6ECDBE";  
-              } else {  
                 return "#539D73";  
+              } else if (params.dataIndex === 2) {  
+                return "#75b08f";  
+              } else if (params.dataIndex === 1) {   
+                return "#97c4ab";  
               }  
+              else{
+                return "#cbe1d5";  
+              }
             },  
           },  
         },  

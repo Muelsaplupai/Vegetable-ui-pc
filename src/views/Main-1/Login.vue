@@ -1,6 +1,6 @@
 <template>
   <div class="reg" v-show="showdetail">
-    <button class="closeBtn" @click="close" style="margin-top: 5%;">
+    <button class="closeBtn" @click="close" style="margin-top: 5%">
       <el-icon>
         <Close />
       </el-icon>
@@ -53,7 +53,7 @@
       </div>
     </div>
     <button @click="regBegin" class="regBtn">没有账号？点击注册</button>
-    <button @click="loginBegin" class="loginBtn">登录</button>
+    <button @click="logBegin" class="loginBtn">登录</button>
   </div>
 </template>
 
@@ -74,8 +74,31 @@ let showdetail = ref(false);
 let showlog1 = ref(true);
 let showlog2 = ref(false);
 
-let stylecolor1=ref('#527865');
-let stylecolor2=ref('#ffffff');
+let stylecolor1 = ref("#527865");
+let stylecolor2 = ref("#ffffff");
+import axios from "axios"; // 确保已安装axios
+const apiUrl = "http://192.168.63.221:8080/api/login/password";
+const config = {
+  headers: {},
+};
+async function logBegin() {
+  try {
+    const postData = {
+      username: inputValue1.value,
+      password: inputValue2.value, // 假设API期望一个名为"message"的字段
+    };
+    const response = await axios.post(apiUrl, postData, config);
+    console.debug(response);
+    if (response.data.msg === "OK") {
+      showdetail.value = false;
+      bus.emit("username", inputValue1.value);
+      bus.emit("username1", inputValue1.value);
+    }
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 
 onMounted(() => {
   bus.on("loginBegin", (e: any) => {
@@ -83,10 +106,9 @@ onMounted(() => {
     showdetail.value = e;
   });
 });
-function close() {  
+function close() {
   bus.emit("maskEnd", "false");
   showdetail.value = false;
-
 }
 
 function clearPlaceholder1() {
@@ -137,15 +159,15 @@ function regBegin() {
 function lognopwd() {
   showlog1.value = false;
   showlog2.value = true;
-  stylecolor2.value='#527865'
-  stylecolor1.value='#ffffff'
+  stylecolor2.value = "#527865";
+  stylecolor1.value = "#ffffff";
 }
 
 function logpwd() {
   showlog1.value = true;
   showlog2.value = false;
-  stylecolor2.value='#ffffff'
-  stylecolor1.value='#527865'
+  stylecolor2.value = "#ffffff";
+  stylecolor1.value = "#527865";
 }
 </script>
 
@@ -205,14 +227,14 @@ function logpwd() {
   margin-left: 15%;
 }
 .activeBtn1 {
-  color:v-bind(stylecolor1);
+  color: v-bind(stylecolor1);
   margin-bottom: 5%;
   margin-left: 10%;
   border: none;
   background: transparent;
 }
 .activeBtn2 {
-  color:v-bind(stylecolor2);
+  color: v-bind(stylecolor2);
   margin-bottom: 5%;
   margin-left: 10%;
   border: none;

@@ -1,5 +1,4 @@
 <template>
-
 <div class="mainimg"></div>
   <div class="mainimg2"></div>
     <div style="text-align: center; background-color: #BACEC6;">
@@ -14,7 +13,7 @@
 
 </template>
 <script setup>
-import HeaderIns from "@/views/Main-1/Header-main.vue"
+import HeaderIns from "@/views/Main-1/Header-main2.vue"
 import HeadermainIns from "@/views/Main-1/Header-main.vue"
 import BodyIns from "@/views/Detail1/Body.vue"
 import RoseIns from "@/views/Main-2/RoseMap.vue"
@@ -198,7 +197,14 @@ function loading() {
     align-items: center;
     justify-content: center;
 }
-
+.back {
+  background-color: #195e42;
+  opacity: 0.4;
+  height: 70px;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+}
 
 .mainimg {
   text-align: center;
@@ -209,6 +215,7 @@ function loading() {
   background-size: 100% 100%;
   position: absolute;
   border-radius: 10px;
+  backdrop-filter: blur(10px);
 }
 .mainimg2 {
   text-align: center;
@@ -217,7 +224,8 @@ function loading() {
   height: 100%; //大小设置为100%
   background-size: 100% 100%;
   opacity: 0.8;
-  background-color: #bacec6;
+
+  background-color: #ffffff;
   position: absolute;
 }
 

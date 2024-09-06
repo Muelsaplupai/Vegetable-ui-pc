@@ -13,13 +13,15 @@ export const useMap = (
     navList: [{ name: "中国", adcode: 100000, level: "province" }],
   });
   // 地区code映射
-  const adcodeMap: Record<string, { adcode: number; level: string }> = {};
+  const adcodeMap: Record<string, { adcode: number; level: string; mapColor:number }> = {};
   // 生成地图code映射
   const genAdcodeMap = (features: any[]) => {
     features.forEach((feature) => {
       const { name, adcode, level } = feature.properties;
       const formattedName = name.replace(/省$/, '');
-      adcodeMap[formattedName] = { adcode, level };
+      const mapColor= parseInt(String(adcode/400000));
+      console.debug(parseInt(String(adcode/400000)));
+      adcodeMap[formattedName] = { adcode, level,mapColor };
     });
   };
   // 注册地图
@@ -43,11 +45,11 @@ export const useMap = (
     const { adcode, level } = adcodeMap[formattedName];
     // 输出省份和市
     if (level === "district") {
-      console.log(`您点击了市级区域: ${formattedName}`);
+      console.log(params);
     } else if (level === "province") {
-      console.log(`您点击了省级区域: ${formattedName}`);
+      console.log(params);
     } else {
-      console.log(`您点击了未知区域: ${formattedName}`);
+      console.log(params);
     }
     if (level === "district") return;
     resetLineData();

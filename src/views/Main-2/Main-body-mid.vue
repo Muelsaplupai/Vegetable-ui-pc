@@ -38,12 +38,12 @@ const data3=ref(0);
 
 const data4=ref(0);
 
-const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/data";  
+const apiUrl = "http://192.168.63.221:8080/api/data";
 onMounted(async () => {
   try {
     const response = await axios.get(apiUrl);
 
-    console.debug("catchdata");
+    console.debug("catchdata11111111111111111111111");
     console.debug(response.data);
     data1.value=response.data.data.pzCount;
     data2.value=response.data.data.marketCount;
@@ -60,21 +60,22 @@ onMounted(async () => {
   display: flex;
   background-color: transparent;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  
   width: 50%;
 }
 .mid-up {
-  height: 22%;
+  height: 18%;
   width: 90%;
   font-size: medium;
   color: #000000;
   background-color: transparent;
   display: flex;
   justify-content: space-between;
-  margin: 0 75px;
   margin-top: 20px;
   border-radius: 20px;
+  margin-right: 15%;
   color: #194955;
 }
 .mid-up-item {
@@ -97,8 +98,9 @@ onMounted(async () => {
 }
 .mid-bottom {
   height: 78%;
-  width: 90%;
+  width: 80%;
   font-size: medium;
   color: #000000;
+  margin-left: 6%;
 }
 </style>

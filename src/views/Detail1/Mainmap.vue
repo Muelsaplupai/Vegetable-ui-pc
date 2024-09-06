@@ -61,6 +61,12 @@ import { ref, onMounted, onUnmounted, reactive, defineProps, toRefs, watch } fro
 import { useRouter } from "vue-router";
 import axios from "axios";
 import bus from "@/views/Main-1/bus";
+
+
+
+
+
+
 </script>
 <style lang="less" scoped>
 .home-container {
@@ -114,7 +120,6 @@ import bus from "@/views/Main-1/bus";
   background-color: transparent;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  margin-left: 5%;
 }
 .main-col-con2 {
   display: flex;
@@ -125,6 +130,7 @@ import bus from "@/views/Main-1/bus";
   border-bottom-right-radius: 20px;
   margin-bottom: 5%;
   margin-top: 15%;
+  margin-right: 7%;
 }
 .main-col-con3 {
   display: flex;
@@ -134,7 +140,8 @@ import bus from "@/views/Main-1/bus";
   background-color: transparent;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  margin-right: 5%;
+  margin-right: 10%;
+  margin-left: 2%;
 }
 .main-col-con4 {
   display: flex;
@@ -144,7 +151,7 @@ import bus from "@/views/Main-1/bus";
   background-color: transparent;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  margin-right: 5%;
+  margin-right: 20%;
   margin-bottom: 5%;
 }
 .main-col-header1 {

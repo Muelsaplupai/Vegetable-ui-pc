@@ -109,48 +109,7 @@
           </transition-group>
         </div>
       </div>
-      <!-- <div class="section">
-        <div class="slide" style="width: 500px">
-          <div class="text3">
-            <div class="maintext31">
-              重新定义<br /><br />
-              数据预测
-            </div>
-            <br /><br /><br />
-            <button class="pagethirdbutton1" @click="predictbegin">点击详情</button>
-          </div>
 
-          <div class="mainimg31">
-            <el-container class="home-container31"> </el-container>
-          </div>
-        </div>
-        <div class="slide">
-          <div class="text3">
-            <div class="maintext32">
-              大千世界<br /><br />
-              监控全局
-            </div>
-            <br /><br /><br />
-            <button class="pagethirdbutton2" @click="searchbegin">点击详情</button>
-          </div>
-          <div class="mainimg32">
-            <el-container class="home-container32"> </el-container>
-          </div>
-        </div>
-        <div class="slide">
-          <div class="text3">
-            <div class="maintext33">
-              最新动态<br /><br />
-              洞悉未来
-            </div>
-            <br /><br /><br />
-            <button class="pagethirdbutton3" @click="newsbegin">点击详情</button>
-          </div>
-          <div class="mainimg33">
-            <el-container class="home-container33"> </el-container>
-          </div>
-        </div>
-      </div> -->
     </full-page>
   </div>
 </template>
@@ -171,7 +130,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import bus from "@/views/Main-1/bus";
 // 替换为你的 Apifox Mock URL
-const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/price/twoindex";
+const apiUrl = "https://192.168.63.221/price/twoindex";
 const items = ref([]);
 
 onMounted(async () => {

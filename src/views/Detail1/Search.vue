@@ -3,12 +3,7 @@
     <div class="searchinput">
       <div class="searchitem">
         <div class="searchtext">品种 :</div>
-        <el-select
-          v-model="selectedCategory3"
-          filterable
-          placeholder="品种"
-          class="select"
-        >
+        <el-select v-model="pz" filterable placeholder="品种" class="select">
           <el-option v-for="item in categories3" :key="item" :label="item" :value="item">
           </el-option>
         </el-select>
@@ -16,23 +11,23 @@
       <div class="searchitem">
         <div class="searchtext">省份 :</div>
         <!-- 类似地添加省份和城市的选择器 -->
-        <el-select
-          v-model="selectedCategory1"
-          filterable
-          placeholder="省份"
-          class="select"
-        >
-          <el-option v-for="item in categories1" :key="item" :label="item" :value="item">
+        <el-select v-model="Sheng" filterable placeholder="省份" class="select">
+          <el-option
+            v-for="item in categories1"
+            :key="item"
+            :label="item.label"
+            :value="item.value"
+          >
           </el-option>
         </el-select>
       </div>
       <div class="searchitem">
-        <div class="searchtext">城市 :</div>
+        <div class="searchtext">市场 :</div>
 
         <el-select
           v-model="selectedCategory2"
           filterable
-          placeholder="城市"
+          placeholder="市场"
           class="select"
         >
           <el-option v-for="item in categories2" :key="item" :label="item" :value="item">
@@ -40,143 +35,158 @@
         </el-select>
       </div>
 
-      <el-button class="searchbtn" type="primary">查询</el-button>
+      <el-button class="searchbtn" type="primary" @click="fetchData">查询</el-button>
       <el-button class="clearbtn">重置</el-button>
     </div>
     <!-- 数据表格组件 -->
     <EasyDataTable
+      
       :headers="headers"
-      :items="filteredItems"
+      :items="items"
       theme-color="#1d90ff"
       table-class-name="customize-table"
       header-text-direction="center"
       body-text-direction="center"
-      :rows-per-page="15"
-      alternating
+      :rows-per-page="12"
+      :loading="loading"  
+      :server-items-length="serverItemsLength"
       table-min-height="500"
+      buttons-pagination
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { ElSelect, ElOption, ElButton } from "element-plus";
 // 确保你引入了 EasyDataTable 及其类型定义
 import EasyDataTable from "vue3-easy-data-table";
-import type { Header, Item } from "vue3-easy-data-table";
+import type { Header, Item,ServerOptions  } from "vue3-easy-data-table";
+import axios from "axios"; // 确保已安装axios
+const config = {
+  headers: {},
+};
 
+const apiUrl = "http://192.168.63.221:8080/api/price/market";
+const apiUrlpz = "http://192.168.63.221:8080/api/price/pz";
+const apiUrlList = "http://192.168.63.221:8080/api/price";
+onMounted(async () => {
+  try {
+    const postData = {
+      prvc: '', // 假设API期望一个名为"message"的字段
+    };
+    const response1 = await axios.post(apiUrlpz, postData, config);
+    categories3.value = response1.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
+onMounted(async () => {
+  try {
+    const postData = {
+      prvc: Sheng.value, // 假设API期望一个名为"message"的字段
+    };
+    const response = await axios.post(apiUrl, postData, config);
+    categories2.value = response.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
+onMounted(async () => {
+  try {
+    const postData = {
+      pageSize: 7000, // 假设API期望一个名为"message"的字段
+      pageNum: 1,
+    };
+    const response = await axios.post(apiUrlList, postData, config);
+    items.value = response.data.data.priceList;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
+onMounted(async () => {
+  try {
+    const postData = {
+      name: "", // 假设API期望一个名为"message"的字段
+    };
+    const response = await axios.post(apiUrlpz, postData, config);
+    items.value = response.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
+
+async function search() {
+  try {
+    const postData = {
+      pz: pz,
+      pageSize: 10, // 假设API期望一个名为"message"的字段
+      pageNum: 1,
+    };
+    const response = await axios.post(apiUrlList, postData, config);
+    items.value = response.data.data.priceList;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 // 组件注册（如果需要在局部注册 Element Plus 组件）
 // 通常在 main.ts 或全局注册 Element Plus
-
+const Sheng = ref();
+const pz = ref();
+console.debug(Sheng.value);
 const headers: Header[] = [
-  { text: "品类", value: "name" },
-  { text: "省", value: "province" },
+  { text: "品类", value: "pz" },
+  { text: "省", value: "prvc" },
   { text: "市场", value: "market" },
-  { text: "平均价格", value: "averprize", sortable: true },
-  { text: "最高价格", value: "maxprize", sortable: true },
-  { text: "最低价格", value: "minprize", sortable: true },
+  { text: "平均价格", value: "average", sortable: true },
+  { text: "最高价格", value: "highest", sortable: true },
+  { text: "最低价格", value: "lowest", sortable: true },
 ];
 
-const items: Item[] = [
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 20,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 21,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "内蒙古",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 22,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 20,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 21,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 22,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 20,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 21,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 22,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 20,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 21,
-    maxprize: 20,
-    minprize: 20,
-  },
-  {
-    name: "番茄",
-    province: "江苏",
-    market: "遵义金土地绿色产品交易有限公司",
-    averprize: 22,
-    maxprize: 20,
-    minprize: 20,
-  },
-];
+const items = ref<Item[]>([]);
 
-const categories1 = ref(["江苏", "内蒙古", "浙江"]);
+const categories1 = [
+  { value: "", label: "全部" },
+  { value: "北京", label: "北京" },
+  { value: "天津", label: "天津" },
+  { value: "河北", label: "河北" },
+  { value: "山西", label: "山西" },
+  { value: "内蒙古", label: "内蒙古" },
+  { value: "辽宁", label: "辽宁" },
+  { value: "吉林", label: "吉林" },
+  { value: "黑龙江", label: "黑龙江" },
+  { value: "上海", label: "上海" },
+  { value: "江苏", label: "江苏" },
+  { value: "浙江", label: "浙江" },
+  { value: "安徽", label: "安徽" },
+  { value: "福建", label: "福建" },
+  { value: "江西", label: "江西" },
+  { value: "山东", label: "山东" },
+  { value: "河南", label: "河南" },
+  { value: "湖北", label: "湖北" },
+  { value: "湖南", label: "湖南" },
+  { value: "广东", label: "广东" },
+  { value: "广西", label: "广西" },
+  { value: "海南", label: "海南" },
+  { value: "重庆", label: "重庆" },
+  { value: "四川", label: "四川" },
+  { value: "贵州", label: "贵州" },
+  { value: "云南", label: "云南" },
+  { value: "西藏", label: "西藏" },
+  { value: "陕西", label: "陕西" },
+  { value: "甘肃", label: "甘肃" },
+  { value: "青海", label: "青海" },
+  { value: "宁夏", label: "宁夏" },
+  { value: "新疆", label: "新疆" },
+  { value: "台湾", label: "台湾" },
+  { value: "香港", label: "香港" },
+  { value: "澳门", label: "澳门" },
+];
 const categories2 = ref(["常州", "赤峰", "南京"]);
 const categories3 = ref(["番茄", "马铃薯", "茄子"]);
 
@@ -185,18 +195,83 @@ const selectedCategory2 = ref("");
 const selectedCategory3 = ref("");
 
 // 添加筛选逻辑（根据选中的分类筛选数据）
-const filteredItems = computed(() => {
-  // 根据 selectedCategory1, selectedCategory2, selectedCategory3 进行筛选
-  // 这里只是示例，实际逻辑可能更复杂
-  return items.filter((item) => {
-    // 假设 items 数组中有与 select 绑定的属性对应的字段
-    return (
-      (selectedCategory1.value === "" || item.province === selectedCategory1.value) &&
-      (selectedCategory2.value === "" || item.market.includes(selectedCategory2.value)) && // 假设 market 字段包含城市名
-      (selectedCategory3.value === "" || item.name === selectedCategory3.value)
-    );
-  });
+
+watch(Sheng, async (newValue) => {
+  try {
+    const postData = {
+      prvc: newValue, // 假设API期望一个名为"message"的字段
+    };
+    const response1 = await axios.post(apiUrlpz, postData, config);
+    categories3.value = response1.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 });
+watch(Sheng, async (newValue) => {
+  try {
+    const postData = {
+      prvc: newValue, // 假设API期望一个名为"message"的字段
+    };
+    const response1 = await axios.post(apiUrl, postData, config);
+    categories2.value = response1.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
+watch(pz, async (newValue) => {
+  console.debug(2121);
+  try {
+    // const postData = {
+    //   prvc: newValue, // 假设API期望一个名为"message"的字段
+    // };
+    // const response1 = await axios.post(apiUrl, postData, config);
+    // categories2.value = response1.data.data;
+    // // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
+
+const serverItemsLength = ref(0);
+// const serverOptions = ref<ServerOptions>({
+//   page: 1,
+//   rowsPerPage: 5,
+// });
+
+const loading = ref(false);
+// 模拟的 API 请求函数  
+const fetchData = async () => {  
+  loading.value = true;  
+  try {  
+    const postData = {
+      pz: pz.value,
+      prvc:Sheng.value,
+      market:selectedCategory2.value,
+      pageSize: 7000, // 假设API期望一个名为"message"的字段
+      pageNum: 1,
+    };
+    const response = await axios.post(apiUrlList, postData,config);  
+  
+    // 假设响应格式如下  
+    // {  
+    //   data: [...items],  
+    //   total: totalItems  
+    // }  
+    items.value = response.data.data.priceList;  
+    serverItemsLength.value = response.data.data.priceList.length;  
+  } catch (error) {  
+    console.error('Error fetching data:', error);  
+  } finally {  
+    loading.value = false;  
+  }  
+};  
+  
+
+  
+
+
 </script>
 
 <style scoped>
@@ -290,23 +365,23 @@ option {
   font-size: 120%;
 }
 .customize-table {
-  --easy-table-border: 1px solid #445269;
-  --easy-table-row-border: 1px solid #445269;
+  --easy-table-border: 1px solid #527865;
+  --easy-table-row-border: 1px solid #527865;
 
   --easy-table-header-font-size: 14px;
   --easy-table-header-height: 40px;
   --easy-table-header-font-color: #ffffff;
-  --easy-table-header-background-color: #527865;
+  --easy-table-header-background-color: #577968;
 
   --easy-table-header-item-padding: 10px 15px;
 
   --easy-table-body-even-row-font-color: #ffffff;
   --easy-table-body-even-row-background-color: #b0be97;
 
-  --easy-table-body-row-font-color: #ffffff;
-  --easy-table-body-row-background-color: #8aada6;
+  --easy-table-body-row-font-color: #527865;
+  --easy-table-body-row-font-size:16px;
+  --easy-table-body-row-background-color: #c9d5d1;
   --easy-table-body-row-height: 40px;
-  --easy-table-body-row-font-size: 14px;
 
   --easy-table-body-row-hover-font-color: #2d3a4f;
   --easy-table-body-row-hover-background-color: #eee;

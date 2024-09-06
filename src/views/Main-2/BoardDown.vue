@@ -1,5 +1,5 @@
 <template>  
-  <div id="bar1" style="width: 100%; height: 90%;"></div>  
+  <div id="bar1" style="width: 100%; height: 100%;"></div>  
 </template>  
   
 <script setup lang="ts">  
@@ -70,11 +70,15 @@ onMounted(async () => {
         rich: {  
           other: {  
             color: "#194955",  
-            opacity: 0.57,  
+            opacity: 0.57, 
+            fontWeight:800, 
+            fontSize: 16,  
           },  
           first: {  
             color: "#194955",  
-          },  
+            fontWeight:800,
+            fontSize: 16,  
+          },   
         },  
       },  
     },  
@@ -89,15 +93,20 @@ onMounted(async () => {
       axisLine: {  
         show: false,  
       },  
-      axisLabel: {  
-        color: "#194955",  
-      },  
+      axisLabel: {
+        padding: [10, 0, 0, -15], //文字左右定位
+        textStyle: {
+          color: "#194955",
+          fontSize: "13",
+          itemSize: "",
+        },
+      },
     },  
     grid: {  
       top: "10%",  
       bottom: "20%",  
-      left: "20%",  
-      right: "20%",  
+      left: "30%",  
+      right: "10%"
     },  
     series: [  
       {  
@@ -109,15 +118,18 @@ onMounted(async () => {
           normal: {  
             borderRadius: [3, 20, 20, 3],  
             color: function (params) {  
-              if (params.dataIndex === 5) {  
-                return "#B3DA61";  
-              } else if (params.dataIndex === 4) {  
-                return "#CDE460";  
+              if (params.dataIndex === 4) {  
+                return "#527865";  
               } else if (params.dataIndex === 3) {  
-                return "#6ECDBE";  
-              } else {  
                 return "#539D73";  
+              } else if (params.dataIndex === 2) {  
+                return "#75b08f";  
+              } else if (params.dataIndex === 1) {   
+                return "#97c4ab";  
               }  
+              else{
+                return "#cbe1d5";  
+              }
             },  
           },  
         },  

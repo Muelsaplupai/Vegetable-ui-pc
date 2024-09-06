@@ -44,6 +44,25 @@
 <script setup lang="ts">
 import  bus  from "./bus";
 import { onMounted, ref } from "vue";
+import axios from "axios"; // 确保已安装axios
+const apiUrl = "http://192.168.63.221:8080/api/register";
+const config = {
+  headers: {},
+};
+async function regBegin(){
+  try {
+    const postData = {
+      username:inputValue1.value,
+      password:inputValue2.value, // 假设API期望一个名为"message"的字段
+      email:inputValue3.value,
+    };
+    const response = await axios.post(apiUrl, postData, config);
+    console.debug(response);
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 const inputValue1 = ref("");
 const inputValue2 = ref("");
 const inputValue3 = ref("");

@@ -1,64 +1,354 @@
 <template>
-  <div ref="monthlyIndicators" class="mainpre"></div>
+  <div class="titlechart">{{ TableTitle }}</div>
+  <div ref="monthlyIndicators" class="mainpre" v-show="activeChart1"></div>
+  <div ref="monthlyIndicators2" class="mainpre2" v-show="activeChart2"></div>
+  <div class="imgGroup">
+    <button class="img1" @click="Chage1"></button>
+    <button class="img2" @click="Chage2"></button>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import * as echarts from "echarts";
-
-// 创建一个响应式引用来保存DOM元素
+import { onMounted, ref, nextTick } from "vue";
+import bus from "@/views/Main-1/bus.ts";
+import axios from "axios"; // 确保已安装axios
+const config = {
+  headers: {},
+};
+const Sheng = ref();
+const pz = ref();
+const apiUrl = "http://192.168.63.221:8080/api/price/partial";
+const pzList = ref([]);
+onMounted(() => {
+  bus.on("ChartBegin", (e: any) => {
+    // 传参由回调函数中的形参接受
+    classIndex.value = e;
+    ChangeTitle(classIndex);
+  });
+  bus.on("ChartBegin2", (e: any) => {
+    // 传参由回调函数中的形参接受
+    classIndex.value = e;
+    Sheng.value = e;
+  });
+  bus.on("ChartBegin3", (e: any) => {
+    pz.value = e;
+  });
+  bus.on("DanpzDuoscList", (e: any) => {
+    pzList.value = e;
+    console.debug(pzList.value.value);
+    console.debug(chartData.value);
+    chartData.value = pzList.value.value;
+    chartData2.value = pzList.value.value;
+    initChart();
+    initChart2();
+  });
+});
+const activeChart1 = ref(true);
+const activeChart2 = ref(false);
+function Chage1() {
+  activeChart1.value = true;
+  activeChart2.value = false;
+}
+function Chage2() {
+  activeChart1.value = false;
+  activeChart2.value = true;
+}
 let chartInstance: any = null;
+const classIndex = ref();
+const TableTitle = ref("单一品种全国平均价");
+function ChangeTitle(tem) {
+  if (tem.value === "Quanguo") {
+    TableTitle.value = "单一品种全国平均价";
+    Sheng.value = "";
+    console.debug("单一品种全国平均价");
+    Search1();
+  } else if (tem.value === "Quansheng") {
+    TableTitle.value = "单一品种地区平均价";
+    console.debug("单一品种地区平均价");
+    Search1();
+  } else if (tem.value === "DanscDuopz") {
+    TableTitle.value = "单一市场多品种对比";
+    console.debug("单一市场多品种对比");
+  } else if (tem.value === "DanpzDuosc") {
+    TableTitle.value = "单一品种多市场对比";
+    console.debug("单一品种多市场对比");
+  }
+}
+async function Search1() {
+  try {
+    const postData = {
+      pz: pz.value,
+      prvc: Sheng.value, // 假设API期望一个名为"message"的字段
+    };
+    const response = await axios.post(apiUrl, postData, config);
+    console.debug(response.data.highestInfo);
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
 const monthlyIndicators = ref(null);
-// 初始化ECharts实例并设置配置项（这里以折线图为例，但可灵活替换）
-onMounted(async () => {
+const chart = ref(null);
+const chart2 = ref(null);
+const chartData = ref([
+  {
+    market: "市场1",
+    price: [
+      { releaseTime: "2024-09-02", average: 120 },
+      { releaseTime: "2024-09-03", average: 130 },
+      // ...
+    ],
+  },
+  {
+    market: "市场2",
+    price: [
+      { releaseTime: "2024-09-02", average: 220 },
+      { releaseTime: "2024-09-03", average: 230 },
+      // ...
+    ],
+  },
+  // ...
+]);
+const chartData2 = ref([
+  {
+    market: "市场1",
+    price: [
+      { releaseTime: "2024-09-02", average: 120 },
+      { releaseTime: "2024-09-03", average: 130 },
+      // ...
+    ],
+  },
+  {
+    market: "市场2",
+    price: [
+      { releaseTime: "2024-09-02", average: 220 },
+      { releaseTime: "2024-09-03", average: 230 },
+      // ...
+    ],
+  },
+  // ...
+]);
+const xAxisDates = ref([]); // 用于存储去重并排序后的日期
+
+onMounted(() => {
+  initChart();
+});
+
+async function initChart() {
   await nextTick(); // 确保DOM已经渲染完成
-  const monthlyIndicatorsElement = echarts.init(monthlyIndicators.value);
+  if (chart.value) {
+    chart.value.dispose();
+  }
+  chart.value = echarts.init(monthlyIndicators.value);
+  prepareData();
+  drawChart();
+}
+async function initChart2() {
+  await nextTick(); // 确保DOM已经渲染完成
+  if (chart2.value) {
+    chart2.value.dispose();
+  }
+  chart2.value = echarts.init(monthlyIndicators2.value);
+  prepareData();
+  drawChart2();
+}
+function prepareData() {
+  // 提取所有唯一的日期并排序
+  xAxisDates.value = [
+    ...new Set(
+      chartData.value.flatMap((market) => market.price.map((item) => item.releaseTime))
+    ),
+  ].sort((a, b) => new Date(a) - new Date(b));
+}
+
+function drawChart() {
+  const series = chartData.value.map((market) => ({
+    name: market.market,
+    type: "line",
+    data: xAxisDates.value.map((date) => {
+      const price = market.price.find((p) => p.releaseTime === date);
+      return price ? price.average : 0; // 如果找不到对应的日期，则使用0
+    }),
+  }));
+
   const option = {
+    tooltip: {
+      show: true,
+      trigger: "axis",
+      axisPointer: {
+        // 坐标轴指示器，坐标轴触发有效
+        type: "line", // 默认为直线，可选为：'line' | 'shadow'
+      },
+    },
     legend: {
-      data: ["计划", "实际"],
-      icon: "circle", // 设置图例图标为圆形
-      left: "left", // 将图例定位到左侧
-      top: "top", // 将图例定位到顶部
+      orient: "vertical",
+      y: "center", //可设定图例在上、下、居中
+      top: 45,
+      right: 20, // 定位，和副标题一排，且在右边
     },
     grid: {
-      top: "45", // 距离容器上边界的距离
-      right: "10", // 距离容器右边界的距离
-      bottom: "3", // 距离容器下边界的距离
-      left: "10", // 距离容器左边界的距离
-      containLabel: true, // 包含标签的绘图区域
+      left: "5%",
+      right: "25%",
+      bottom: "5%",
+      containLabel: true,
+    },
+    toolbox: {
+      right: 20,
+      feature: {
+        saveAsImage: {},
+      },
     },
     xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  yAxis: {
-    type: 'value'
-  },
-    series: [
-      {
-        data: [150, 230, 224, 218, 135, 147, 260],
-        type: "line",
+      type: "category",
+      data: xAxisDates.value,
+      axisLabel: {
+        padding: [10, 0, 0, -15], //文字左右定位
+        textStyle: {
+          color: "#1d382d",
+          fontSize: "10",
+          itemSize: "",
+        },
       },
-    ],
+      boundaryGap: true,
+    },
+    yAxis: {
+      type: "value",
+      boundaryGap: true,
+      axisLabel: {
+        padding: [10, 0, 0, -15], //文字左右定位
+        textStyle: {
+          color: "#1d382d",
+          fontSize: "16",
+          itemSize: "",
+        },
+      },
+      splitLine: {
+        //修改背景线条样式
+        show: true, //是否展示
+        lineStyle: {
+          color: "#353b5a", //线条颜色
+          type: "dashed", //线条样式，默认是实现，dashed是虚线
+          opacity: 0.5,
+        },
+      },
+    },
+    series,
   };
 
-  monthlyIndicatorsElement.setOption(option);
-});
+  chart.value.setOption(option);
+}
 
-// 销毁ECharts实例
-onUnmounted(() => {
-  if (chartInstance != null && chartInstance.dispose) {
-    chartInstance.dispose();
-  }
-});
+const monthlyIndicators2 = ref(null);
+
+function drawChart2() {
+  const series = chartData2.value.map((market) => ({
+    name: market.market,
+    type: "bar",
+    data: xAxisDates.value.map((date) => {
+      const price = market.price.find((p) => p.releaseTime === date);
+      console.debug(111222333);
+      console.debug(price ? price.average : 0);
+      return price ? price.average : 0; // 如果找不到对应的日期，则使用0
+    }),
+  }));
+
+
+  
+  const option = {
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    legend: {
+      orient: "vertical",
+      y: "center", //可设定图例在上、下、居中
+      top: 45,
+      right: 20, // 定位，和副标题一排，且在右边
+    },
+    grid: {
+      left: "3%",
+      right: "24%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: "category",
+        data: xAxisDates.value,
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+      },
+    ],
+    series,
+  };
+
+  chart2.value.setOption(option);
+}
+
 </script>
 
 <style scoped>
-.mainpre{
-   width: 80%; 
-   height: 80%;
-   align-items: center;
-   justify-content: center;
-   background-color: #d7ede4;
+.mainpre {
+  margin-top: 40px;
+  width: 800px;
+  height: 400px;
+  align-items: center;
+  justify-content: center;
+  background-color: #d7ede4;
+  z-index: 30;
+  position: absolute;
+}
+.mainpre2 {
+  margin-top: 40px;
+  width: 800px;
+  height: 400px;
+  align-items: center;
+  justify-content: center;
+  background-color: #d7ede4;
+  z-index: 30;
+  position: absolute;
+}
+.titlechart {
+  width: 300px;
+  height: 100px;
+  position: absolute;
+  z-index: 31;
+  font-size: 200%;
+  margin-bottom: 330px;
+  color: #1d382d;
+}
+.img1 {
+  background-image: url("@/assets/chartLogo1.png");
+  background-color: transparent;
+  width: 50px;
+  height: 50px;
+  background-size: 100%;
+  border: none;
+}
+
+.img2 {
+  background-image: url("@/assets/chartLogo2.png");
+  background-color: transparent;
+  background-size: 100%;
+  width: 50px;
+  border: none;
+  height: 50px;
+}
+.imgGroup {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  width: 50px;
+  position: absolute;
+  z-index: 31;
+  margin-left: 500px;
+  margin-top: 200px;
 }
 </style>
