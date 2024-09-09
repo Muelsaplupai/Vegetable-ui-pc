@@ -5,9 +5,9 @@
       <div class="typeSelect">
         <div class="text1">类型:</div>
         <el-radio-group v-model="radio1" class="select1">
-          <el-radio value="1" size="large">供应</el-radio>
-          <el-radio value="2" size="large">求购</el-radio>
-          <el-radio value="3" size="large">供应和求购</el-radio>
+          <el-radio value="供应" size="large">供应</el-radio>
+          <el-radio value="求购" size="large">求购</el-radio>
+          <el-radio value="供应和求购" size="large">供应和求购</el-radio>
         </el-radio-group>
       </div>
       <div class="prvcSelect">
@@ -22,40 +22,53 @@
           />
         </el-select>
       </div>
+      <div class="prvcSelect1">
+        <div class="text1">品种:</div>
+        <el-select v-model="selectedProvince" placeholder="请选择品种" class="select2">
+          <el-option
+            style="width: 100px"
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
+      <el-button class="predictbtn" type="primary" @click="searchChange()">查询</el-button>
     </div>
 
     <el-scrollbar class="marketScrollbar">
-      <div v-for="(items, rowIndex) in list" :key="rowIndex" class="row">
+      <div v-for="(items, rowIndex) in List" :key="rowIndex" class="row">
         <div v-for="(item, colIndex) in items" :key="colIndex" class="cell">
           <div
             style="
               display: flex;
-              align-items: center;
+              align-items: flex-start;
               flex-direction: column;
               justify-content: space-between;
-              align-items: self-start;
+              align-items: flex-start;
               margin-bottom: 5%;
               margin-top: 5%;
             "
           >
-            <div style="font-size: 200%; font-weight: 600; text-align: center">
-              蔬菜加工供应及求购
+            <div style="font-size: 160%; font-weight: 600; text-align: left">
+             {{ item.name}}
             </div>
             <div style="display: flex; flex-direction: row; align-items: center">
               <div
                 class="sleimg"
-                style="display: flex; flex-direction: row; align-items: center"
+                style="display: flex; flex-direction: row"
               ></div>
-              <div style="margin-left: 20px">李军先生</div>
+              <div style="margin-left: 20px;">{{item.manager}}</div>
             </div>
             <div style="display: flex; flex-direction: row; align-items: center">
               <div
                 class="sleimg2"
                 style="display: flex; flex-direction: row; align-items: center"
               ></div>
-              <div style="margin-left: 20px">13369911556</div>
+              <div style="margin-left: 20px">{{item.phone}}</div>
             </div>
-            <div>新疆 > 昌吉 > 昌吉 > 歧峰农贸市场</div>
+            <div style="width: 240px;">{{item.addr}}</div>
           </div>
         </div>
       </div>
@@ -73,18 +86,6 @@
       </div>
     </el-scrollbar>
   </div>
-
-  <!-- <div v-for="index in 10" :key="index">
-        <el-card class="marketCard">
-          <template #header>
-            <div class="card-header">
-              <span>111</span>
-            </div>
-          </template>
-          <p v-for="o in 4" :key="o" class="text item">{{ "List item " + o }}</p>
-          <template #footer>Footer content</template>
-        </el-card>
-      </div> -->
 </template>
 
 <script lang="ts" setup>
@@ -93,6 +94,27 @@ import type { ComponentSize } from "element-plus";
 import { ElSelect, ElOption } from "element-plus";
 import axios from "axios";
 
+const List = ref( );
+const apiUrl = "http://192.168.63.221:8080/api/brief/enterprise";
+const config = {
+  headers: {},
+};
+onMounted(async () => {
+  try {
+    const postData = {
+      prvc: "", // 假设API期望一个名为"message"的字段
+      supplyType: radio1.value,
+      pageSize: 12,
+      pageNum: 1,
+    };
+    const response = await axios.post(apiUrl, postData, config);
+    
+    List.value=response.data.data.enterpriseList;
+    console.log(List.value[0].name);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
 const finalL1 = ref();
 const list = [
   ["Item 1-1", "Item 1-2", "Item 1-3", "Item 1-4"],
@@ -105,17 +127,33 @@ const totalLine = ref(50);
 const size = ref<ComponentSize>("default");
 const background = ref(false);
 const disabled = ref(false);
-const radio1 = ref("1");
+const radio1 = ref("供应");
 const value = ref("");
 const selectedProvince = ref();
-
+const selectedPz = ref();
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
   pageNum.value = val; // 更新当前页码
   // search(); // 根据新的当前页码获取数据
 };
-
+async function searchChange(){
+  try {
+    const postData = {
+      prvc: selectedProvince.value, // 假设API期望一个名为"message"的字段
+      supplyType: radio1.value,
+      pageSize: 12,
+      pageNum: pageNum.value,
+    };
+    const response = await axios.post(apiUrl, postData, config);
+    
+    List.value=response.data.data.enterpriseList;
+    console.log(List.value);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 const options = [
+  { value: "", label: "全部" },
   { value: "北京", label: "北京" },
   { value: "天津", label: "天津" },
   { value: "河北", label: "河北" },
@@ -211,12 +249,20 @@ onMounted(async () => {
   font-size: 14px; /* 可根据需要调整字体大小 */
   margin-left: 3%;
   color: #333; /* 可根据需要调整颜色 */
-  width: 400px;
+  width: 200px;
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-
+.prvcSelect1 {
+  font-size: 14px; /* 可根据需要调整字体大小 */
+  margin-right: 23%;
+  color: #333; /* 可根据需要调整颜色 */
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 .selectContainer {
   background-color: #f4f8f6;
   width: 100%;
@@ -252,7 +298,7 @@ onMounted(async () => {
 .text1 {
   display: flex;
   text-align: center;
-  width: 100px;
+  width: 70px;
   height: 100%;
   align-items: center;
 }
@@ -322,5 +368,20 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.predictbtn {
+  position: absolute;
+  margin-left: 1000px;
+  margin-top: 10px;
+  width: 100px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  border-color: #527865;
+  justify-content: center;
+  align-items: center;
+  color: #527865;
+  font-size: 120%;
+  z-index: 31;
 }
 </style>

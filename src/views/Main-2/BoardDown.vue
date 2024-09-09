@@ -7,8 +7,8 @@ import { onMounted, ref } from 'vue';
 import * as echarts from 'echarts';  
 import axios from 'axios'; // 确保已安装axios  
   
-const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/price/fall";  
-const dataToSend = "这是我要发送的字符串"; // 要发送的字符串 
+const apiUrl = "http://192.168.63.221:8080/api/price/fall";  
+const dataToSend = "江苏"; // 要发送的字符串 
 // const xValue = ref([1, 1, 1, 2, 3]);  
 // const yValue = ref(["陕西移动", "山西移动", "北京移动", "山东移动", "河北移动"]);  
   

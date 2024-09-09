@@ -1,6 +1,6 @@
 <template>
   <div class="searchinput">
-    <div class="searchitem">
+    <div class="searchitem" v-if="show1">
       <div class="searchtext">品种 :</div>
       <el-select
         v-model="selectedCategorypz"
@@ -16,7 +16,7 @@
         </el-option>
       </el-select>
     </div>
-    <div class="searchitem">
+    <div class="searchitem" v-if="show2">
       <div class="searchtext">省份 :</div>
       <!-- 类似地添加省份和城市的选择器 -->
       <el-select
@@ -34,7 +34,7 @@
         </el-option>
       </el-select>
     </div>
-    <div class="searchitem">
+    <div class="searchitem" v-if="show3">
       <div class="searchtext">市场 :</div>
 
       <el-select
@@ -52,149 +52,177 @@
       </el-select>
     </div>
 
-    <el-button class="searchbtn" type="primary" @click="searchChange">查询</el-button>
-    <el-button class="clearbtn">重置</el-button>
+    <el-button class="searchbtn" type="primary" @click="searchChange(0)">查询</el-button>
   </div>
+  <el-button class="predictbtn" type="primary" @click="searchChange(1)">预测</el-button>
+  <el-aside>
+    <button class="el-selection" @click="select1">
+      <img src="@/assets/logo1.png" class="sleimg" />
+      <div class="sletext">单一品种<br />全国均价</div>
+    </button>
+    <button class="el-selection" @click="select2">
+      <img src="@/assets/logo2.png" class="sleimg" />
+      <div class="sletext">单一品种<br />全省均价</div>
+    </button>
+    <button class="el-selection" @click="select3">
+      <img src="@/assets/logo3.png" class="sleimg" />
+      <div class="sletext">单市场多<br />品种对比</div>
+    </button>
+    <button class="el-selection" @click="select4">
+      <img src="@/assets/logo4.png" class="sleimg" />
+      <div class="sletext">单品种多<br />市场对比</div>
+    </button>
+  </el-aside>
 
   <div class="line1">
     <div class="price" v-show="div1">
-      <div style="display: flex; flex-direction: row; margin-left: 11%; margin-top: 4%">
-        <div class="Img1"></div>
-        <div class="titleDate">时间范围</div>
+      <div class="el-selectionall" style="margin-top: 10%">
+        <button class="el-selection1" @click="select1">
+          <img src="@/assets/logopre1.png" class="sleimg1" />
+          <div class="sletext1">时间范围</div>
+        </button>
+        <div class="averageDate0">起始: 09/01<br /><br />截止: 09/03</div>
       </div>
-      <div class="averageDate">2024/09/01-2024/09/03</div>
-      <div style="display: flex; flex-direction: row; margin-left: 11%">
-        <div class="Img3"></div>
-        <div class="title">{{ "最高价格:  "+Max11 }}</div>
+      <div class="el-selectionall">
+        <button class="el-selection1" @click="select1">
+          <img src="@/assets/logopre3.png" class="sleimg1" />
+          <div class="sletext1">最高价格</div>
+        </button>
+        <div style="display: flex; flex-direction: column; height: 70px">
+          <div class="averageDate00">{{ "￥ " + Max11 + " 元/斤" }}</div>
+          <div class="averageDate00">{{  "日期： "+Date11 }}</div>
+        </div>
       </div>
-      <div class="textAdd">{{Sc11}}</div>
-      <div class="average">{{ Date11 }}</div>
-      <div style="display: flex; flex-direction: row; margin-left: 11%">
-        <div class="Img2"></div>
-        <div class="title">{{"最低价格:  " + Min11 }}</div>
+      <div class="el-selectionall" style="margin-bottom: 15%">
+        <button class="el-selection1" @click="select1">
+          <img src="@/assets/logopre2.png" class="sleimg1" />
+          <div class="sletext1">最低价格</div>
+        </button>
+        <div style="display: flex; flex-direction: column; height: 70px">
+          <div class="averageDate00">{{ "￥ " + Min11 + " 元/斤" }}</div>
+          <div class="averageDate00">{{  "日期： "+Date11 }}</div>
+        </div>
       </div>
-      <div class="textAdd">{{Sc12}}</div>
-      <div class="average">{{ Date11 }}</div>
     </div>
     <div class="price" v-show="div2">
-      <div style="display: flex; flex-direction: row; margin-left: 11%; margin-top: 4%">
-        <div class="Img1"></div>
-        <div class="titleDate">时间范围</div>
+      <div class="el-selectionall" style="margin-top: 10%">
+        <button class="el-selection1" @click="select1">
+          <img src="@/assets/logopre1.png" class="sleimg1" />
+          <div class="sletext1">时间范围</div>
+        </button>
+        <div class="averageDate0">起始: 09/01<br /><br />截止: 09/03</div>
       </div>
-      <div class="averageDate">2024/09/01-2024/09/03</div>
-      <div style="display: flex; flex-direction: row; margin-left: 11%">
-        <div class="Img3"></div>
-        <div class="title">最高价格: 29.9</div>
+      <div class="el-selectionall">
+        <button class="el-selection1" @click="select1">
+          <img src="@/assets/logopre3.png" class="sleimg1" />
+          <div class="sletext1">最高价格</div>
+        </button>
+        <div style="display: flex; flex-direction: column; height: 70px">
+          <div class="averageDate00">{{ "￥ " + Max21 + " 元/斤" }}</div>
+          <div class="averageDate00">{{  "日期： "+Date11 }}</div>
+        </div>
       </div>
-      <div class="textAdd">北京京丰岳各庄农副产品批发市场</div>
-      <div class="average">2024/09/01</div>
-      <div style="display: flex; flex-direction: row; margin-left: 11%">
-        <div class="Img2"></div>
-        <div class="title">最低价格: 23.9</div>
+      <div class="el-selectionall" style="margin-bottom: 15%">
+        <button class="el-selection1" @click="select1">
+          <img src="@/assets/logopre2.png" class="sleimg1" />
+          <div class="sletext1">最低价格</div>
+        </button>
+        <div style="display: flex; flex-direction: column; height: 70px; text-align: center;">
+          <div class="averageDate00">{{ "￥ " + Min21 + " 元/斤" }}</div>
+          <div class="averageDate00">{{ "日期： "+Date12 }}</div>
+        </div>
       </div>
-      <div class="textAdd">北京京丰岳各庄农副产品批发市场</div>
-      <div class="average">2024/09/01</div>
     </div>
     <div class="price" v-show="div3">
-      <div class="titleDate2">北京京丰岳各庄农副产品批发市场</div>
+      <div class="titleDate2">{{ SCtitle }}</div>
       <div class="PriceJizhi">
         <div class="Img4"></div>
-        <div class="title1">今日价格极值</div>
+        <div class="title1">今日价格极值（元/斤）</div>
       </div>
       <div style="display: flex; flex-direction: column; width: 100px">
         <div
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd1">番茄</div>
-            <div class="average1">￥888</div>
-
-            <div class="averageDate1">2024-01-01</div>
+            <div class="textAdd1">{{ Pz31 }}</div>
+            <div class="average0">{{ "￥" + Max31 }}</div>
           </div>
         </div>
         <div
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd1">番茄</div>
-            <div class="average1">￥888</div>
-
-            <div class="averageDate1">2024-01-01</div>
+            <div class="textAdd1">{{ Pz32 }}</div>
+            <div class="average0">{{ "￥" + Min32 }}</div>
           </div>
         </div>
       </div>
       <div class="PriceJizhi">
         <div class="Img5"></div>
-        <div class="title1">一周价格极值</div>
+        <div class="title1">一周价格极值（元/斤）</div>
       </div>
       <div style="display: flex; flex-direction: column; width: 100px">
         <div
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd1">番茄</div>
-            <div class="average1">￥888</div>
-
-            <div class="averageDate1">2024-01-01</div>
+            <div class="textAdd1">{{ Pz33 }}</div>
+            <div class="average0">{{ "￥" + Max33 }}</div>
           </div>
         </div>
         <div
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd1">番茄</div>
-            <div class="average1">￥888</div>
-
-            <div class="averageDate1">2024-01-01</div>
+            <div class="textAdd1">{{ Pz34 }}</div>
+            <div class="average0">{{ "￥" + Min34 }}</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="price1" v-show="div4">
-      <div class="titleDate2">{{ selectedCategorypz }}</div>
+    <div class="price" v-show="div4">
+      <div class="titleDate2">{{ PZtitle+"（更新日期"+ Date21+"）"}}</div>
       <div class="PriceJizhi">
         <div class="Img4"></div>
-        <div class="title1">今日价格极值</div>
+        <div class="title1">今日价格一览（元/斤）</div>
       </div>
-      <div style="display: flex; flex-direction: column; width: 350px">
-        <div style="display: flex; flex-direction: column; width: 180px; margin-left: 5%">
+      <div style="display: flex; flex-direction: column; width: 100px">
+        <div
+          style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
+        >
           <div class="PriceItem">
             <div class="textAdd2">{{ Sc41 }}</div>
-            <div class="average2">{{ '￥'+Max41 }}</div>
+            <div class="average1">{{ "￥" + Max41 }}</div>
           </div>
         </div>
-        <div style="display: flex; flex-direction: column; width: 180px; margin-left: 5%">
+        <div
+          style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
+        >
           <div class="PriceItem">
             <div class="textAdd2">{{ Sc42 }}</div>
-            <div class="average2">{{ '￥'+Min42 }}</div>
+            <div class="average1">{{ "￥" + Min42 }}</div>
           </div>
         </div>
       </div>
       <div class="PriceJizhi">
         <div class="Img5"></div>
-        <div class="title1">一周价格极值</div>
+        <div class="title1">一周价格极值（元/斤）</div>
       </div>
       <div style="display: flex; flex-direction: column; width: 100px">
         <div
-          style="display: flex; flex-direction: column; width: 180px; margin-left: 20%"
+          style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
             <div class="textAdd2">{{ Sc43 }}</div>
-            <div class="average2">{{ '￥'+Max43 }}</div>
+            <div class="average1">{{ "￥" + Max43 }}</div>
           </div>
         </div>
         <div
-          style="
-            display: flex;
-            flex-direction: column;
-            width: 180px;
-            margin-left: 20%;
-            margin-bottom: 10px;
-          "
+          style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
             <div class="textAdd2">{{ Sc44 }}</div>
-            <div class="average2">{{ '￥'+Min44 }}</div>
+            <div class="average1">{{ "￥" + Min44 }}</div>
           </div>
         </div>
       </div>
@@ -209,6 +237,7 @@ import bus from "@/views/Main-1/bus.ts";
 import { ElSelect, ElOption } from "element-plus";
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
+import { slice } from "lodash-es";
 
 const apiUrlpz = "http://192.168.63.221:8080/api/price/pz";
 const apiUrl = "http://192.168.63.221:8080/api/price/market";
@@ -227,35 +256,53 @@ const div4 = ref(false);
 const selectedCategorypz = ref([]);
 const selectedCategoryprvc = ref("");
 const selectedCategorysc = ref([]);
-const Max11 = ref();
-const Min11 = ref();
-const Sc11=ref();
-const Sc12=ref();
-const Date11=ref();
-const Date12=ref();
+const Max11 = ref(18);
+const Min11 = ref(18);
+const Sc11 = ref();
+const Sc12 = ref();
+const Date11 = ref("01-01");
+const Date12 = ref("01-01");
 
-const Max31 = ref();
-const Min32 = ref();
-const Sc31=ref();
-const Sc32=ref();
-const Max33 = ref();
-const Min34 = ref();
-const Sc33=ref();
-const Sc34=ref();
+const Max21 = ref(18);
+const Min21 = ref(18);
+const Sc21 = ref();
+const Sc22 = ref();
+const Date21 = ref("01-01");
+const Date22 = ref("01-01");
 
-const Max41 = ref();
-const Min42 = ref();
-const Sc41=ref();
-const Sc42=ref();
-const Max43 = ref();
-const Min44 = ref();
-const Sc43=ref();
-const Sc44=ref();
+const SCtitle = ref("北京京丰岳各庄农副产品批发市场");
+const Max31 = ref(18);
+const Min32 = ref(18);
+const Pz31 = ref("番茄");
+const Pz32 = ref("番茄");
+const Max33 = ref(18);
+const Min34 = ref(18);
+const Pz33 = ref("番茄");
+const Pz34 = ref("番茄");
+const date31 = ref("2024-01-01");
+const date32 = ref("2024-01-01");
+const date33 = ref("2024-01-01");
+const date34 = ref("2024-01-01");
 
-const DanpzDuoscList=ref();
-const QuanguoList=ref();
-const DanscDuopzList=ref();
+const PZtitle = ref("土豆");
+const Max41 = ref(18);
+const Min42 = ref(18);
+const Sc41 = ref("北京京丰岳各庄农副产品批发市场");
+const Sc42 = ref("北京京丰岳各庄农副产品批发市场");
+const Max43 = ref(18);
+const Min44 = ref(18);
+const Sc43 = ref("北京京丰岳各庄农副产品批发市场");
+const Sc44 = ref("北京京丰岳各庄农副产品批发市场");
 
+const DanpzDuoscList = ref();
+const QuanguoList = ref();
+const QuanshenList = ref();
+const DanscDuopzList = ref();
+
+const SearchPredict = ref();
+const show1 = ref(true);
+const show2 = ref(false);
+const show3 = ref(false);
 onMounted(async () => {
   try {
     const postData = {
@@ -344,40 +391,45 @@ const categoriesprvc = [
   { value: "澳门", label: "澳门" },
 ];
 
-
 onMounted(async () => {
   try {
     const postData = {
-      pz: '南瓜', // 假设API期望一个名为"message"的字段
+      pz: "南瓜", // 假设API期望一个名为"message"的字段
     };
     const response1 = await axios.post(apiUrlleft, postData, config);
     Max11.value = response1.data.data.highestInfo.highest;
     Min11.value = response1.data.data.lowestInfo.lowest;
-    Date11.value= response1.data.data.highestInfo.releaseTime;
-    Date12.value= response1.data.data.lowestInfo.releaseTime;
-    Sc11.value=response1.data.data.highestInfo.market;
-    Sc12.value=response1.data.data.lowestInfo.market;
-    QuanguoList.value=response1.data.data.averageInfo;
-    bus.emit("QuanguoList",QuanguoList);
+    Date11.value = response1.data.data.highestInfo.releaseTime;
+    Date11.value =Date11.value.slice(5);
+    Date12.value = response1.data.data.lowestInfo.releaseTime;
+    Date12.value =Date12.value.slice(5);
+    Sc11.value = response1.data.data.highestInfo.market;
+    Sc12.value = response1.data.data.lowestInfo.market;
+    QuanguoList.value = response1.data.data.averageInfo;
+    bus.emit("QuanguoList", QuanguoList);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
   }
-})
+});
 async function Quanguoleft() {
   try {
     const postData = {
       pz: selectedCategorypz.value[0], // 假设API期望一个名为"message"的字段
+      isPrediction: SearchPredict.value,
     };
     const response1 = await axios.post(apiUrlleft, postData, config);
+    console.debug(response1.data.data);
     Max11.value = response1.data.data.highestInfo.highest;
     Min11.value = response1.data.data.lowestInfo.lowest;
-    Date11.value= response1.data.data.highestInfo.releaseTime;
-    Date12.value= response1.data.data.lowestInfo.releaseTime;
-    Sc11.value=response1.data.data.highestInfo.market;
-    Sc12.value=response1.data.data.lowestInfo.market;
-    QuanguoList.value=response1.data.data.averageInfo;
-    bus.emit("QuanguoList",QuanguoList);
+    Date11.value = response1.data.data.highestInfo.releaseTime;
+    Date11.value =Date11.value.slice(5);
+    Date12.value = response1.data.data.lowestInfo.releaseTime;
+    Date12.value =Date12.value.slice(5);
+    Sc11.value = response1.data.data.highestInfo.market;
+    Sc12.value = response1.data.data.lowestInfo.market;
+    QuanguoList.value = response1.data.data.averageInfo;
+    bus.emit("QuanguoList", QuanguoList);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -387,17 +439,19 @@ async function Quanshenleft() {
   try {
     const postData = {
       pz: selectedCategorypz.value[0], // 假设API期望一个名为"message"的字段
-      prvc:selectedCategoryprvc.value,
+      prvc: selectedCategoryprvc.value,
     };
     const response1 = await axios.post(apiUrlleft, postData, config);
-    Max11.value = response1.data.data.highestInfo.highest;
-    Min11.value = response1.data.data.lowestInfo.lowest;
-    Date11.value= response1.data.data.highestInfo.releaseTime;
-    Date12.value= response1.data.data.lowestInfo.releaseTime;
-    Sc11.value=response1.data.data.highestInfo.market;
-    Sc12.value=response1.data.data.lowestInfo.market;
-    QuanguoList.value=response1.data.data.averageInfo;
-    bus.emit("QuanguoList",QuanguoList);
+    Max21.value = response1.data.data.highestInfo.highest;
+    Min21.value = response1.data.data.lowestInfo.lowest;
+    Date21.value = response1.data.data.highestInfo.releaseTime;
+    Date21.value =Date21.value.slice(5);
+    Date22.value = response1.data.data.lowestInfo.releaseTime;
+    Date22.value =Date22.value.slice(5);
+    Sc21.value = response1.data.data.highestInfo.market;
+    Sc22.value = response1.data.data.lowestInfo.market;
+    QuanshenList.value = response1.data.data.averageInfo;
+    bus.emit("QuanshenList", QuanshenList);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -407,31 +461,30 @@ async function Danpzleft() {
   try {
     const postData = {
       pz: selectedCategorypz.value[0], // 假设API期望一个名为"message"的字段
-      marketList:selectedCategorysc.value,
+      marketList: selectedCategorysc.value,
     };
     const response1 = await axios.post(apiUrlleft4, postData, config);
     Max41.value = response1.data.data.todayInfo.highest;
     Min42.value = response1.data.data.todayInfo.lowest;
     Max43.value = response1.data.data.weekInfo.highest;
     Min44.value = response1.data.data.weekInfo.lowest;
-    Sc41.value=response1.data.data.todayInfo.highestMarket;
-    Sc42.value=response1.data.data.todayInfo.lowestMarket;
-    Sc43.value=response1.data.data.weekInfo.highestMarket;
-    Sc44.value=response1.data.data.weekInfo.lowestMarket;
-    DanpzDuoscList.value=response1.data.data.averageInfo;
-    bus.emit("DanpzDuoscList",DanpzDuoscList);
+    Sc41.value = response1.data.data.todayInfo.highestMarket;
+    Sc42.value = response1.data.data.todayInfo.lowestMarket;
+    Sc43.value = response1.data.data.weekInfo.highestMarket;
+    Sc44.value = response1.data.data.weekInfo.lowestMarket;
+    DanpzDuoscList.value = response1.data.data.averageInfo;
+    bus.emit("DanpzDuoscList", DanpzDuoscList);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 }
 
-
 async function Danscleft() {
   try {
     const postData = {
-      pz: selectedCategorypz.value, // 假设API期望一个名为"message"的字段
-      marketList:selectedCategorysc.value[0],
+      pzList: selectedCategorypz.value, // 假设API期望一个名为"message"的字段
+      market: selectedCategorysc.value[0],
     };
     const response1 = await axios.post(apiUrlleft3, postData, config);
     console.debug(888888888);
@@ -440,18 +493,19 @@ async function Danscleft() {
     Min32.value = response1.data.data.todayInfo.lowest;
     Max33.value = response1.data.data.weekInfo.highest;
     Min34.value = response1.data.data.weekInfo.lowest;
-    Sc31.value=response1.data.data.todayInfo.highestPz;
-    Sc32.value=response1.data.data.todayInfo.lowestPz;
-    Sc33.value=response1.data.data.weekInfo.highestPz;
-    Sc34.value=response1.data.data.weekInfo.lowestPz;
-    DanscDuopzList.value=response1.data.data.averageInfo;
-    bus.emit("DanscDuopzList",DanscDuopzList);
+    Pz31.value = response1.data.data.todayInfo.highestPz;
+    Pz32.value = response1.data.data.todayInfo.lowestPz;
+    Pz33.value = response1.data.data.weekInfo.highestPz;
+    Pz34.value = response1.data.data.weekInfo.lowestPz;
+    DanscDuopzList.value = response1.data.data.averageInfo;
+    bus.emit("DanscDuopzList", DanscDuopzList);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 }
-function searchChange() {
+function searchChange(tem) {
+  SearchPredict.value = tem;
   if (
     selectedCategorypz.value.length === 1 &&
     selectedCategoryprvc.value === "" &&
@@ -496,6 +550,41 @@ function searchChange() {
     console.debug("error");
   }
 }
+
+function select1() {
+  show1.value = true;
+  show2.value = show3.value = false;
+  div1.value = div2.value = div3.value = div4.value = false;
+  div1.value = true;
+  selectedCategorypz.value=selectedCategorysc.value=[];
+  selectedCategoryprvc.value="";
+  bus.emit("ChartBegin", "Quanguo");
+}
+function select2() {
+  show1.value = show2.value = true;
+  show3.value = false;
+  div1.value = div2.value = div3.value = div4.value = false;
+  div2.value = true;
+  selectedCategorypz.value=selectedCategorysc.value=[];
+  selectedCategoryprvc.value="";
+  bus.emit("ChartBegin", "Quansheng");
+}
+function select3() {
+  show1.value = show2.value = show3.value = true;
+  div1.value = div2.value = div3.value = div4.value = false;
+  div3.value = true;
+  selectedCategorypz.value=selectedCategorysc.value=[];
+  selectedCategoryprvc.value="";
+  bus.emit("ChartBegin", "DanscDuopz");
+}
+function select4() {
+  show1.value = show2.value = show3.value = true;
+  div1.value = div2.value = div3.value = div4.value = false;
+  div4.value = true;
+  selectedCategorypz.value=selectedCategorysc.value=[];
+  selectedCategoryprvc.value="";
+  bus.emit("ChartBegin", "DanpzDuosc");
+}
 </script>
 
 <style scoped>
@@ -508,7 +597,7 @@ function searchChange() {
   align-items: center;
   border: none;
   border-radius: 4%;
-  margin-right: 100px;
+  margin-right: 80px;
   margin-bottom: 40px;
 }
 
@@ -526,10 +615,10 @@ function searchChange() {
 .price {
   display: flex;
   background-color: #d7ede4;
-  width: 350px;
+  width: 300px;
   height: 500px;
   border-radius: 20px;
-  margin-left: 100px;
+  margin-left: 250px;
   border: none;
   flex-direction: column;
   justify-content: space-between;
@@ -582,14 +671,16 @@ function searchChange() {
   height: 50px;
   color: #1d382d;
   font-size: 180%;
+  font-weight: 800;
   margin-left: 5%;
 }
 .title1 {
   display: flex;
   width: 500px;
   height: 50px;
-  color: #1d382d;
+  color: #2c5645;
   font-size: 180%;
+  font-weight: 550;
   margin-left: 5%;
   margin-top: 3px;
 }
@@ -599,6 +690,7 @@ function searchChange() {
   height: 50px;
   color: #1d382d;
   font-size: 180%;
+  font-weight: 550;
   margin-top: 30px;
   margin-left: 3%;
 }
@@ -613,6 +705,17 @@ function searchChange() {
   justify-content: center;
   margin-top: 30px;
 }
+.titleDate3 {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  color: #1d382d;
+  font-size: 200%;
+  font-weight: 900;
+  text-align: center;
+  justify-content: center;
+  margin-top: 30px;
+}
 .average {
   display: flex;
   width: 200px;
@@ -623,45 +726,62 @@ function searchChange() {
 }
 .textAdd {
   display: flex;
-  width: 100%;
-  height: 40px;
+  width: 215px;
+  height: 60px;
   color: #1d382d;
   font-size: 130%;
   margin-left: 22.5%;
   justify-content: flex-start;
+  text-align: start;
+}
+.average0 {
+  display: flex;
+  width: 100px;
+  height: 40px;
+  color: #1d382d;
+  font-size: 180%;
+  margin-right: 60px;
+  margin-top: 10px;
 }
 .average1 {
   display: flex;
   width: 100px;
   height: 40px;
   color: #1d382d;
-  font-size: 120%;
+  font-size: 180%;
+  margin-right: 20px;
+  margin-top: 10px;
 }
 .average2 {
   display: flex;
   justify-content: flex-start;
   width: 60px;
-  height: 40px;
+  height: 30px;
   color: #1d382d;
-  font-size: 120%;
+  font-size: 180%;
+  font-weight: 800;
 }
 .textAdd1 {
   display: flex;
   width: 110px;
   height: 40px;
   color: #1d382d;
-  font-size: 130%;
-
-  justify-content: flex-start;
+  font-size: 160%;
+  margin-top: 10px;
+  justify-content: center;
 }
 .textAdd2 {
   display: flex;
-  width: 150px;
-  height: 40px;
+  width: 140px;
+  height: 30px;
   color: #1d382d;
-  font-size: 120%;
+  font-size: 140%;
   justify-content: flex-start;
+  margin-right: 26px;
+  text-align: center;
+  margin-bottom: 15px;
 }
+
 .averageDate {
   display: flex;
   width: 400px;
@@ -670,6 +790,28 @@ function searchChange() {
   font-size: 150%;
   margin-left: 24%;
   margin-bottom: 4%;
+}
+.averageDate0 {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  width: 120px;
+  height: 60px;
+  color: #1d382d;
+  font-size: 150%;
+  margin-left: 14%;
+  margin-top: 14%;
+}
+.averageDate00 {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  width: 120px;
+  height: 60px;
+  color: #1d382d;
+  font-size: 150%;
+  margin-left: 14%;
+  margin-top: 23%;
 }
 .averageDate1 {
   display: flex;
@@ -735,13 +877,15 @@ option {
   margin-left: 150px;
 }
 .searchinput {
-  width: 100%;
+  width: 80%;
   display: flex;
   flex-direction: row;
   z-index: 16;
   margin-top: 80px;
+  margin-left: 250px;
+
   height: 40px;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .searchtext {
   width: 50px;
@@ -756,7 +900,8 @@ option {
   flex-direction: row;
 }
 .searchbtn {
-  margin-left: 200px;
+  position: absolute;
+  margin-left: 900px;
   width: 100px;
   display: flex;
   flex-direction: row;
@@ -767,7 +912,11 @@ option {
   color: #ffffff;
   font-size: 120%;
 }
-.clearbtn {
+
+.predictbtn {
+  position: absolute;
+  margin-left: 1300px;
+  margin-top: 81px;
   width: 100px;
   display: flex;
   flex-direction: row;
@@ -777,8 +926,8 @@ option {
   align-items: center;
   color: #527865;
   font-size: 120%;
+  z-index: 31;
 }
-
 .select {
   height: 30px;
   width: 180px;
@@ -787,15 +936,15 @@ option {
 }
 
 .Img1 {
-  margin-top: 28px;
-  width: 43px;
-  height: 27px;
+  margin-top: 26px;
+  width: 35px;
+  height: 24px;
   background-image: url("@/assets/logopre1.png");
   background-size: 100%;
   z-index: 40;
 }
 .Img2 {
-  margin-top: 1px;
+  margin-top: 0px;
   width: 44px;
   height: 27px;
   background-image: url("@/assets/logopre2.png");
@@ -803,7 +952,7 @@ option {
   z-index: 40;
 }
 .Img3 {
-  margin-top: 1px;
+  margin-top: 0px;
   width: 44px;
   height: 27px;
   background-image: url("@/assets/logopre3.png");
@@ -829,13 +978,77 @@ option {
 .PriceJizhi {
   display: flex;
   flex-direction: row;
-  margin-left: 11%;
+  margin-left: 8%;
 }
 .PriceItem {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 300px;
-  height: 70px;
+  height: 80px;
+}
+.el-aside {
+  display: flex;
+  background-color: transparent;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  height: 78.9%;
+  margin-top: 5%;
+  margin-bottom: 7%;
+  margin-left: 10px;
+  z-index: 31;
+  position: absolute;
+}
+.el-selection {
+  background-color: #d7ede4;
+  width: 60%;
+  height: 20%;
+  border-radius: 20px;
+  border: none;
+}
+.el-selection1 {
+  background-color: #d7ede4;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+}
+.el-selection:hover {
+  background-color: #f1e1e5;
+}
+
+.sleimg {
+  margin-top: -5px;
+  height: 50px;
+}
+.sletext {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 10%;
+  color: #1d382d;
+  font-size: 120%;
+  margin-bottom: 10%;
+}
+.sleimg1 {
+  margin-top: 5px;
+  height: 50px;
+}
+.sletext1 {
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 10%;
+  color: #1d382d;
+  font-size: 150%;
+  margin-top: 10%;
+}
+.el-selectionall {
+  display: flex;
+  flex-direction: row;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 </style>

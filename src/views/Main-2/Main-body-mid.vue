@@ -3,19 +3,19 @@
     <div class="mid-up">
       <div class="mid-up-item1">
         市场总数<br /><br />
-        {{ data1 }}
+        <div class="mid-up-item0">{{ data1 }}</div>
       </div>
       <div class="mid-up-item">
         品种总数<br /><br />
-        {{ data2 }}
+        <div class="mid-up-item0">{{ data2 }}</div>
       </div>
       <div class="mid-up-item">
         品类总数<br /><br />
-        {{ data3 }}
+        <div class="mid-up-item0">{{ data3 }}</div>
       </div>
       <div class="mid-up-item2">
         数据总量<br /><br />
-        {{ data4 }}
+        <div class="mid-up-item0">{{ data4 }}</div>
       </div>
     </div>
     <div class="mid-bottom">
@@ -81,20 +81,38 @@ onMounted(async () => {
 .mid-up-item {
   background-color: transparent;
   font-size: 150%;
+  font-weight: 800;
   display: flex;
   align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+.mid-up-item0 {
+  background-color: transparent;
+  font-size: 100%;
+  display: flex;
+  font-weight: 800;
+  align-items: center;
+  flex-direction: column;
+  color: #517963;
 }
 .mid-up-item1 {
   background-color: transparent;
   font-size: 150%;
   display: flex;
+  font-weight: 800;
   align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
 }
 .mid-up-item2 {
   background-color: transparent;
   font-size: 150%;
+  font-weight: 800;
   display: flex;
   align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
 }
 .mid-bottom {
   height: 78%;

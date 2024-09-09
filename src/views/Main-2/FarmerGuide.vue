@@ -186,9 +186,9 @@ function pairArray(arr:any) {
 }
 // 图片数组
 const images = [
-  ` /vue3-echarts-map/src/assets/backnew1.jpg`,
-  ` /vue3-echarts-map/src/assets/backnew2.jpg`,
-  ` /vue3-echarts-map/src/assets/backnew3.jpg`,
+  ` /southMountainVillage/src/assets/backnew1.jpg`,
+  ` /southMountainVillage/src/assets/backnew2.jpg`,
+  ` /southMountainVillage/src/assets/backnew3.jpg`,
 ];
 </script>
 

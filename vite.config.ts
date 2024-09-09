@@ -4,7 +4,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/vue3-echarts-map/",
+  base: "/southMountainVillage/",
   plugins: [vue()],
   server: {
     port: 9802,

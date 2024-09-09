@@ -43,6 +43,33 @@ onMounted(() => {
     initChart();
     initChart2();
   });
+  bus.on("DanscDuopzList", (e: any) => {
+    pzList.value = e;
+    console.debug(pzList.value.value);
+    console.debug(chartData.value);
+    chartData.value = pzList.value.value;
+    chartData2.value = pzList.value.value;
+    initChart();
+    initChart2();
+  });
+  bus.on("QuanshenList", (e: any) => {
+    pzList.value = e;
+    console.debug(pzList.value.value);
+    console.debug(chartData.value);
+    chartData.value = pzList.value.value;
+    chartData2.value = pzList.value.value;
+    initChart();
+    initChart2();
+  });
+  bus.on("QuanguoList", (e: any) => {
+    pzList.value = e;
+    console.debug(pzList.value.value);
+    console.debug(chartData.value);
+    chartData.value = pzList.value.value;
+    chartData2.value = pzList.value.value;
+    initChart();
+    initChart2();
+  });
 });
 const activeChart1 = ref(true);
 const activeChart2 = ref(false);
@@ -96,16 +123,16 @@ const chartData = ref([
   {
     market: "市场1",
     price: [
-      { releaseTime: "2024-09-02", average: 120 },
-      { releaseTime: "2024-09-03", average: 130 },
+      { releaseTime: "2024-09-02", average: 120, type: "" },
+      { releaseTime: "2024-09-03", average: 130, type: "" },
       // ...
     ],
   },
   {
     market: "市场2",
     price: [
-      { releaseTime: "2024-09-02", average: 220 },
-      { releaseTime: "2024-09-03", average: 230 },
+      { releaseTime: "2024-09-02", average: 220, type: "" },
+      { releaseTime: "2024-09-03", average: 230, type: "" },
       // ...
     ],
   },
@@ -113,18 +140,16 @@ const chartData = ref([
 ]);
 const chartData2 = ref([
   {
-    market: "市场1",
     price: [
-      { releaseTime: "2024-09-02", average: 120 },
-      { releaseTime: "2024-09-03", average: 130 },
+      { market: "市场1", releaseTime: "2024-09-02", average: 120, type: "" },
+      { market: "市场1", releaseTime: "2024-09-03", average: 130, type: "" },
       // ...
     ],
   },
   {
-    market: "市场2",
     price: [
-      { releaseTime: "2024-09-02", average: 220 },
-      { releaseTime: "2024-09-03", average: 230 },
+      { market: "市场2", releaseTime: "2024-09-02", average: 220, type: "" },
+      { market: "市场2", releaseTime: "2024-09-03", average: 230, type: "" },
       // ...
     ],
   },
@@ -164,15 +189,35 @@ function prepareData() {
 }
 
 function drawChart() {
-  const series = chartData.value.map((market) => ({
-    name: market.market,
-    type: "line",
-    data: xAxisDates.value.map((date) => {
-      const price = market.price.find((p) => p.releaseTime === date);
-      return price ? price.average : 0; // 如果找不到对应的日期，则使用0
-    }),
-  }));
-
+  // const series = chartData.value.map((market1) => ({
+  //   name: market1.market,
+  //   type: "line",
+  //   lineStyle: {
+  //     type: "",
+  //   },
+  //   data: xAxisDates.value.map((date) => {
+  //     const price = market1.price.find((p) => p.releaseTime === date);
+  //     return price ? price.average : 0; // 如果找不到对应的日期，则使用0
+  //   }),
+  // }));
+  const series = [
+    {
+      name: "市场1",
+      type: "line",
+      lineStyle: {
+        type: "dashed",
+      },
+      data: [, , 140, 130],
+    },
+    {
+      name: "市场1",
+      type: "line",
+      lineStyle: {
+        type: "",
+      },
+      data: [120, 110, 140],
+    },
+  ];
   const option = {
     tooltip: {
       show: true,
@@ -195,14 +240,15 @@ function drawChart() {
       containLabel: true,
     },
     toolbox: {
-      right: 20,
+      right: 90,
+      top: -0,
       feature: {
         saveAsImage: {},
       },
     },
     xAxis: {
       type: "category",
-      data: xAxisDates.value,
+      data: ["Mon", "Tue", "Wed", "Thu"], //xAxisDates.value,
       axisLabel: {
         padding: [10, 0, 0, -15], //文字左右定位
         textStyle: {
@@ -236,7 +282,7 @@ function drawChart() {
     },
     series,
   };
-
+  console.debug(series);
   chart.value.setOption(option);
 }
 
@@ -254,8 +300,6 @@ function drawChart2() {
     }),
   }));
 
-
-  
   const option = {
     tooltip: {
       trigger: "axis",
@@ -291,7 +335,6 @@ function drawChart2() {
 
   chart2.value.setOption(option);
 }
-
 </script>
 
 <style scoped>
@@ -348,7 +391,7 @@ function drawChart2() {
   width: 50px;
   position: absolute;
   z-index: 31;
-  margin-left: 500px;
-  margin-top: 200px;
+  margin-left: 600px;
+  margin-top: 380px;
 }
 </style>

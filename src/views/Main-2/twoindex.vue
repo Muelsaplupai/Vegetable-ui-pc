@@ -24,7 +24,7 @@
         <div class="text1">
           <div class="special-style1">蔬菜指数</div>
           <div class="special-style2">{{ index3 }}</div>
-          <div class="special-style3">{{rise3 }} 较昨日</div>
+          <div class="special-style3">{{ rise3 }} 较昨日</div>
         </div>
       </div>
       <div class="line2">
@@ -43,27 +43,27 @@
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import axios from "axios"; // 确保已安装axios
 const apiUrl = "http://192.168.63.221:8080/api/price/hbindex";
-const List=ref();
-const index1=ref();
-const rise1=ref();
-const index2=ref();
-const rise2=ref();
-const index3=ref();
-const rise3=ref();
-const index4=ref();
-const rise4=ref();
+const List = ref();
+const index1 = ref();
+const rise1 = ref();
+const index2 = ref();
+const rise2 = ref();
+const index3 = ref();
+const rise3 = ref();
+const index4 = ref();
+const rise4 = ref();
 onMounted(async () => {
   try {
     const response1 = await axios.get(apiUrl);
-    List.value=response1.data.data;
-    index1.value=List.value[1].index;
-    index2.value=List.value[2].index;
-    index3.value=List.value[3].index;
-    index4.value=List.value[4].index;
-    rise1.value=List.value[1].rise;
-    rise2.value=List.value[2].rise;
-    rise3.value=List.value[3].rise;
-    rise4.value=List.value[4].rise;
+    List.value = response1.data.data;
+    index1.value = List.value[1].index;
+    index2.value = List.value[2].index;
+    index3.value = List.value[3].index;
+    index4.value = List.value[4].index;
+    rise1.value = List.value[1].rise;
+    rise2.value = List.value[2].rise;
+    rise3.value = List.value[3].rise;
+    rise4.value = List.value[4].rise;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -104,18 +104,20 @@ onMounted(async () => {
   font-weight: 900;
   margin-top: 10px;
   margin-bottom: 10px;
+
   width: 100%;
   display: flex;
   justify-content: flex-start;
 }
 .special-style2 {
   font-size: 170%;
-  font-weight: 500;
+  font-weight: 600;
   width: 100%;
   display: flex;
+  color: #749383;
   justify-content: flex-start;
 }
-.text1{
+.text1 {
   color: #527865;
   font-size: 140%;
   margin-top: 10px;
@@ -132,5 +134,4 @@ onMounted(async () => {
   display: flex;
   justify-content: flex-start;
 }
-
 </style>

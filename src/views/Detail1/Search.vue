@@ -3,7 +3,7 @@
     <div class="searchinput">
       <div class="searchitem">
         <div class="searchtext">品种 :</div>
-        <el-select v-model="pz" filterable placeholder="品种" class="select">
+        <el-select v-model="pz" filterable placeholder="品种" class="select" ref="ref1">
           <el-option v-for="item in categories3" :key="item" :label="item" :value="item">
           </el-option>
         </el-select>
@@ -11,7 +11,13 @@
       <div class="searchitem">
         <div class="searchtext">省份 :</div>
         <!-- 类似地添加省份和城市的选择器 -->
-        <el-select v-model="Sheng" filterable placeholder="省份" class="select">
+        <el-select
+          v-model="Sheng"
+          filterable
+          placeholder="省份"
+          class="select"
+          ref="ref2"
+        >
           <el-option
             v-for="item in categories1"
             :key="item"
@@ -29,51 +35,78 @@
           filterable
           placeholder="市场"
           class="select"
+          ref="ref3"
         >
           <el-option v-for="item in categories2" :key="item" :label="item" :value="item">
           </el-option>
         </el-select>
       </div>
 
-      <el-button class="searchbtn" type="primary" @click="fetchData">查询</el-button>
-      <el-button class="clearbtn">重置</el-button>
+      <el-button class="searchbtn" type="primary" @click="fetchData" ref="buttonRef">查询</el-button>
+      <el-button class="clearbtn" @click="clearData">重置</el-button>
     </div>
+    <el-popover
+      ref="popoverRef"
+      :virtual-ref="buttonRef"
+      trigger="click"
+      title="今日总结"
+      virtual-triggering
+      width= 220
+    >
+      <span> {{ textfinal }}</span>
+    </el-popover>
+    <!-- <div class="textall">
+      <button class="el-selection">
+        <img src="@/assets/robot.png" class="sleimg" />
+      </button>
+      <div class="text">
+        昨日(2024年9月7日)，河北省的【土豆】平均价格为0.88元，价格稳定在0.88左右。与前天相比，土豆的平均价格上涨了e.05元预计今日的价格为0.92元，明日的价格可能会上涨至1.03元。 {{ textfinal }} 
+      </div>
+    </div> -->
     <!-- 数据表格组件 -->
     <EasyDataTable
-      
       :headers="headers"
       :items="items"
       theme-color="#1d90ff"
       table-class-name="customize-table"
       header-text-direction="center"
       body-text-direction="center"
-      :rows-per-page="12"
-      :loading="loading"  
+      :rows-per-page="10"
+      :loading="loading"
       :server-items-length="serverItemsLength"
       table-min-height="500"
       buttons-pagination
+      margin-bottom="50px"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
-import { ElSelect, ElOption, ElButton } from "element-plus";
+import { ref, computed, onMounted, watch, unref } from "vue";
+import { ElSelect, ElOption, ElButton, ElTour } from "element-plus";
 // 确保你引入了 EasyDataTable 及其类型定义
 import EasyDataTable from "vue3-easy-data-table";
-import type { Header, Item,ServerOptions  } from "vue3-easy-data-table";
+import type { Header, Item, ServerOptions } from "vue3-easy-data-table";
 import axios from "axios"; // 确保已安装axios
+
 const config = {
   headers: {},
 };
-
+const ref1 = ref();
+const ref2 = ref();
+const ref3 = ref();
+const open = ref(false);
+const textfinal = ref();
 const apiUrl = "http://192.168.63.221:8080/api/price/market";
 const apiUrlpz = "http://192.168.63.221:8080/api/price/pz";
 const apiUrlList = "http://192.168.63.221:8080/api/price";
+
+const apiUrlFinal = "http://192.168.63.221:8080/api/price/brief";
+
 onMounted(async () => {
   try {
     const postData = {
-      prvc: '', // 假设API期望一个名为"message"的字段
+      prvc: "", // 假设API期望一个名为"message"的字段
     };
     const response1 = await axios.post(apiUrlpz, postData, config);
     categories3.value = response1.data.data;
@@ -127,8 +160,9 @@ async function search() {
       pageSize: 10, // 假设API期望一个名为"message"的字段
       pageNum: 1,
     };
-    const response = await axios.post(apiUrlList, postData, config);
+    const response = await axios.post(apiUrlFinal, postData, config);
     items.value = response.data.data.priceList;
+
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -146,6 +180,7 @@ const headers: Header[] = [
   { text: "平均价格", value: "average", sortable: true },
   { text: "最高价格", value: "highest", sortable: true },
   { text: "最低价格", value: "lowest", sortable: true },
+  { text: "日期", value: "releaseTime", sortable: true },
 ];
 
 const items = ref<Item[]>([]);
@@ -195,7 +230,12 @@ const selectedCategory2 = ref("");
 const selectedCategory3 = ref("");
 
 // 添加筛选逻辑（根据选中的分类筛选数据）
-
+function clearData() {
+  pz.value = "";
+  Sheng.value = "";
+  selectedCategory2.value = "";
+  fetchData();
+}
 watch(Sheng, async (newValue) => {
   try {
     const postData = {
@@ -241,37 +281,44 @@ const serverItemsLength = ref(0);
 // });
 
 const loading = ref(false);
-// 模拟的 API 请求函数  
-const fetchData = async () => {  
-  loading.value = true;  
-  try {  
+const buttonRef = ref();
+const popoverRef = ref();
+// 模拟的 API 请求函数
+const fetchData = async () => {
+  unref(popoverRef).popperRef?.delayHide?.()
+  open.value = true;
+  loading.value = true;
+  try {
     const postData = {
       pz: pz.value,
-      prvc:Sheng.value,
-      market:selectedCategory2.value,
+      prvc: Sheng.value,
+      market: selectedCategory2.value,
       pageSize: 7000, // 假设API期望一个名为"message"的字段
       pageNum: 1,
     };
-    const response = await axios.post(apiUrlList, postData,config);  
-  
-    // 假设响应格式如下  
-    // {  
-    //   data: [...items],  
-    //   total: totalItems  
-    // }  
-    items.value = response.data.data.priceList;  
-    serverItemsLength.value = response.data.data.priceList.length;  
-  } catch (error) {  
-    console.error('Error fetching data:', error);  
-  } finally {  
-    loading.value = false;  
-  }  
-};  
-  
-
-  
-
-
+    const postData2 = {
+      pz: pz.value,
+      prvc: Sheng.value,
+      market: selectedCategory2.value,
+    };
+    const response = await axios.post(apiUrlList, postData, config);
+    const response2 = await axios.post(apiUrlFinal, postData2, config);
+    console.debug(response2.data.data);
+    textfinal.value = response2.data.data;
+    console.debug("00000"+textfinal.value);
+    // 假设响应格式如下
+    // {
+    //   data: [...items],
+    //   total: totalItems
+    // }
+    items.value = response.data.data.priceList;
+    serverItemsLength.value = response.data.data.priceList.length;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -337,12 +384,12 @@ option {
   margin-top: 4px;
 }
 .searchitem {
-  width: 200px;
+  width: 500px;
   display: flex;
   flex-direction: row;
 }
 .searchbtn {
-  margin-left: 300px;
+  margin-left: 380px;
   width: 100px;
   display: flex;
   flex-direction: row;
@@ -379,7 +426,7 @@ option {
   --easy-table-body-even-row-background-color: #b0be97;
 
   --easy-table-body-row-font-color: #527865;
-  --easy-table-body-row-font-size:16px;
+  --easy-table-body-row-font-size: 16px;
   --easy-table-body-row-background-color: #c9d5d1;
   --easy-table-body-row-height: 40px;
 
@@ -407,10 +454,55 @@ option {
 }
 .select {
   height: 30px;
-  width: 80px;
+  width: 130px;
   font-size: 100%;
   margin-left: 10px;
 }
+.el-selection {
+  background-color: #d7ede4;
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
+  border: none;
+}
 
+.sleimg {
+  height: 40px;
+  margin-left: 5px;
+}
+.sletext {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 10px;
+  color: #1d382d;
+  font-size: 100%;
+}
+
+.textall {
+  width: 380px;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  background-color: #d7ede4;
+  justify-content: space-between;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 32;
+  margin-top: 10px;
+  margin-left: 580px;
+}
+.text {
+  width: 350px;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  color: #577968;
+  text-align: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 100%;
+}
 /* 原有的样式保持或根据 Element Plus 组件进行调整 */
 </style>

@@ -4,7 +4,7 @@
       <div class="main-row1">
         <div class="main-col">
           <div class="main-col-header1">
-            <div style="margin-left: 10%; margin-top: 5%">涨幅排行</div>
+            <div style="margin-left: 10%; margin-top: 5%; font-weight:1000;">农产品价格涨幅排行</div>
           </div>
           <div class="main-col-con1">
             <BoardIns />
@@ -12,7 +12,7 @@
         </div>
         <div class="main-col">
           <div class="main-col-header2">
-            <div style="margin-left: 10%; margin-top: 5%">跌幅排行</div>
+            <div style="margin-left: 10%; margin-top: 5%;font-weight:1000;">农产品价格跌幅排行</div>
           </div>
           <div class="main-col-con1">
             <BoardDownIns />
@@ -24,7 +24,7 @@
       <div class="main-row1">
         <div class="main-col">
           <div class="main-col-header3">
-            <div style="margin-left: 10%; margin-top: 5%">“菜篮子”产品批发价格指数 </div>
+            <div style="margin-left: 10%; margin-top: 5%;font-weight:1000;">“菜篮子”产品批发价格指数 </div>
           </div>
           <div class="main-col-con3">
             <twoindex />
@@ -32,7 +32,7 @@
         </div>
         <div class="main-col">
           <div class="main-col-header4">
-            <div style="margin-left: 10%; margin-top: 5%">粮油产品批发价格指数</div>
+            <div style="margin-left: 10%; margin-top: 5%;font-weight:1000;">粮油产品批发价格指数</div>
           </div>
           <div class="main-col-con4">
             <twoindexplus />
