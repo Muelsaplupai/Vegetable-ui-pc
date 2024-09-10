@@ -261,15 +261,14 @@ import bus from "@/views/Main-1/bus.ts";
 import { ElSelect, ElOption } from "element-plus";
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
-import { slice } from "lodash-es";
 const now = new Date();
 
-const year = now.getFullYear();
+//const year = now.getFullYear();
 const month = ("0" + (now.getMonth() + 1)).slice(-2);
 const day = ("0" + now.getDate()).slice(-2);
-const hours = ("0" + now.getHours()).slice(-2);
-const minutes = ("0" + now.getMinutes()).slice(-2);
-const seconds = ("0" + now.getSeconds()).slice(-2);
+//const hours = ("0" + now.getHours()).slice(-2);
+//const minutes = ("0" + now.getMinutes()).slice(-2);
+//const seconds = ("0" + now.getSeconds()).slice(-2);
 
 const formattedTime = month + "-" + day;
 
@@ -313,10 +312,10 @@ const Max33 = ref(18);
 const Min34 = ref(18);
 const Pz33 = ref("番茄");
 const Pz34 = ref("番茄");
-const date31 = ref("2024-01-01");
-const date32 = ref("2024-01-01");
-const date33 = ref("2024-01-01");
-const date34 = ref("2024-01-01");
+// const date31 = ref("2024-01-01");
+// const date32 = ref("2024-01-01");
+// const date33 = ref("2024-01-01");
+// const date34 = ref("2024-01-01");
 
 const PZtitle = ref("土豆");
 const Max41 = ref(18);
@@ -557,7 +556,7 @@ async function Danscleft() {
     console.error("Error fetching data:", error);
   }
 }
-function searchChange(tem) {
+function searchChange(tem:any) {
   SearchPredict.value = tem;
   if (
     selectedCategorypz.value.length === 1 &&

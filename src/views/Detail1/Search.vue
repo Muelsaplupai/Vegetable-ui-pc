@@ -314,15 +314,16 @@ watch(Sheng, async (newValue) => {
     console.error("Error fetching data:", error);
   }
 });
-watch(pz, async (newValue) => {
+watch(selectedCategory2, async (newValue) => {
   console.debug(2121);
   try {
-    // const postData = {
-    //   prvc: newValue, // 假设API期望一个名为"message"的字段
-    // };
-    // const response1 = await axios.post(apiUrl, postData, config);
-    // categories2.value = response1.data.data;
-    // // 如果需要根据响应数据更新图表，您应该在这里处理
+    const postData = {
+      prvc: "",
+      market: newValue, // 假设API期望一个名为"message"的字段
+    };
+    const response1 = await axios.post(apiUrlpz, postData, config);
+    categories3.value = response1.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
   }
