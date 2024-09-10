@@ -42,8 +42,11 @@
         </el-select>
       </div>
 
-      <el-button class="searchbtn" type="primary" @click="fetchData" ref="buttonRef">查询</el-button>
+      <el-button class="searchbtn" type="primary" @click="fetchData" ref="buttonRef"
+        >查询</el-button
+      >
       <el-button class="clearbtn" @click="clearData">重置</el-button>
+      <el-button class="Outbtn" @click="OutData">导出</el-button>
     </div>
     <el-popover
       ref="popoverRef"
@@ -51,7 +54,7 @@
       trigger="click"
       title="今日总结"
       virtual-triggering
-      width= 220
+      width="220"
     >
       <span> {{ textfinal }}</span>
     </el-popover>
@@ -65,33 +68,72 @@
     </div> -->
     <!-- 数据表格组件 -->
     <EasyDataTable
+      ref="exportTableRef"
       :headers="headers"
       :items="items"
       theme-color="#1d90ff"
       table-class-name="customize-table"
       header-text-direction="center"
       body-text-direction="center"
-      :rows-per-page="10"
+      :rows-per-page="12"
       :loading="loading"
       :server-items-length="serverItemsLength"
       table-min-height="500"
       buttons-pagination
       margin-bottom="50px"
     />
+
+    <EasyDataTable
+      ref="exportTableRef1"
+      :headers="headers"
+      :items="items"
+      theme-color="#1d90ff"
+      table-class-name="customize-table"
+      header-text-direction="center"
+      body-text-direction="center"
+      :rows-per-page="1000"
+      :loading="loading"
+      :server-items-length="serverItemsLength"
+      table-min-height="500"
+      buttons-pagination
+      margin-bottom="50px"
+      v-show="false"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, unref } from "vue";
-import { ElSelect, ElOption, ElButton, ElTour } from "element-plus";
+import { ElSelect, ElOption, ElButton, ElTour, ComponentSize } from "element-plus";
 // 确保你引入了 EasyDataTable 及其类型定义
 import EasyDataTable from "vue3-easy-data-table";
 import type { Header, Item, ServerOptions } from "vue3-easy-data-table";
 import axios from "axios"; // 确保已安装axios
-
+import * as XLSX from "xlsx";
+const exportTableRef = ref(null);
+const exportTableRef1 = ref(null);
+const pageSize = ref(10);
+const pageNum = ref(1);
+const totalLine = ref(50);
+const size = ref<ComponentSize>("default");
+const background = ref(false);
+const disabled = ref(false);
+const radio1 = ref("供应");
+const value = ref("");
+const selectedProvince = ref();
+const selectedPz = ref();
+const handleCurrentChange = (val) => {
+  console.log(`current page: ${val}`);
+  pageNum.value = val; // 更新当前页码
+  // search(); // 根据新的当前页码获取数据
+};
+const list = ref([
+  // 表格数据
+]);
 const config = {
   headers: {},
 };
+
 const ref1 = ref();
 const ref2 = ref();
 const ref3 = ref();
@@ -99,9 +141,19 @@ const open = ref(false);
 const textfinal = ref();
 const apiUrl = "http://192.168.63.221:8080/api/price/market";
 const apiUrlpz = "http://192.168.63.221:8080/api/price/pz";
-const apiUrlList = "http://192.168.63.221:8080/api/price";
+const apiUrlList = "http://192.168.63.221:8080/api/price/list";
 
 const apiUrlFinal = "http://192.168.63.221:8080/api/price/brief";
+
+const OutData = () => {
+  const tableDom = exportTableRef1.value?.$el;
+  if (!tableDom) {
+    return;
+  }
+
+  const wb = XLSX.utils.table_to_book(tableDom);
+  XLSX.writeFile(wb, "表格数据.xlsx");
+};
 
 onMounted(async () => {
   try {
@@ -110,6 +162,7 @@ onMounted(async () => {
     };
     const response1 = await axios.post(apiUrlpz, postData, config);
     categories3.value = response1.data.data;
+
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -135,6 +188,7 @@ onMounted(async () => {
     };
     const response = await axios.post(apiUrlList, postData, config);
     items.value = response.data.data.priceList;
+    totalLine.value=response.data.data.count;
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -285,7 +339,7 @@ const buttonRef = ref();
 const popoverRef = ref();
 // 模拟的 API 请求函数
 const fetchData = async () => {
-  unref(popoverRef).popperRef?.delayHide?.()
+  unref(popoverRef).popperRef?.delayHide?.();
   open.value = true;
   loading.value = true;
   try {
@@ -305,7 +359,7 @@ const fetchData = async () => {
     const response2 = await axios.post(apiUrlFinal, postData2, config);
     console.debug(response2.data.data);
     textfinal.value = response2.data.data;
-    console.debug("00000"+textfinal.value);
+    console.debug("00000" + textfinal.value);
     // 假设响应格式如下
     // {
     //   data: [...items],
@@ -389,7 +443,7 @@ option {
   flex-direction: row;
 }
 .searchbtn {
-  margin-left: 380px;
+  margin-left: 280px;
   width: 100px;
   display: flex;
   flex-direction: row;
@@ -409,6 +463,17 @@ option {
   justify-content: center;
   align-items: center;
   color: #527865;
+  font-size: 120%;
+}
+.Outbtn {
+  width: 100px;
+  display: flex;
+  flex-direction: row;
+  background-color: #527865;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
   font-size: 120%;
 }
 .customize-table {
@@ -504,5 +569,12 @@ option {
   margin-right: 10px;
   font-size: 100%;
 }
-/* 原有的样式保持或根据 Element Plus 组件进行调整 */
+
+.demo-pagination-block {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  background-color: #527865;
+}
+
 </style>

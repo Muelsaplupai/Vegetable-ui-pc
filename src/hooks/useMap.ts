@@ -1,6 +1,7 @@
 import { reactive } from "vue";
 import * as echarts from "echarts";
 import { getGeojson } from "@/apis/index";
+import bus from "@/views/Main-1/bus";
 
 export const useMap = (
   setOption: (options: echarts.EChartsOption, opts?: echarts.SetOptionOpts) => void,
@@ -45,9 +46,11 @@ export const useMap = (
     const { adcode, level } = adcodeMap[formattedName];
     // 输出省份和市
     if (level === "district") {
-      console.log(params);
+      console.log(params.name);
+      bus.emit("prvc", params.name);
     } else if (level === "province") {
-      console.log(params);
+      console.log(params.name);
+      bus.emit("prvc", params.name);
     } else {
       console.log(params);
     }

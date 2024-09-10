@@ -23,7 +23,7 @@
             <div class="nav" :class="{ active: isActive5 }">企业市场</div>
           </router-link>
           <router-link to="/">
-            <div class="nav">回到主页</div>
+            <div class="nav" @click="zzz">退出登录</div>
           </router-link>
         </div>
       </div>
@@ -52,7 +52,15 @@ onMounted(() => {
     username.value = name;
   });
 });
+onMounted(() => {
+  username.value= localStorage.getItem("username")||"用户";
 
+});
+function zzz(){
+  console.debug(999);
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
+}
 const reg = () => {
   bus.emit("loginBegin", "true");
   bus.emit("maskBegin", "true");

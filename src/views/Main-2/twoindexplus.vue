@@ -6,7 +6,7 @@
           <div class="spstyle1">农产品批发价格200指数</div>
           <div class="spstyle2">{{ index3 }}</div>
           <div class="spstyle3">{{ rise3 }} 较昨日</div>
-          <div class="spstyle7">{{ rise4 }} 较3天日</div>
+          <div class="spstyle7">{{ rise4 }} 较3天前</div>
           <div class="spstyle8">{{ rise5 }} 较5天前</div>
         </div>
       </div>

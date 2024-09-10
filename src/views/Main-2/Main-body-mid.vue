@@ -10,7 +10,7 @@
         <div class="mid-up-item0">{{ data2 }}</div>
       </div>
       <div class="mid-up-item">
-        品类总数<br /><br />
+        企业总数<br /><br />
         <div class="mid-up-item0">{{ data3 }}</div>
       </div>
       <div class="mid-up-item2">

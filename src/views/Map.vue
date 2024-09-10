@@ -49,60 +49,7 @@ const chartOptions = {
       min: 1.25,
       max: 10,
     },
-    regions: [
-      {
-        // 通过 name 指定要修改样式的区域，这里是“广东”
-        name: "广东省",
-        // 自定义该区域的样式
-        itemStyle: {
-          areaColor: "#527865", // 区域颜色
-          borderColor: "#527865", // 边界颜色
-        },
-      },
-      {
-        name: "福建省",
-        // 自定义该区域的样式
-        itemStyle: {
-          areaColor: "#527865", // 区域颜色
-          borderColor: "#527865", // 边界颜色
-        },
-      },
-      {
-        name: "江苏省",
-        // 自定义该区域的样式
-        itemStyle: {
-          areaColor: "#527865", // 区域颜色
-          borderColor: "#527865", // 边界颜色
-        },
-      },
-      {
-        // 通过 name 指定要修改样式的区域，这里是“广东”
-        name: "安徽省",
-        // 自定义该区域的样式
-        itemStyle: {
-          areaColor: "#527865", // 区域颜色
-          borderColor: "#527865", // 边界颜色
-        },
-      },
-      {
-        name: "湖南省",
-        // 自定义该区域的样式
-        itemStyle: {
-          areaColor: "#527865", // 区域颜色
-          borderColor: "#527865", // 边界颜色
-        },
-      },
-      {
-        name: "江西省",
-        // 自定义该区域的样式
-        itemStyle: {
-          areaColor: "#527865", // 区域颜色
-          borderColor: "#527865", // 边界颜色
-        },
-      },
-      // 可以继续添加其他需要自定义样式的区域
-      // ...
-    ],
+    
     label: {
       show: true,
       color: "#FFFFFF",

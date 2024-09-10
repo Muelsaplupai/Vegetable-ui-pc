@@ -3,21 +3,152 @@
 </template>  
   
 <script setup lang="ts">  
-import { onMounted, ref } from 'vue';  
+import { onMounted, ref,watch } from 'vue';  
 import * as echarts from 'echarts';  
 import axios from 'axios'; // 确保已安装axios  
-  
+import bus from '../Main-1/bus';
 const apiUrl = "http://192.168.63.221:8080/api/price/fall";  
 const dataToSend = "江苏"; // 要发送的字符串 
-// const xValue = ref([1, 1, 1, 2, 3]);  
-// const yValue = ref(["陕西移动", "山西移动", "北京移动", "山东移动", "河北移动"]);  
-  
 const charts = ref(null);  
 const List=ref();
+// const xValue = ref([1, 1, 1, 2, 3]);  
+// const yValue = ref(["陕西移动", "山西移动", "北京移动", "山东移动", "河北移动"]);  
+const prvcname=ref("江苏");
+onMounted(() => {
+  bus.on("prvc", (e: any) => {
+    // 传参由回调函数中的形参接受
+    const name=e;
+    prvcname.value = name;
+    console.debug(prvcname.value);
+  });
+});
+watch(prvcname, async (newValue) => {
+  try {  
+    const postData = {  
+      prvc: prvcname.value // 假设API期望一个名为"message"的字段  
+    }; 
+    const response = await axios.post(apiUrl, postData, {  
+      headers: {  
+        'Content-Type': 'application/json' // 告诉服务器我们正在发送JSON  
+      }  
+    });  
+    console.log("Success fetching data2222222222222222222222222222222:");  
+    console.log(response.data.data);  
+    List.value=response.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理  
+  } catch (error) {  
+    console.error("Error fetching data:", error);  
+  }  
+  charts.value = echarts.init(document.getElementById("bar1"));  
+  const option = {  
+    color: ["#d84430"],  
+    tooltip: {  
+      show: true,  
+    },  
+    yAxis: {  
+      data: List.value.map(item => item.pz),  
+      axisTick: {  
+        show: false,  
+      },  
+      axisLine: {  
+        show: false,  
+      },  
+      axisLabel: {  
+        inside: false,  
+        verticalAlign: "middle",  
+        lineHeight: 26,  
+        color: "#194955",  
+        textStyle: {  
+          fontSize: 26,  
+          fontWeight: 800,  
+        },  
+        formatter: function (value, index) {  
+          if (index > 2) {  
+            return "{first|" + value + "}";  
+          } else {  
+            return "{other|" + value + "}";  
+          }  
+        },  
+        rich: {  
+          other: {  
+            color: "#194955",  
+            opacity: 0.57, 
+            fontWeight:800, 
+            fontSize: 16,  
+          },  
+          first: {  
+            color: "#194955",  
+            fontWeight:800,
+            fontSize: 16,  
+          },  
+        },  
+      },  
+    },  
+    xAxis: {  
+      nameTextStyle: {  
+        color: "#194955",  
+        align: "right",  
+      },  
+      splitLine: {  
+        show: false,  
+      },  
+      axisLine: {  
+        show: false,  
+      },   
+      axisLabel: {
+        padding: [10, 0, 0, -15], //文字左右定位
+        textStyle: {
+          color: "#194955",
+          fontSize: "13",
+          itemSize: "",
+        },
+      },
+    },  
+    grid: {  
+      top: "10%",  
+      bottom: "20%",  
+      left: "30%",  
+      right: "10%",  
+    },  
+    series: [  
+      {  
+        name: "价格跌幅排行榜",  
+        data: List.value.map(item => item.fall),  
+        barWidth: 15,  
+        type: "bar",  
+        itemStyle: {  
+          normal: {  
+            borderRadius: [3, 20, 20, 3],  
+            color: function (params) {  
+              if (params.dataIndex === 4) {  
+                return "#527865";  
+              } else if (params.dataIndex === 3) {  
+                return "#539D73";  
+              } else if (params.dataIndex === 2) {  
+                return "#75b08f";  
+              } else if (params.dataIndex === 1) {   
+                return "#97c4ab";  
+              }  
+              else{
+                return "#cbe1d5";  
+              }
+            },  
+          },  
+        },  
+      },  
+    ],  
+  };  
+  
+  charts.value.setOption(option);  
+  window.addEventListener("resize", () => {  
+    charts.value.resize();  
+  });  
+});
+
 onMounted(async () => {  
   try {  
     const postData = {  
-      message: dataToSend // 假设API期望一个名为"message"的字段  
+      prvc: dataToSend // 假设API期望一个名为"message"的字段  
     }; 
     const response = await axios.post(apiUrl, postData, {  
       headers: {  
@@ -110,7 +241,7 @@ onMounted(async () => {
     },  
     series: [  
       {  
-        name: "价格涨幅排行榜",  
+        name: "价格跌幅排行榜",  
         data: List.value.map(item => item.fall),  
         barWidth: 15,  
         type: "bar",  

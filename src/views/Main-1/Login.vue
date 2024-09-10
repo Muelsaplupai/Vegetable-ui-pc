@@ -30,6 +30,8 @@
         @focus="clearPlaceholder2"
         :placeholder="placeholderText2"
       ></el-input>
+      <button @click="regBegin" class="regBtn">没有账号？点击注册</button>
+    <button @click="logBegin" class="loginBtn">登录</button>
     </div>
     <div v-show="showlog2">
       <el-input
@@ -49,16 +51,17 @@
           @focus="clearPlaceholder4"
           :placeholder="placeholderText4"
         ></el-input
-        ><button class="confirm">获取验证码</button>
+        ><button class="confirm" @click="regemail">获取验证码</button>
       </div>
+      <button @click="regBegin" class="regBtn">没有账号？点击注册</button>
+    <button @click="regyanzheng" class="loginBtn" >登录</button>
     </div>
-    <button @click="regBegin" class="regBtn">没有账号？点击注册</button>
-    <button @click="logBegin" class="loginBtn">登录</button>
+    
   </div>
 </template>
 
 <script setup lang="ts">
-import { ElIcon } from "element-plus";
+import { ElIcon, ElMessage } from "element-plus";
 import bus from "./bus";
 import { onMounted, ref } from "vue";
 const inputValue1 = ref("");
@@ -74,10 +77,14 @@ let showdetail = ref(false);
 let showlog1 = ref(true);
 let showlog2 = ref(false);
 
+
+
 let stylecolor1 = ref("#527865");
 let stylecolor2 = ref("#ffffff");
 import axios from "axios"; // 确保已安装axios
 const apiUrl = "http://192.168.63.221:8080/api/login/password";
+const apiUrl2 = "http://192.168.63.221:8080/api/login/sendvcode";
+const apiUrl3 = "http://192.168.63.221:8080/api/login/checkvcode";
 const config = {
   headers: {},
 };
@@ -91,8 +98,21 @@ async function logBegin() {
     console.debug(response);
     if (response.data.msg === "OK") {
       showdetail.value = false;
+      {
+        localStorage.setItem("username", inputValue1.value);
+        localStorage.setItem("token", response.data.data);
+        ElMessage({
+          message: "登录成功",
+          type: "success",
+        });
+      }
       bus.emit("username", inputValue1.value);
       bus.emit("username1", inputValue1.value);
+      localStorage.setItem("username", inputValue1.value);
+    } else {
+      {
+        ElMessage.error("用户或密码不存在");
+      }
     }
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
@@ -100,6 +120,54 @@ async function logBegin() {
   }
 }
 
+
+async function regyanzheng(){
+  try {
+    const postData = {
+      email: inputValue3.value,
+      vcode: inputValue4.value
+    };
+    const response = await axios.post(apiUrl3, postData, config);
+    console.debug(response);
+    if (response.data.msg === "OK") {
+      showdetail.value = false;
+      localStorage.setItem("username", inputValue1.value);
+      localStorage.setItem("token", response.data.data);
+      {
+        ElMessage({
+          message: "登录成功",
+          type: "success",
+        });
+      }
+    } else {
+      {
+        ElMessage.error("用户或密码不存在");
+      }
+    }
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+async function regemail(){
+  try {
+    const postData = {
+      email: inputValue3.value,
+    };
+    const response = await axios.post(apiUrl2, postData, config);
+    console.debug(response);
+    if (response.data.msg === "OK") {
+      regyanzheng();
+    } else {
+      {
+        ElMessage.error("用户或密码不存在");
+      }
+    }
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 onMounted(() => {
   bus.on("loginBegin", (e: any) => {
     // 传参由回调函数中的形参接受
@@ -213,8 +281,9 @@ function logpwd() {
   background-color: #527865;
   border: none;
   color: #ffffff;
-  margin-left: 15%;
+  margin-left: 1%;
   margin-top: 5%;
+  z-index: 31;
 }
 .regBtn {
   width: 70%;
@@ -224,7 +293,7 @@ function logpwd() {
   background: transparent;
   border: none;
   color: #527865;
-  margin-left: 15%;
+  margin-left: 1%;
 }
 .activeBtn1 {
   color: v-bind(stylecolor1);

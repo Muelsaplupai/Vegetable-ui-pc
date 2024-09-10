@@ -22,18 +22,7 @@
           />
         </el-select>
       </div>
-      <div class="prvcSelect1">
-        <div class="text1">品种:</div>
-        <el-select v-model="selectedProvince" placeholder="请选择品种" class="select2">
-          <el-option
-            style="width: 100px"
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </div>
+
       <el-button class="predictbtn" type="primary" @click="searchChange()">查询</el-button>
     </div>
 
@@ -89,13 +78,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import type { ComponentSize } from "element-plus";
 import { ElSelect, ElOption } from "element-plus";
 import axios from "axios";
 
 const List = ref( );
 const apiUrl = "http://192.168.63.221:8080/api/brief/enterprise";
+const apiUrlPz = "http://192.168.63.221:8080/api/price/pz";
 const config = {
   headers: {},
 };
@@ -121,6 +111,7 @@ const list = [
   ["Item 2-1", "Item 2-2", "Item 2-3", "Item 2-4"],
   ["Item 3-1", "Item 3-2", "Item 3-3", "Item 3-4"],
 ];
+
 const pageSize = ref(10);
 const pageNum = ref(1);
 const totalLine = ref(50);
@@ -136,10 +127,39 @@ const handleCurrentChange = (val) => {
   pageNum.value = val; // 更新当前页码
   // search(); // 根据新的当前页码获取数据
 };
+onMounted(async () => {
+  try {
+    const postData = {
+      prvc: '', // 假设API期望一个名为"message"的字段
+      market:''
+    };
+    const response1 = await axios.post(apiUrlPz, postData, config);
+    
+    options2.value = response1.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+    console.debug(options2.value);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
+
+watch(selectedProvince, async (newValue) => {
+  try {
+    const postData = {
+      prvc: newValue, // 假设API期望一个名为"message"的字段
+    };
+    const response1 = await axios.post(apiUrlPz, postData, config);
+    options2.value = response1.data.data;
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
 async function searchChange(){
   try {
     const postData = {
       prvc: selectedProvince.value, // 假设API期望一个名为"message"的字段
+      pz:selectedPz.value,
       supplyType: radio1.value,
       pageSize: 12,
       pageNum: pageNum.value,
@@ -152,6 +172,7 @@ async function searchChange(){
     console.error("Error fetching data:", error);
   }
 }
+const options2 = ref([]);
 const options = [
   { value: "", label: "全部" },
   { value: "北京", label: "北京" },
@@ -191,7 +212,9 @@ const options = [
 ];
 
 const enterpriseList = ref();
-
+watch(pageNum, async (newValue) => {
+  searchChange();
+});
 onMounted(async () => {
   try {
     const apiUrl = "https://apifoxmock.com/m1/5019871-4679592-default/brief/enterprise";
@@ -247,7 +270,7 @@ onMounted(async () => {
 
 .prvcSelect {
   font-size: 14px; /* 可根据需要调整字体大小 */
-  margin-left: 3%;
+  margin-right: 33%;
   color: #333; /* 可根据需要调整颜色 */
   width: 200px;
   display: flex;

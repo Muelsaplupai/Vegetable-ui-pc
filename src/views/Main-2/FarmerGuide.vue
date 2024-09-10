@@ -25,7 +25,7 @@
           color: #527865;
         "
       >
-        09
+        03
         <div
           style="
             height: auto;
@@ -57,8 +57,8 @@
         >
           {{title0}}
         </div>
-        <div style="margin-top: 8%; text-align: left; color: #527865">
-          王小兵主任出席2024中国国际大数据产业博览会王小兵主任出席2024中国国际大数据产业博览会
+        <div style="margin-top: 8%; text-align: left; color: #527865; width:355px">
+          在福建漳州天霖农业发展公司，一批重23.9吨的新鲜妃子笑荔枝经厦门海关所属漳州海关查验合格后顺利装车，发往印度尼西亚。
         </div>
       </div>
     </div>
@@ -83,7 +83,7 @@
       <div v-for="(item, colIndex) in items" :key="colIndex" class="cell">
         <div class="enmessage">
           <div class="enmessagechild1">
-            09
+            03
             <div class="enmessagechild2">2024-07</div>
           </div>
           <div
@@ -164,6 +164,7 @@ onMounted(async () => {
 
     List.value = response.data.data.slice(0,6);
     firstItem.value = List.value[0];
+    console.log( firstItem.value);
     title0.value=firstItem.value.title;
     link0.value=firstItem.value.link;
     List1.value = response1.data.data.slice(0,6);

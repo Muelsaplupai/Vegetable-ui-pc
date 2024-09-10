@@ -22,9 +22,6 @@
           <router-link to="/detail/company">
             <div class="nav">企业市场</div>
           </router-link>
-          <router-link to="/">
-            <div class="nav">回到主页</div>
-          </router-link>
         </div>
       </div>
     </div>

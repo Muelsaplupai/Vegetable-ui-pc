@@ -56,80 +56,89 @@
   </div>
   <el-button class="predictbtn" type="primary" @click="searchChange(1)">预测</el-button>
   <el-aside>
-    <button class="el-selection" @click="select1">
-      <img src="@/assets/logo1.png" class="sleimg" />
+    <button class="el-selection11" @click="select1" :class="{ active: isActive1 }">
+      <div class="sleimg11" />
       <div class="sletext">单一品种<br />全国均价</div>
     </button>
-    <button class="el-selection" @click="select2">
-      <img src="@/assets/logo2.png" class="sleimg" />
+    <button class="el-selection22" @click="select2" :class="{ active: isActive2 }">
+      <div class="sleimg22" />
       <div class="sletext">单一品种<br />全省均价</div>
     </button>
-    <button class="el-selection" @click="select3">
-      <img src="@/assets/logo3.png" class="sleimg" />
+    <button class="el-selection33" @click="select3" :class="{ active: isActive3 }">
+      <div class="sleimg33" />
       <div class="sletext">单市场多<br />品种对比</div>
     </button>
-    <button class="el-selection" @click="select4">
-      <img src="@/assets/logo4.png" class="sleimg" />
+    <button class="el-selection44" @click="select4" :class="{ active: isActive4 }">
+      <div class="sleimg44" />
       <div class="sletext">单品种多<br />市场对比</div>
     </button>
   </el-aside>
 
   <div class="line1">
     <div class="price" v-show="div1">
-      <div class="el-selectionall" style="margin-top: 10%">
-        <button class="el-selection1" @click="select1">
+      <div class="titleDate11">{{ PZtitle + "（更新日期：" + formattedTime + "）" }}</div>
+      <div class="el-selectionall" style="margin-top: 2%">
+        <button class="el-selection1">
           <img src="@/assets/logopre1.png" class="sleimg1" />
           <div class="sletext1">时间范围</div>
         </button>
-        <div class="averageDate0">起始: 09/01<br /><br />截止: 09/03</div>
+        <div class="averageDate0">
+          {{ "起始: " + Date23 }}<br /><br />{{ "截止: " + formattedTime }}
+        </div>
       </div>
       <div class="el-selectionall">
-        <button class="el-selection1" @click="select1">
+        <button class="el-selection1">
           <img src="@/assets/logopre3.png" class="sleimg1" />
           <div class="sletext1">最高价格</div>
         </button>
         <div style="display: flex; flex-direction: column; height: 70px">
           <div class="averageDate00">{{ "￥ " + Max11 + " 元/斤" }}</div>
-          <div class="averageDate00">{{  "日期： "+Date11 }}</div>
+          <div class="averageDate00">{{ "日期： " + Date11 }}</div>
         </div>
       </div>
       <div class="el-selectionall" style="margin-bottom: 15%">
-        <button class="el-selection1" @click="select1">
+        <button class="el-selection1">
           <img src="@/assets/logopre2.png" class="sleimg1" />
           <div class="sletext1">最低价格</div>
         </button>
         <div style="display: flex; flex-direction: column; height: 70px">
           <div class="averageDate00">{{ "￥ " + Min11 + " 元/斤" }}</div>
-          <div class="averageDate00">{{  "日期： "+Date11 }}</div>
+          <div class="averageDate00">{{ "日期： " + Date11 }}</div>
         </div>
       </div>
     </div>
     <div class="price" v-show="div2">
-      <div class="el-selectionall" style="margin-top: 10%">
-        <button class="el-selection1" @click="select1">
+      <div class="titleDate11">{{ PZtitle + "（更新日期：" + formattedTime + "）" }}</div>
+      <div class="titleDate11">{{ "当前省份： " + Prvctitle }}</div>
+      <div class="el-selectionall" style="margin-top: 2%">
+        <button class="el-selection1">
           <img src="@/assets/logopre1.png" class="sleimg1" />
           <div class="sletext1">时间范围</div>
         </button>
-        <div class="averageDate0">起始: 09/01<br /><br />截止: 09/03</div>
+        <div class="averageDate0">
+          {{ "起始: " + Date23 }}<br /><br />{{ "截止: " + formattedTime }}
+        </div>
       </div>
       <div class="el-selectionall">
-        <button class="el-selection1" @click="select1">
+        <button class="el-selection1">
           <img src="@/assets/logopre3.png" class="sleimg1" />
           <div class="sletext1">最高价格</div>
         </button>
         <div style="display: flex; flex-direction: column; height: 70px">
           <div class="averageDate00">{{ "￥ " + Max21 + " 元/斤" }}</div>
-          <div class="averageDate00">{{  "日期： "+Date11 }}</div>
+          <div class="averageDate00">{{ "日期： " + Date11 }}</div>
         </div>
       </div>
       <div class="el-selectionall" style="margin-bottom: 15%">
-        <button class="el-selection1" @click="select1">
+        <button class="el-selection1">
           <img src="@/assets/logopre2.png" class="sleimg1" />
           <div class="sletext1">最低价格</div>
         </button>
-        <div style="display: flex; flex-direction: column; height: 70px; text-align: center;">
+        <div
+          style="display: flex; flex-direction: column; height: 70px; text-align: center"
+        >
           <div class="averageDate00">{{ "￥ " + Min21 + " 元/斤" }}</div>
-          <div class="averageDate00">{{ "日期： "+Date12 }}</div>
+          <div class="averageDate00">{{ "日期： " + Date12 }}</div>
         </div>
       </div>
     </div>
@@ -137,7 +146,7 @@
       <div class="titleDate2">{{ SCtitle }}</div>
       <div class="PriceJizhi">
         <div class="Img4"></div>
-        <div class="title1">今日价格极值（元/斤）</div>
+        <div class="title1">今日价格一览（元/斤）</div>
       </div>
       <div style="display: flex; flex-direction: column; width: 100px">
         <div
@@ -159,7 +168,7 @@
       </div>
       <div class="PriceJizhi">
         <div class="Img5"></div>
-        <div class="title1">一周价格极值（元/斤）</div>
+        <div class="title1">一周价格一览（元/斤）</div>
       </div>
       <div style="display: flex; flex-direction: column; width: 100px">
         <div
@@ -181,7 +190,7 @@
       </div>
     </div>
     <div class="price" v-show="div4">
-      <div class="titleDate2">{{ PZtitle+"（更新日期"+ Date21+"）"}}</div>
+      <div class="titleDate2">{{ PZtitle + "（更新日期：" + formattedTime + "）" }}</div>
       <div class="PriceJizhi">
         <div class="Img4"></div>
         <div class="title1">今日价格一览（元/斤）</div>
@@ -191,7 +200,10 @@
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd2">{{ Sc41 }}</div>
+            <el-tooltip placement="top" effect="light">
+              <template #content> {{ Sc44 }} </template>
+              <div class="textAdd2">{{ Sc41suo }}</div>
+            </el-tooltip>
             <div class="average1">{{ "￥" + Max41 }}</div>
           </div>
         </div>
@@ -199,21 +211,30 @@
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd2">{{ Sc42 }}</div>
+            <el-tooltip placement="top" effect="light">
+              <template #content> {{ Sc42 }} </template>
+              <div class="textAdd2">{{ Sc42suo }}</div>
+            </el-tooltip>
+
             <div class="average1">{{ "￥" + Min42 }}</div>
           </div>
         </div>
       </div>
       <div class="PriceJizhi">
         <div class="Img5"></div>
-        <div class="title1">一周价格极值（元/斤）</div>
+        <div class="title1">一周价格一览（元/斤）</div>
       </div>
       <div style="display: flex; flex-direction: column; width: 100px">
         <div
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd2">{{ Sc43 }}</div>
+            <el-tooltip placement="top" effect="light">
+              <template #content> {{ Sc43 }} </template>
+
+              <div class="textAdd2">{{ Sc43suo }}</div>
+            </el-tooltip>
+
             <div class="average1">{{ "￥" + Max43 }}</div>
           </div>
         </div>
@@ -221,7 +242,10 @@
           style="display: flex; flex-direction: column; width: 180px; margin-left: 40%"
         >
           <div class="PriceItem">
-            <div class="textAdd2">{{ Sc44 }}</div>
+            <el-tooltip placement="top" effect="light">
+              <template #content> {{ Sc44 }} </template>
+              <div class="textAdd2">{{ Sc44suo }}</div>
+            </el-tooltip>
             <div class="average1">{{ "￥" + Min44 }}</div>
           </div>
         </div>
@@ -238,6 +262,16 @@ import { ElSelect, ElOption } from "element-plus";
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
 import { slice } from "lodash-es";
+const now = new Date();
+
+const year = now.getFullYear();
+const month = ("0" + (now.getMonth() + 1)).slice(-2);
+const day = ("0" + now.getDate()).slice(-2);
+const hours = ("0" + now.getHours()).slice(-2);
+const minutes = ("0" + now.getMinutes()).slice(-2);
+const seconds = ("0" + now.getSeconds()).slice(-2);
+
+const formattedTime = month + "-" + day;
 
 const apiUrlpz = "http://192.168.63.221:8080/api/price/pz";
 const apiUrl = "http://192.168.63.221:8080/api/price/market";
@@ -262,14 +296,14 @@ const Sc11 = ref();
 const Sc12 = ref();
 const Date11 = ref("01-01");
 const Date12 = ref("01-01");
-
+const Prvctitle = ref("江苏");
 const Max21 = ref(18);
 const Min21 = ref(18);
 const Sc21 = ref();
 const Sc22 = ref();
 const Date21 = ref("01-01");
 const Date22 = ref("01-01");
-
+const Date23 = ref("01-01");
 const SCtitle = ref("北京京丰岳各庄农副产品批发市场");
 const Max31 = ref(18);
 const Min32 = ref(18);
@@ -287,10 +321,14 @@ const date34 = ref("2024-01-01");
 const PZtitle = ref("土豆");
 const Max41 = ref(18);
 const Min42 = ref(18);
+const Sc41suo = ref("北京京丰岳各庄农副产品批发市场");
+const Sc42suo = ref("北京京丰岳各庄农副产品批发市场");
 const Sc41 = ref("北京京丰岳各庄农副产品批发市场");
 const Sc42 = ref("北京京丰岳各庄农副产品批发市场");
 const Max43 = ref(18);
 const Min44 = ref(18);
+const Sc43suo = ref("北京京丰岳各庄农副产品批发市场");
+const Sc44suo = ref("北京京丰岳各庄农副产品批发市场");
 const Sc43 = ref("北京京丰岳各庄农副产品批发市场");
 const Sc44 = ref("北京京丰岳各庄农副产品批发市场");
 
@@ -303,6 +341,10 @@ const SearchPredict = ref();
 const show1 = ref(true);
 const show2 = ref(false);
 const show3 = ref(false);
+const isActive1=ref(false);
+const isActive2=ref(false);
+const isActive3=ref(false);
+const isActive4=ref(false);
 onMounted(async () => {
   try {
     const postData = {
@@ -396,13 +438,14 @@ onMounted(async () => {
     const postData = {
       pz: "南瓜", // 假设API期望一个名为"message"的字段
     };
+    PZtitle.value = "南瓜";
     const response1 = await axios.post(apiUrlleft, postData, config);
     Max11.value = response1.data.data.highestInfo.highest;
     Min11.value = response1.data.data.lowestInfo.lowest;
     Date11.value = response1.data.data.highestInfo.releaseTime;
-    Date11.value =Date11.value.slice(5);
+    Date11.value = Date11.value.slice(5);
     Date12.value = response1.data.data.lowestInfo.releaseTime;
-    Date12.value =Date12.value.slice(5);
+    Date12.value = Date12.value.slice(5);
     Sc11.value = response1.data.data.highestInfo.market;
     Sc12.value = response1.data.data.lowestInfo.market;
     QuanguoList.value = response1.data.data.averageInfo;
@@ -420,15 +463,17 @@ async function Quanguoleft() {
     };
     const response1 = await axios.post(apiUrlleft, postData, config);
     console.debug(response1.data.data);
+    PZtitle.value=selectedCategorypz.value[0];
     Max11.value = response1.data.data.highestInfo.highest;
     Min11.value = response1.data.data.lowestInfo.lowest;
     Date11.value = response1.data.data.highestInfo.releaseTime;
-    Date11.value =Date11.value.slice(5);
+    Date11.value = Date11.value.slice(5);
     Date12.value = response1.data.data.lowestInfo.releaseTime;
-    Date12.value =Date12.value.slice(5);
+    Date12.value = Date12.value.slice(5);
     Sc11.value = response1.data.data.highestInfo.market;
     Sc12.value = response1.data.data.lowestInfo.market;
     QuanguoList.value = response1.data.data.averageInfo;
+    Date23.value = response1.data.data.averageInfo[0].price[0].releaseTime.slice(5);
     bus.emit("QuanguoList", QuanguoList);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
@@ -440,14 +485,16 @@ async function Quanshenleft() {
     const postData = {
       pz: selectedCategorypz.value[0], // 假设API期望一个名为"message"的字段
       prvc: selectedCategoryprvc.value,
+      isPrediction: SearchPredict.value,
     };
     const response1 = await axios.post(apiUrlleft, postData, config);
     Max21.value = response1.data.data.highestInfo.highest;
     Min21.value = response1.data.data.lowestInfo.lowest;
     Date21.value = response1.data.data.highestInfo.releaseTime;
-    Date21.value =Date21.value.slice(5);
+    Date21.value = Date21.value.slice(5);
     Date22.value = response1.data.data.lowestInfo.releaseTime;
-    Date22.value =Date22.value.slice(5);
+    Date22.value = Date22.value.slice(5);
+    Date23.value = response1.data.data.averageInfo[0].price[0].releaseTime.slice(5);
     Sc21.value = response1.data.data.highestInfo.market;
     Sc22.value = response1.data.data.lowestInfo.market;
     QuanshenList.value = response1.data.data.averageInfo;
@@ -462,8 +509,10 @@ async function Danpzleft() {
     const postData = {
       pz: selectedCategorypz.value[0], // 假设API期望一个名为"message"的字段
       marketList: selectedCategorysc.value,
+      isPrediction: SearchPredict.value,
     };
     const response1 = await axios.post(apiUrlleft4, postData, config);
+    console.debug(response1.data.data);
     Max41.value = response1.data.data.todayInfo.highest;
     Min42.value = response1.data.data.todayInfo.lowest;
     Max43.value = response1.data.data.weekInfo.highest;
@@ -472,6 +521,10 @@ async function Danpzleft() {
     Sc42.value = response1.data.data.todayInfo.lowestMarket;
     Sc43.value = response1.data.data.weekInfo.highestMarket;
     Sc44.value = response1.data.data.weekInfo.lowestMarket;
+    Sc41suo.value = response1.data.data.todayInfo.highestMarket.slice(0, 14) + "...";
+    Sc42suo.value = response1.data.data.todayInfo.lowestMarket.slice(0, 14) + "...";
+    Sc43suo.value = response1.data.data.weekInfo.highestMarket.slice(0, 14) + "...";
+    Sc44suo.value = response1.data.data.weekInfo.lowestMarket.slice(0, 14) + "...";
     DanpzDuoscList.value = response1.data.data.averageInfo;
     bus.emit("DanpzDuoscList", DanpzDuoscList);
     // 如果需要根据响应数据更新图表，您应该在这里处理
@@ -551,39 +604,112 @@ function searchChange(tem) {
   }
 }
 
-function select1() {
+async function select1() {
+  isActive1.value=isActive2.value=isActive3.value=isActive4.value=false;
+  isActive1.value=true;
   show1.value = true;
   show2.value = show3.value = false;
   div1.value = div2.value = div3.value = div4.value = false;
   div1.value = true;
-  selectedCategorypz.value=selectedCategorysc.value=[];
-  selectedCategoryprvc.value="";
+  selectedCategorypz.value = selectedCategorysc.value = [];
+  selectedCategoryprvc.value = "";
   bus.emit("ChartBegin", "Quanguo");
+  try {
+    const postData = {
+      pz: "南瓜", // 假设API期望一个名为"message"的字段
+    };
+    PZtitle.value = "南瓜";
+    const response1 = await axios.post(apiUrlleft, postData, config);
+    Max11.value = response1.data.data.highestInfo.highest;
+    Min11.value = response1.data.data.lowestInfo.lowest;
+    Date11.value = response1.data.data.highestInfo.releaseTime;
+    Date11.value = Date11.value.slice(5);
+    Date12.value = response1.data.data.lowestInfo.releaseTime;
+    Date12.value = Date12.value.slice(5);
+    Sc11.value = response1.data.data.highestInfo.market;
+    Sc12.value = response1.data.data.lowestInfo.market;
+    QuanguoList.value = response1.data.data.averageInfo;
+    bus.emit("QuanguoList", QuanguoList);
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
-function select2() {
+async function select2() {
+  isActive1.value=isActive2.value=isActive3.value=isActive4.value=false;
+  isActive2.value=true;
   show1.value = show2.value = true;
   show3.value = false;
   div1.value = div2.value = div3.value = div4.value = false;
   div2.value = true;
-  selectedCategorypz.value=selectedCategorysc.value=[];
-  selectedCategoryprvc.value="";
+  selectedCategorypz.value = selectedCategorysc.value = [];
+  selectedCategoryprvc.value = "";
   bus.emit("ChartBegin", "Quansheng");
+  try {
+    const postData = {
+      pz: "南瓜", // 假设API期望一个名为"message"的字段
+      prvc: "江苏",
+    };
+    const response1 = await axios.post(apiUrlleft, postData, config);
+    Max21.value = response1.data.data.highestInfo.highest;
+    Min21.value = response1.data.data.lowestInfo.lowest;
+    Date21.value = response1.data.data.highestInfo.releaseTime;
+    Date21.value = Date21.value.slice(5);
+    Date22.value = response1.data.data.lowestInfo.releaseTime;
+    Date22.value = Date22.value.slice(5);
+    Date23.value = response1.data.data.averageInfo[0].price[0].releaseTime.slice(5);
+    Sc21.value = response1.data.data.highestInfo.market;
+    Sc22.value = response1.data.data.lowestInfo.market;
+    QuanshenList.value = response1.data.data.averageInfo;
+    bus.emit("QuanshenList", QuanshenList);
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
 function select3() {
+  isActive1.value=isActive2.value=isActive3.value=isActive4.value=false;
+  isActive3.value=true;
   show1.value = show2.value = show3.value = true;
   div1.value = div2.value = div3.value = div4.value = false;
   div3.value = true;
-  selectedCategorypz.value=selectedCategorysc.value=[];
-  selectedCategoryprvc.value="";
+  selectedCategorypz.value = selectedCategorysc.value = [];
+  selectedCategoryprvc.value = "";
   bus.emit("ChartBegin", "DanscDuopz");
 }
-function select4() {
+async function select4() {
+  isActive1.value=isActive2.value=isActive3.value=isActive4.value=false;
+  isActive4.value=true;
   show1.value = show2.value = show3.value = true;
   div1.value = div2.value = div3.value = div4.value = false;
   div4.value = true;
-  selectedCategorypz.value=selectedCategorysc.value=[];
-  selectedCategoryprvc.value="";
+  selectedCategorypz.value = selectedCategorysc.value = [];
+  selectedCategoryprvc.value = "";
   bus.emit("ChartBegin", "DanpzDuosc");
+  try {
+    const postData = {
+      pz: "南瓜", // 假设API期望一个名为"message"的字段
+      marketList: ["三门峡金河农产品批发交易中心", "上海农产品中心批发市场"],
+    };
+    const response1 = await axios.post(apiUrlleft4, postData, config);
+    Max41.value = response1.data.data.todayInfo.highest;
+    Min42.value = response1.data.data.todayInfo.lowest;
+    Max43.value = response1.data.data.weekInfo.highest;
+    Min44.value = response1.data.data.weekInfo.lowest;
+    Sc41.value = response1.data.data.todayInfo.highestMarket;
+    Sc42.value = response1.data.data.todayInfo.lowestMarket;
+    Sc43.value = response1.data.data.weekInfo.highestMarket;
+    Sc44.value = response1.data.data.weekInfo.lowestMarket;
+    Sc41suo.value = response1.data.data.todayInfo.highestMarket.slice(0, 14) + "...";
+    Sc42suo.value = response1.data.data.todayInfo.lowestMarket.slice(0, 14) + "...";
+    Sc43suo.value = response1.data.data.weekInfo.highestMarket.slice(0, 14) + "...";
+    Sc44suo.value = response1.data.data.weekInfo.lowestMarket.slice(0, 14) + "...";
+    DanpzDuoscList.value = response1.data.data.averageInfo;
+    bus.emit("DanpzDuoscList", DanpzDuoscList);
+    // 如果需要根据响应数据更新图表，您应该在这里处理
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
 </script>
 
@@ -698,6 +824,17 @@ function select4() {
   display: flex;
   width: 100%;
   height: 50px;
+  color: #1d382d;
+  font-size: 150%;
+  font-weight: 700;
+  text-align: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+.titleDate11 {
+  display: flex;
+  width: 100%;
+  height: 10px;
   color: #1d382d;
   font-size: 150%;
   font-weight: 700;
@@ -1015,14 +1152,362 @@ option {
   border-radius: 20px;
   border: none;
 }
-.el-selection:hover {
-  background-color: #f1e1e5;
+.el-selection11 {
+  background-color: #d7ede4;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg11 {
+    height: 50px;
+    background-image: url("@/assets/logo1.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #1d382d;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+}
+.el-selection11:hover {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg11 {
+    height: 50px;
+    background-image: url("@/assets/logo122.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
 }
 
+.el-selection11.active {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg11 {
+    height: 50px;
+    background-image: url("@/assets/logo122.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
+.el-selection22 {
+  background-color: #d7ede4;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg22 {
+    height: 50px;
+    background-image: url("@/assets/logo2.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #1d382d;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
+.el-selection22:hover {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  color: #ffffff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg22 {
+    height: 50px;
+    background-image: url("/src/assets/logo22.png");
+    background-size: 100%;
+    z-index: 42;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+}
+
+.el-selection22.active {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  color: #ffffff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg22 {
+    height: 50px;
+    background-image: url("/src/assets/logo22.png");
+    background-size: 100%;
+    z-index: 42;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+}
+.el-selection33 {
+  background-color: #d7ede4;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg33 {
+    height: 50px;
+    background-image: url("@/assets/logo3.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #1d382d;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
+.el-selection33:hover {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg33 {
+    height: 50px;
+    background-image: url("@/assets/logo32.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
+
+.el-selection33.active {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg33 {
+    height: 50px;
+    background-image: url("@/assets/logo32.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
+.el-selection44 {
+  background-color: #d7ede4;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg44 {
+    height: 50px;
+    background-image: url("@/assets/logo4.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #1d382d;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
+.el-selection44:hover {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg44 {
+    height: 50px;
+    background-image: url("@/assets/logo42.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
+
+.el-selection44.active {
+  background-color: #527865;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .sleimg44 {
+    height: 50px;
+    background-image: url("@/assets/logo42.png");
+    background-size: 100%;
+    z-index: 40;
+    width: 50px;
+    margin-top: -15px;
+  }
+  .sletext {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    color: #ffffff;
+    font-size: 120%;
+    margin-bottom: 10%;
+  }
+  transition: background-color 0.5s ease;
+}
 .sleimg {
   margin-top: -5px;
   height: 50px;
 }
+
 .sletext {
   justify-content: center;
   align-items: center;
@@ -1050,5 +1535,14 @@ option {
   flex-direction: row;
   margin-left: 30px;
   margin-right: 30px;
+}
+
+.el-selection:hover {
+  background-color: #527865;
+  width: 60%;
+  height: 20%;
+  border-radius: 20px;
+  border: none;
+  transition: background-color 0.5s ease;
 }
 </style>

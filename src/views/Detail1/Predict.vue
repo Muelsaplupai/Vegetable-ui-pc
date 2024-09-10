@@ -36,8 +36,8 @@ onMounted(() => {
   });
   bus.on("DanpzDuoscList", (e: any) => {
     pzList.value = e;
-    console.debug(pzList.value.value);
-    console.debug(chartData.value);
+    //console.debug(pzList.value.value);
+    //console.debug(chartData.value);
     chartData.value = pzList.value.value;
     chartData2.value = pzList.value.value;
     initChart();
@@ -45,8 +45,8 @@ onMounted(() => {
   });
   bus.on("DanscDuopzList", (e: any) => {
     pzList.value = e;
-    console.debug(pzList.value.value);
-    console.debug(chartData.value);
+    //console.debug(pzList.value.value);
+    //console.debug(chartData.value);
     chartData.value = pzList.value.value;
     chartData2.value = pzList.value.value;
     initChart();
@@ -54,8 +54,8 @@ onMounted(() => {
   });
   bus.on("QuanshenList", (e: any) => {
     pzList.value = e;
-    console.debug(pzList.value.value);
-    console.debug(chartData.value);
+    //console.debug(pzList.value.value);
+    //console.debug(chartData.value);
     chartData.value = pzList.value.value;
     chartData2.value = pzList.value.value;
     initChart();
@@ -63,8 +63,8 @@ onMounted(() => {
   });
   bus.on("QuanguoList", (e: any) => {
     pzList.value = e;
-    console.debug(pzList.value.value);
-    console.debug(chartData.value);
+    //console.debug(pzList.value.value);
+    //console.debug(chartData.value);
     chartData.value = pzList.value.value;
     chartData2.value = pzList.value.value;
     initChart();
@@ -89,11 +89,9 @@ function ChangeTitle(tem) {
     TableTitle.value = "单一品种全国平均价";
     Sheng.value = "";
     console.debug("单一品种全国平均价");
-    Search1();
   } else if (tem.value === "Quansheng") {
     TableTitle.value = "单一品种地区平均价";
     console.debug("单一品种地区平均价");
-    Search1();
   } else if (tem.value === "DanscDuopz") {
     TableTitle.value = "单一市场多品种对比";
     console.debug("单一市场多品种对比");
@@ -109,7 +107,7 @@ async function Search1() {
       prvc: Sheng.value, // 假设API期望一个名为"message"的字段
     };
     const response = await axios.post(apiUrl, postData, config);
-    console.debug(response.data.highestInfo);
+    //console.debug(response.data.highestInfo);
     // 如果需要根据响应数据更新图表，您应该在这里处理
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -187,6 +185,55 @@ function prepareData() {
     ),
   ].sort((a, b) => new Date(a) - new Date(b));
 }
+function transformData(responseData: any) {
+  const series = [];
+
+  responseData.forEach((marketInfo) => {
+    const regularData = marketInfo.price
+      .filter((p) => p.type === "")
+      .map((p) => p.average);
+
+    const dashedData = marketInfo.price
+      .filter((p) => p.type === "dashed")
+      .map((p) => p.average);
+
+    const lengthDifference = regularData.length;
+
+    const filledDashedData = [
+      ...Array(Math.max(lengthDifference, 0)).fill(null),
+      ...dashedData,
+    ];
+
+    if (regularData.length > 0) {
+      const lastRegularDataPoint = regularData[regularData.length - 1];
+      const lastNullIndex = filledDashedData.lastIndexOf(null);
+
+      if (lastNullIndex !== -1) {
+        filledDashedData[lastNullIndex] = lastRegularDataPoint;
+      }
+    }
+
+    series.push({
+      name: marketInfo.market,
+      type: "line",
+      lineStyle: {
+        type: "",
+      },
+      data: regularData,
+    });
+
+    series.push({
+      name: marketInfo.market,
+      type: "line",
+      lineStyle: {
+        type: "dashed",
+      },
+      data: filledDashedData,
+    });
+  });
+  console.debug(series);
+  return series;
+}
 
 function drawChart() {
   // const series = chartData.value.map((market1) => ({
@@ -200,24 +247,7 @@ function drawChart() {
   //     return price ? price.average : 0; // 如果找不到对应的日期，则使用0
   //   }),
   // }));
-  const series = [
-    {
-      name: "市场1",
-      type: "line",
-      lineStyle: {
-        type: "dashed",
-      },
-      data: [, , 140, 130],
-    },
-    {
-      name: "市场1",
-      type: "line",
-      lineStyle: {
-        type: "",
-      },
-      data: [120, 110, 140],
-    },
-  ];
+  const series = transformData(chartData.value);
   const option = {
     tooltip: {
       show: true,
@@ -231,7 +261,7 @@ function drawChart() {
       orient: "vertical",
       y: "center", //可设定图例在上、下、居中
       top: 45,
-      right: 20, // 定位，和副标题一排，且在右边
+      right: 90, // 定位，和副标题一排，且在右边
     },
     grid: {
       left: "5%",
@@ -248,7 +278,7 @@ function drawChart() {
     },
     xAxis: {
       type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu"], //xAxisDates.value,
+      data: xAxisDates.value,
       axisLabel: {
         padding: [10, 0, 0, -15], //文字左右定位
         textStyle: {
@@ -256,6 +286,7 @@ function drawChart() {
           fontSize: "10",
           itemSize: "",
         },
+        rotate: 45,
       },
       boundaryGap: true,
     },
