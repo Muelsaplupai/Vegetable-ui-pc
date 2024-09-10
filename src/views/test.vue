@@ -43,7 +43,7 @@
               监控全局
             </div>
             <br /><br /><br />
-            <button class="pagethirdbutton1" @click="predictbegin">点击详情</button>
+            <button class="pagethirdbutton1" @click="searchbegin">点击详情</button>
           </div></transition
         >
         <transition name="slide-up" v-show="isActive3 === true">
@@ -53,7 +53,7 @@
               洞悉未来
             </div>
             <br /><br /><br />
-            <button class="pagethirdbutton1" @click="predictbegin">点击详情</button>
+            <button class="pagethirdbutton1" @click="newsbegin">点击详情</button>
           </div></transition
         >
         <div
@@ -280,7 +280,7 @@ const moveToFn = () => {
 };
 
 function loading() {
-  router.push({ path: "/detail/search" });
+  router.push({ path: "/detail/mainmap" });
 }
 
 function test() {

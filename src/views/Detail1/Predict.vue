@@ -83,20 +83,20 @@ function Chage2() {
 }
 let chartInstance: any = null;
 const classIndex = ref();
-const TableTitle = ref("单一品种全国平均价");
+const TableTitle = ref("单一品种全国平均价(元/斤)");
 function ChangeTitle(tem) {
   if (tem.value === "Quanguo") {
-    TableTitle.value = "单一品种全国平均价";
+    TableTitle.value = "单一品种全国平均价(元/斤)";
     Sheng.value = "";
     console.debug("单一品种全国平均价");
   } else if (tem.value === "Quansheng") {
-    TableTitle.value = "单一品种地区平均价";
+    TableTitle.value = "单一品种地区平均价(元/斤)";
     console.debug("单一品种地区平均价");
   } else if (tem.value === "DanscDuopz") {
-    TableTitle.value = "单一市场多品种对比";
+    TableTitle.value = "单一市场多品种对比(元/斤)";
     console.debug("单一市场多品种对比");
   } else if (tem.value === "DanpzDuosc") {
-    TableTitle.value = "单一品种多市场对比";
+    TableTitle.value = "单一品种多市场对比(元/斤)";
     console.debug("单一品种多市场对比");
   }
 }

@@ -41,6 +41,7 @@ import { ref, computed, onMounted } from "vue";
 import bus from "../Main-1/bus";
 import test from "node:test";
 import { useRouter } from "vue-router";
+import axios from "axios";
 let currentPage = ref("SearchIns");
 let textmain=ref("数据查询");
 const router = useRouter();
@@ -49,6 +50,7 @@ const pageComponents = {
   NewsIns,
   AnalysisAndPredictIns,
 };
+
 function goEcharts() {
   router.push({ path: "/" });
 }

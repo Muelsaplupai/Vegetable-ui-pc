@@ -25,6 +25,7 @@ import VideoBackground from 'vue-responsive-video-background-player';
 import { ref, onMounted, onUnmounted, reactive, defineProps, toRefs, watch } from "vue";
 import { Apple } from "@element-plus/icons-vue"
 
+
 const fullpageRef = ref();
 const videobackground = ref();
 let index = ref();

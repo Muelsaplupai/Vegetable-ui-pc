@@ -10,11 +10,32 @@ import bus from '../Main-1/bus';
 const apiUrl = "http://192.168.63.221:8080/api/price/fall";  
 const dataToSend = "江苏"; // 要发送的字符串 
 const charts = ref(null);  
+const config = {
+  headers: {},
+};
 const List=ref();
+const apiurl22="http://192.168.63.221:8080/api/getpersonal";
+onMounted(async () => {
+  try {
+    const postData = {
+        username: localStorage.getItem("username")||"用户", 
+    };
+    const response = await axios.post(apiurl22, postData, config);
+    const sheng= response.data.data.prvc;
+    const pz22= response.data.data.pzList;
+    console.debug(8888888888888888888888888888888);
+    console.debug(sheng)
+    localStorage.setItem("prvc",sheng);
+    localStorage.setItem("pz",pz22);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+});
 // const xValue = ref([1, 1, 1, 2, 3]);  
 // const yValue = ref(["陕西移动", "山西移动", "北京移动", "山东移动", "河北移动"]);  
-const prvcname=ref("江苏");
+const prvcname=ref();
 onMounted(() => {
+  prvcname.value=localStorage.getItem("prvc")||"江苏";
   bus.on("prvc", (e: any) => {
     // 传参由回调函数中的形参接受
     const name=e;
@@ -148,7 +169,7 @@ watch(prvcname, async (newValue) => {
 onMounted(async () => {  
   try {  
     const postData = {  
-      prvc: dataToSend // 假设API期望一个名为"message"的字段  
+      prvc: prvcname.value // 假设API期望一个名为"message"的字段  
     }; 
     const response = await axios.post(apiUrl, postData, {  
       headers: {  

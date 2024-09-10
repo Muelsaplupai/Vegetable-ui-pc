@@ -157,7 +157,10 @@ async function regemail(){
     const response = await axios.post(apiUrl2, postData, config);
     console.debug(response);
     if (response.data.msg === "OK") {
-      regyanzheng();
+      ElMessage({
+          message: "验证码已发送",
+          type: "success",
+        });
     } else {
       {
         ElMessage.error("用户或密码不存在");
@@ -168,6 +171,7 @@ async function regemail(){
     console.error("Error fetching data:", error);
   }
 }
+
 onMounted(() => {
   bus.on("loginBegin", (e: any) => {
     // 传参由回调函数中的形参接受

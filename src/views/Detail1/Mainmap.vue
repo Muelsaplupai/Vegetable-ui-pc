@@ -4,7 +4,9 @@
       <div class="main-row1">
         <div class="main-col">
           <div class="main-col-header1">
-            <div style="margin-left: 10%; margin-top: 5%; font-weight:1000;">农产品价格涨幅排行</div>
+            <div style="margin-left: 10%; margin-top: 5%; font-weight: 1000">
+              {{prvcname+"农产品价格涨幅日排行(%)"}}
+            </div>
           </div>
           <div class="main-col-con1">
             <BoardIns />
@@ -12,19 +14,22 @@
         </div>
         <div class="main-col">
           <div class="main-col-header2">
-            <div style="margin-left: 10%; margin-top: 5%;font-weight:1000;">农产品价格跌幅排行</div>
+            <div style="margin-left: 10%; margin-top: 5%; font-weight: 1000">
+              {{prvcname+"农产品价格跌幅日排行(%)"}}
+            </div>
           </div>
           <div class="main-col-con1">
             <BoardDownIns />
           </div>
-          
         </div>
       </div>
       <MainBodyMid />
       <div class="main-row1">
         <div class="main-col">
           <div class="main-col-header3">
-            <div style="margin-left: 10%; margin-top: 5%;font-weight:1000;">“菜篮子”产品批发价格指数 </div>
+            <div style="margin-left: 10%; margin-top: 5%; font-weight: 1000">
+              “菜篮子”产品批发价格指数
+            </div>
           </div>
           <div class="main-col-con3">
             <twoindex />
@@ -32,7 +37,9 @@
         </div>
         <div class="main-col">
           <div class="main-col-header4">
-            <div style="margin-left: 10%; margin-top: 5%;font-weight:1000;">粮油产品批发价格指数</div>
+            <div style="margin-left: 10%; margin-top: 5%; font-weight: 1000">
+              粮油产品批发价格指数
+            </div>
           </div>
           <div class="main-col-con4">
             <twoindexplus />
@@ -42,7 +49,7 @@
     </div>
   </el-container>
 </template>
-<script setup>
+<script setup lang="ts">
 import HeaderIns from "@/views/Header.vue";
 import HeadermainIns from "@/views/Main-1/Header-main.vue";
 import BodyIns from "@/views/Detail1/Body.vue";
@@ -55,18 +62,25 @@ import RollIns from "@/views/Main-2/RollNews.vue";
 import VideoBackground from "vue-responsive-video-background-player";
 import LoginIns from "@/views/Main-1/Login.vue";
 import RegisterIns from "@/views/Main-1/Register.vue";
-import twoindex  from "@/views/Main-2/twoindex.vue"
-import twoindexplus from "@/views/Main-2/twoindexplus.vue"
+import twoindex from "@/views/Main-2/twoindex.vue";
+import twoindexplus from "@/views/Main-2/twoindexplus.vue";
 import { ref, onMounted, onUnmounted, reactive, defineProps, toRefs, watch } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import bus from "@/views/Main-1/bus";
 
-
-
-
-
-
+const prvcname = ref("江苏");
+const charts = ref(null);
+const List = ref();
+onMounted(() => {
+  prvcname.value=localStorage.getItem("prvc")||"";
+  bus.on("prvc", (e: any) => {
+    // 传参由回调函数中的形参接受
+    const name=e;
+    prvcname.value = name;
+    console.debug(prvcname.value);
+  });
+});
 </script>
 <style lang="less" scoped>
 .home-container {
