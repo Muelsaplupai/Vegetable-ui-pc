@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import { ElIcon, ElMessage } from "element-plus";
-import bus from "./bus";
+import bus from "../../Tools/bus";
 import { onMounted, ref } from "vue";
 const inputValue1 = ref("");
 const inputValue2 = ref("");

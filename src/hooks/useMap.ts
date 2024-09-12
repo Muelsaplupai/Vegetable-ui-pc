@@ -1,7 +1,7 @@
 import { reactive } from "vue";
 import * as echarts from "echarts";
 import { getGeojson } from "@/apis/index";
-import bus from "@/views/Main-1/bus";
+import bus from "@/views/Tools/bus";
 
 export const useMap = (
   setOption: (options: echarts.EChartsOption, opts?: echarts.SetOptionOpts) => void,

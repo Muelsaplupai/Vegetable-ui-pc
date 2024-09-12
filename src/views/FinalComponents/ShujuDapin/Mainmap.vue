@@ -50,13 +50,13 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import BoardDownIns from "../Main-2/BoardDown.vue";
-import MainBodyMid from "@/views/Main-2/Main-body-mid.vue";
-import BoardIns from "@/views/Main-2/Board.vue";
-import twoindex from "@/views/Main-2/twoindex.vue";
-import twoindexplus from "@/views/Main-2/twoindexplus.vue";
+import BoardDownIns from "./BoardDown.vue";
+import MainBodyMid from "@/views/FinalComponents/ShujuDapin/Main-body-mid.vue";
+import BoardIns from "@/views/FinalComponents/ShujuDapin/Board.vue";
+import twoindex from "@/views/FinalComponents/ShujuDapin/twoindex.vue";
+import twoindexplus from "@/views/FinalComponents/ShujuDapin/twoindexplus.vue";
 import { ref, onMounted } from "vue";
-import bus from "@/views/Main-1/bus";
+import bus from "@/views/Tools/bus";
 
 const prvcname = ref("江苏");
 onMounted(() => {

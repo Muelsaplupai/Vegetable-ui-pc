@@ -22,9 +22,9 @@
 import { onMounted, ref } from "vue";
 import type * as echarts from "echarts";
 
-import { useECharts } from "../hooks/useEcharts";
-import { useMap } from "../hooks/useMap";
-import { useLine } from "../hooks/useLine";
+import { useECharts } from "../../../hooks/useEcharts";
+import { useMap } from "../../../hooks/useMap";
+import { useLine } from "../../../hooks/useLine";
 
 const chartRef = ref();
 const { setOption, getInstance } = useECharts(chartRef, true);

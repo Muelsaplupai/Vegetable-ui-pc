@@ -132,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import bus from "./bus";
+import bus from "../../Tools/bus";
 import { onMounted, ref } from "vue";
 import axios from "axios"; // 确保已安装axios
 import { ElMessage } from "element-plus";

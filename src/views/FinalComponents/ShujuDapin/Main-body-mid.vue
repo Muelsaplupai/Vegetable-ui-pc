@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import MapIns from "@/views/Map.vue";
+import MapIns from "@/views/FinalComponents/ShujuDapin/Map.vue";
 import axios from "axios";
 import { onMounted, ref } from 'vue';  
 import * as echarts from 'echarts';  

@@ -13,14 +13,14 @@
 
 </template>
 <script setup>
-import HeaderIns from "@/views/Main-1/Header-main2.vue"
-import HeadermainIns from "@/views/Main-1/Header-main.vue"
-import BodyIns from "@/views/Detail1/Body.vue"
-import RoseIns from "@/views/Main-2/RoseMap.vue"
-import MainBodyMid from "@/views/Main-2/Main-body-mid.vue"
-import BarChartIns from "../Main-2/BarChart.vue"
-import BoardIns from "../Main-2/Board.vue"
-import RollIns from "../Main-2/RollNews.vue"
+import HeaderIns from "@/views/FinalComponents/NavHeader/Header-main2.vue"
+import HeadermainIns from "@/views/FinalComponents/NavHeader/Header-main.vue"
+import BodyIns from "@/views/FinalComponents/Analysis/Body.vue"
+
+import MainBodyMid from "@/views/FinalComponents/ShujuDapin/Main-body-mid.vue"
+import BarChartIns from "./Materials/BarChart.vue"
+import BoardIns from "./FinalComponents/ShujuDapin/Board.vue"
+
 import VideoBackground from 'vue-responsive-video-background-player';
 import { ref, onMounted, onUnmounted, reactive, defineProps, toRefs, watch } from "vue";
 import { Apple } from "@element-plus/icons-vue"

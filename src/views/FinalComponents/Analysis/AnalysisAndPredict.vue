@@ -257,7 +257,7 @@
 
 <script setup lang="ts">
 import PredictIns from "./Predict.vue";
-import bus from "@/views/Main-1/bus.ts";
+import bus from "@/views/Tools/bus";
 import { ElSelect, ElOption } from "element-plus";
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
@@ -439,6 +439,7 @@ onMounted(async () => {
       pz: localStorage.getItem("pz"), // 假设API期望一个名为"message"的字段
     };
     PZtitle.value =  localStorage.getItem("pz")||"";
+    console.debug("123129381239218"+ PZtitle.value)
     const response1 = await axios.post(apiUrlleft, postData, config);
     Max11.value = response1.data.data.highestInfo.highest;
     Min11.value = response1.data.data.lowestInfo.lowest;

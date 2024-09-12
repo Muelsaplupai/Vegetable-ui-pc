@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import * as echarts from "echarts";
 import { onMounted, ref, nextTick } from "vue";
-import bus from "@/views/Main-1/bus.ts";
+import bus from "@/views/Tools/bus";
 import axios from "axios"; // 确保已安装axios
 const config = {
   headers: {},

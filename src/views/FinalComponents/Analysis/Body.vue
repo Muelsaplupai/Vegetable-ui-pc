@@ -33,12 +33,12 @@
 
 <script setup>
 import GSymbol from "@/components/Gsymbol/GSymbol.vue";
-import SearchIns from "./Search.vue";
-import NewsIns from "./News.vue";
+import SearchIns from "../Search/Search.vue";
+import NewsIns from "../../Materials/News.vue";
 import PredictIns from "./Predict.vue";
 import AnalysisAndPredictIns from "./AnalysisAndPredict.vue";
 import { ref, computed, onMounted } from "vue";
-import bus from "../Main-1/bus";
+import bus from "../../Tools/bus";
 import test from "node:test";
 import { useRouter } from "vue-router";
 import axios from "axios";

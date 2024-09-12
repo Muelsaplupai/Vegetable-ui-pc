@@ -1,13 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import Map from "../views/ZhuYe.vue";
-import AnalysisAndPredict from '@/views/Detail1/AnalysisAndPredict.vue'
-import Search from '@/views/Detail1/Search.vue'
-import News from '@/views/Detail1/News.vue'
-import Advice from '@/views/Detail1/Advice.vue'
-import Mainmap from '@/views/Detail1/Mainmap.vue'
-import FarmerGuide from '@/views/Main-2/FarmerGuide.vue'
-import Company from '@/views/Main-2/Company.vue'
+import AnalysisAndPredict from '@/views/FinalComponents/Analysis/AnalysisAndPredict.vue'
+import Search from '@/views/FinalComponents/Search/Search.vue'
+import Mainmap from '@/views/FinalComponents/ShujuDapin/Mainmap.vue'
+import FarmerGuide from '@/views/FinalComponents/NewsandAdvice/FarmerGuide.vue'
+import Company from '@/views/FinalComponents/Company/Company.vue'
 import { ElMessage } from 'element-plus'
 const routes = [
   {
@@ -18,7 +15,7 @@ const routes = [
   {
     path: "/detail",
     name: "detail",
-    component: () => import('../views/Detail1/detail.vue'),
+    component: () => import('../views/detail.vue'),
     children: [
       { path: 'search', component: Search , meta: { requiresAuth: true }},
       { path: 'analysis', component: AnalysisAndPredict, meta: { requiresAuth: true } },
