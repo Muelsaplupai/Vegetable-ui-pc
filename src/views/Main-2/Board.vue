@@ -8,7 +8,7 @@ import * as echarts from 'echarts';
 import axios from 'axios'; // 确保已安装axios  
 import bus from '../Main-1/bus';
 const apiUrl = "http://192.168.63.221:8080/api/price/rise";  
-const dataToSend = "江苏"; 
+
 const config = {
   headers: {},
 };

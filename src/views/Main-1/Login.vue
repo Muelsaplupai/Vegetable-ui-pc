@@ -31,7 +31,7 @@
         :placeholder="placeholderText2"
       ></el-input>
       <button @click="regBegin" class="regBtn">没有账号？点击注册</button>
-    <button @click="logBegin" class="loginBtn">登录</button>
+      <button @click="logBegin" class="loginBtn">登录</button>
     </div>
     <div v-show="showlog2">
       <el-input
@@ -54,9 +54,8 @@
         ><button class="confirm" @click="regemail">获取验证码</button>
       </div>
       <button @click="regBegin" class="regBtn">没有账号？点击注册</button>
-    <button @click="regyanzheng" class="loginBtn" >登录</button>
+      <button @click="regyanzheng" class="loginBtn">登录</button>
     </div>
-    
   </div>
 </template>
 
@@ -76,8 +75,6 @@ const placeholderText4 = ref("验证码");
 let showdetail = ref(false);
 let showlog1 = ref(true);
 let showlog2 = ref(false);
-
-
 
 let stylecolor1 = ref("#527865");
 let stylecolor2 = ref("#ffffff");
@@ -99,8 +96,12 @@ async function logBegin() {
     if (response.data.msg === "OK") {
       showdetail.value = false;
       {
-        localStorage.setItem("username", inputValue1.value);
         localStorage.setItem("token", response.data.data);
+
+        if (localStorage.getItem("username")) {
+          localStorage.removeItem("username");
+          localStorage.setItem("username", inputValue1.value);
+        }
         ElMessage({
           message: "登录成功",
           type: "success",
@@ -120,19 +121,24 @@ async function logBegin() {
   }
 }
 
-
-async function regyanzheng(){
+async function regyanzheng() {
   try {
     const postData = {
       email: inputValue3.value,
-      vcode: inputValue4.value
+      vcode: inputValue4.value,
     };
     const response = await axios.post(apiUrl3, postData, config);
     console.debug(response);
     if (response.data.msg === "OK") {
       showdetail.value = false;
-      localStorage.setItem("username", inputValue1.value);
+
       localStorage.setItem("token", response.data.data);
+
+      if (localStorage.getItem("username")) {
+        localStorage.removeItem("username");
+        localStorage.setItem("username", inputValue1.value);
+      }
+
       {
         ElMessage({
           message: "登录成功",
@@ -149,7 +155,7 @@ async function regyanzheng(){
     console.error("Error fetching data:", error);
   }
 }
-async function regemail(){
+async function regemail() {
   try {
     const postData = {
       email: inputValue3.value,
@@ -158,9 +164,9 @@ async function regemail(){
     console.debug(response);
     if (response.data.msg === "OK") {
       ElMessage({
-          message: "验证码已发送",
-          type: "success",
-        });
+        message: "验证码已发送",
+        type: "success",
+      });
     } else {
       {
         ElMessage.error("用户或密码不存在");

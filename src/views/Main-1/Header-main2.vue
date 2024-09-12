@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import bus from "./bus";
-import { defineComponent, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 const username=ref("登录/注册");
@@ -81,7 +81,7 @@ watch(
   { immediate: true, deep: true }
 );
 
-function changeact(tem) {
+function changeact(tem: string) {
   if (tem === "/detail/news") {
     isActive1.value=isActive2.value=isActive3.value=isActive4.value=isActive5.value=false;
     isActive4.value=true;

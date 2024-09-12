@@ -2,13 +2,6 @@
   <div class="search">
     <div class="searchinput">
       <div class="searchitem">
-        <div class="searchtext">品种 :</div>
-        <el-select v-model="pz" filterable placeholder="品种" class="select" ref="ref1">
-          <el-option v-for="item in categories3" :key="item" :label="item" :value="item">
-          </el-option>
-        </el-select>
-      </div>
-      <div class="searchitem">
         <div class="searchtext">省份 :</div>
         <!-- 类似地添加省份和城市的选择器 -->
         <el-select
@@ -41,7 +34,13 @@
           </el-option>
         </el-select>
       </div>
-
+      <div class="searchitem">
+        <div class="searchtext">品种 :</div>
+        <el-select v-model="pz" filterable placeholder="品种" class="select" ref="ref1">
+          <el-option v-for="item in categories3" :key="item" :label="item" :value="item">
+          </el-option>
+        </el-select>
+      </div>
       <el-button class="searchbtn" type="primary" @click="fetchData" ref="buttonRef"
         >查询</el-button
       >
@@ -103,33 +102,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, unref } from "vue";
-import { ElSelect, ElOption, ElButton, ElTour, ComponentSize } from "element-plus";
+import { ref, onMounted, watch, unref } from "vue";
+import { ElSelect, ElOption, ElButton } from "element-plus";
 // 确保你引入了 EasyDataTable 及其类型定义
 import EasyDataTable from "vue3-easy-data-table";
-import type { Header, Item, ServerOptions } from "vue3-easy-data-table";
+import type { Header, Item } from "vue3-easy-data-table";
 import axios from "axios"; // 确保已安装axios
 import * as XLSX from "xlsx";
 const exportTableRef = ref(null);
 const exportTableRef1 = ref(null);
-const pageSize = ref(10);
-const pageNum = ref(1);
+// const pageSize = ref(10);
+// const pageNum = ref(1);
 const totalLine = ref(50);
-const size = ref<ComponentSize>("default");
-const background = ref(false);
-const disabled = ref(false);
-const radio1 = ref("供应");
-const value = ref("");
-const selectedProvince = ref();
-const selectedPz = ref();
-const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
-  pageNum.value = val; // 更新当前页码
-  // search(); // 根据新的当前页码获取数据
-};
-const list = ref([
-  // 表格数据
-]);
+// const size = ref<ComponentSize>("default");
+// const background = ref(false);
+// const disabled = ref(false);
+// const radio1 = ref("供应");
+// const value = ref("");
+// const selectedProvince = ref();
+// const selectedPz = ref();
+// const handleCurrentChange = (val) => {
+//   console.log(`current page: ${val}`);
+//   pageNum.value = val; // 更新当前页码
+//   // search(); // 根据新的当前页码获取数据
+// };
+// const list = ref([
+//   // 表格数据
+// ]);
 const config = {
   headers: {},
 };
@@ -207,21 +206,21 @@ onMounted(async () => {
   }
 });
 
-async function search() {
-  try {
-    const postData = {
-      pz: pz,
-      pageSize: 10, // 假设API期望一个名为"message"的字段
-      pageNum: 1,
-    };
-    const response = await axios.post(apiUrlFinal, postData, config);
-    items.value = response.data.data.priceList;
+// async function search() {
+//   try {
+//     const postData = {
+//       pz: pz,
+//       pageSize: 10, // 假设API期望一个名为"message"的字段
+//       pageNum: 1,
+//     };
+//     const response = await axios.post(apiUrlFinal, postData, config);
+//     items.value = response.data.data.priceList;
 
-    // 如果需要根据响应数据更新图表，您应该在这里处理
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
+//     如果需要根据响应数据更新图表，您应该在这里处理
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
 // 组件注册（如果需要在局部注册 Element Plus 组件）
 // 通常在 main.ts 或全局注册 Element Plus
 const Sheng = ref();
@@ -231,9 +230,9 @@ const headers: Header[] = [
   { text: "品类", value: "pz" },
   { text: "省", value: "prvc" },
   { text: "市场", value: "market" },
-  { text: "平均价格", value: "average", sortable: true },
-  { text: "最高价格", value: "highest", sortable: true },
-  { text: "最低价格", value: "lowest", sortable: true },
+  { text: "平均价格（元/斤）", value: "average", sortable: true },
+  { text: "最高价格（元/斤）", value: "highest", sortable: true },
+  { text: "最低价格（元/斤）", value: "lowest", sortable: true },
   { text: "日期", value: "releaseTime", sortable: true },
 ];
 
@@ -279,9 +278,9 @@ const categories1 = [
 const categories2 = ref(["常州", "赤峰", "南京"]);
 const categories3 = ref(["番茄", "马铃薯", "茄子"]);
 
-const selectedCategory1 = ref("");
+//const selectedCategory1 = ref("");
 const selectedCategory2 = ref("");
-const selectedCategory3 = ref("");
+//const selectedCategory3 = ref("");
 
 // 添加筛选逻辑（根据选中的分类筛选数据）
 function clearData() {

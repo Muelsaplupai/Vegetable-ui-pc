@@ -226,12 +226,17 @@ async function reg2() {
       console.debug("success");
       showdetail.value = false;
       ElMessage({
-          message: "注册成功",
-          type: "success",
-        });
+        message: "注册成功",
+        type: "success",
+      });
+      if (localStorage.getItem("username")) {
+        localStorage.removeItem("username");
         localStorage.setItem("username", inputValue1.value);
+      }
+
         localStorage.setItem("token", response.data.data);
-        bus.emit("username", inputValue1.value);
+      
+      bus.emit("username", inputValue1.value);
       bus.emit("username1", inputValue1.value);
     }
     // 如果需要根据响应数据更新图表，您应该在这里处理

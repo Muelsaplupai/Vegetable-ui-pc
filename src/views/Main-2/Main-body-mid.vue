@@ -2,11 +2,11 @@
   <div class="main-row2">
     <div class="mid-up">
       <div class="mid-up-item1">
-        市场总数<br /><br />
+       品种总数<br /><br />
         <div class="mid-up-item0">{{ data1 }}</div>
       </div>
       <div class="mid-up-item">
-        品种总数<br /><br />
+        市场总数<br /><br />
         <div class="mid-up-item0">{{ data2 }}</div>
       </div>
       <div class="mid-up-item">

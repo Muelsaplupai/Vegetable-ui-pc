@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import Map from "../views/test.vue";
+import Map from "../views/ZhuYe.vue";
 import AnalysisAndPredict from '@/views/Detail1/AnalysisAndPredict.vue'
 import Search from '@/views/Detail1/Search.vue'
 import News from '@/views/Detail1/News.vue'
@@ -13,7 +13,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import('../views/test.vue')
+    component: () => import('../views/ZhuYe.vue')
   },
   {
     path: "/detail",

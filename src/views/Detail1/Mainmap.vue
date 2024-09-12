@@ -5,7 +5,7 @@
         <div class="main-col">
           <div class="main-col-header1">
             <div style="margin-left: 10%; margin-top: 5%; font-weight: 1000">
-              {{prvcname+"农产品价格涨幅日排行(%)"}}
+              {{prvcname+"农产品价格涨幅日排行"}}
             </div>
           </div>
           <div class="main-col-con1">
@@ -15,7 +15,7 @@
         <div class="main-col">
           <div class="main-col-header2">
             <div style="margin-left: 10%; margin-top: 5%; font-weight: 1000">
-              {{prvcname+"农产品价格跌幅日排行(%)"}}
+              {{prvcname+"农产品价格跌幅日排行"}}
             </div>
           </div>
           <div class="main-col-con1">
@@ -50,28 +50,15 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import HeaderIns from "@/views/Header.vue";
-import HeadermainIns from "@/views/Main-1/Header-main.vue";
-import BodyIns from "@/views/Detail1/Body.vue";
 import BoardDownIns from "../Main-2/BoardDown.vue";
-import RoseIns from "@/views/Main-2/RoseMap.vue";
 import MainBodyMid from "@/views/Main-2/Main-body-mid.vue";
-import BarChartIns from "@/views/Main-2/BarChart.vue";
 import BoardIns from "@/views/Main-2/Board.vue";
-import RollIns from "@/views/Main-2/RollNews.vue";
-import VideoBackground from "vue-responsive-video-background-player";
-import LoginIns from "@/views/Main-1/Login.vue";
-import RegisterIns from "@/views/Main-1/Register.vue";
 import twoindex from "@/views/Main-2/twoindex.vue";
 import twoindexplus from "@/views/Main-2/twoindexplus.vue";
-import { ref, onMounted, onUnmounted, reactive, defineProps, toRefs, watch } from "vue";
-import { useRouter } from "vue-router";
-import axios from "axios";
+import { ref, onMounted } from "vue";
 import bus from "@/views/Main-1/bus";
 
 const prvcname = ref("江苏");
-const charts = ref(null);
-const List = ref();
 onMounted(() => {
   prvcname.value=localStorage.getItem("prvc")||"";
   bus.on("prvc", (e: any) => {

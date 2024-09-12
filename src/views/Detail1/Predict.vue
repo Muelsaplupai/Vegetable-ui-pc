@@ -258,10 +258,12 @@ function drawChart() {
       },
     },
     legend: {
+      
+    show: true,
       orient: "vertical",
       y: "center", //可设定图例在上、下、居中
       top: 45,
-      right: 90, // 定位，和副标题一排，且在右边
+      right: 20, // 定位，和副标题一排，且在右边
     },
     grid: {
       left: "5%",

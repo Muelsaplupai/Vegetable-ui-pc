@@ -304,14 +304,14 @@ const Date21 = ref("01-01");
 const Date22 = ref("01-01");
 const Date23 = ref("01-01");
 const SCtitle = ref("北京京丰岳各庄农副产品批发市场");
-const Max31 = ref(18);
-const Min32 = ref(18);
-const Pz31 = ref("番茄");
-const Pz32 = ref("番茄");
-const Max33 = ref(18);
-const Min34 = ref(18);
-const Pz33 = ref("番茄");
-const Pz34 = ref("番茄");
+const Max31 = ref(8.8);
+const Min32 = ref(0.75);
+const Pz31 = ref("生姜");
+const Pz32 = ref("土豆");
+const Max33 = ref(8.8);
+const Min34 = ref(0.75);
+const Pz33 = ref("生姜");
+const Pz34 = ref("土豆");
 // const date31 = ref("2024-01-01");
 // const date32 = ref("2024-01-01");
 // const date33 = ref("2024-01-01");
@@ -345,6 +345,7 @@ const isActive2=ref(false);
 const isActive3=ref(false);
 const isActive4=ref(false);
 onMounted(async () => {
+  select1();
   try {
     const postData = {
       prvc: selectedCategoryprvc.value, // 假设API期望一个名为"message"的字段
@@ -435,9 +436,9 @@ const categoriesprvc = [
 onMounted(async () => {
   try {
     const postData = {
-      pz: "南瓜", // 假设API期望一个名为"message"的字段
+      pz: localStorage.getItem("pz"), // 假设API期望一个名为"message"的字段
     };
-    PZtitle.value = "南瓜";
+    PZtitle.value =  localStorage.getItem("pz")||"";
     const response1 = await axios.post(apiUrlleft, postData, config);
     Max11.value = response1.data.data.highestInfo.highest;
     Min11.value = response1.data.data.lowestInfo.lowest;
@@ -486,6 +487,7 @@ async function Quanshenleft() {
       prvc: selectedCategoryprvc.value,
       isPrediction: SearchPredict.value,
     };
+    PZtitle.value= selectedCategorypz.value[0];
     const response1 = await axios.post(apiUrlleft, postData, config);
     Max21.value = response1.data.data.highestInfo.highest;
     Min21.value = response1.data.data.lowestInfo.lowest;
@@ -510,6 +512,7 @@ async function Danpzleft() {
       marketList: selectedCategorysc.value,
       isPrediction: SearchPredict.value,
     };
+    PZtitle.value= selectedCategorypz.value[0];
     const response1 = await axios.post(apiUrlleft4, postData, config);
     console.debug(response1.data.data);
     Max41.value = response1.data.data.todayInfo.highest;
@@ -615,9 +618,9 @@ async function select1() {
   bus.emit("ChartBegin", "Quanguo");
   try {
     const postData = {
-      pz: "南瓜", // 假设API期望一个名为"message"的字段
+      pz: localStorage.getItem("pz"), // 假设API期望一个名为"message"的字段
     };
-    PZtitle.value = "南瓜";
+    PZtitle.value = localStorage.getItem("pz")||"";
     const response1 = await axios.post(apiUrlleft, postData, config);
     Max11.value = response1.data.data.highestInfo.highest;
     Min11.value = response1.data.data.lowestInfo.lowest;

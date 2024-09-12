@@ -47,7 +47,7 @@
           </div></transition
         >
         <transition name="slide-up" v-show="isActive3 === true">
-          <div class="text3" >
+          <div class="text3">
             <div class="maintext31">
               最新动态<br /><br />
               洞悉未来
@@ -109,7 +109,6 @@
           </transition-group>
         </div>
       </div>
-
     </full-page>
   </div>
 </template>
@@ -129,30 +128,35 @@ import { ref, onMounted, onUnmounted, reactive, defineProps, toRefs, watch } fro
 import { useRouter } from "vue-router";
 import axios from "axios";
 import bus from "@/views/Main-1/bus";
-// 替换为你的 Apifox Mock URL
-const apiUrl = "https://192.168.63.221/price/twoindex";
-const items = ref([]);
 
-onMounted(async () => {
-  try {
-    const response = await axios.get(apiUrl);
-    items.value = response.data;
-    console.debug("catch");
-    console.debug(response.data);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-});
+//实现跳转
 const router = useRouter();
+
+//fullpage引用
 const fullpageRef = ref();
+
+//背景视频引用
 const videobackground = ref();
 
-let index = ref();
-let indexleave = ref();
+// 图片初始宽度
+const widths = ref(["520px", "520px", "520px"]); 
 
+// 设置不同的背景
+const images = ref([
+  "@/assets/background2.jpg",
+  "@/assets/background5.jpg",
+  "@/assets/background4.jpg",
+]); 
+
+//下方板块高亮设置
 const isActive1 = ref(false);
 const isActive2 = ref(false);
 const isActive3 = ref(false);
+const currentIndex = ref(0);
+let index = ref();
+let indexleave = ref();
+const booljus = ref(true);
+
 const setActive = (index) => {
   // 重置所有按钮的状态
   isActive1.value = false;
@@ -173,21 +177,12 @@ const setActive = (index) => {
   }
 };
 
-const widths = ref(["520px", "520px", "520px"]); // 初始宽度
-const colors = ref(["red", "blue", "green"]); // 为每个div设置不同的背景颜色
-const images = ref([
-  "@/assets/background2.jpg",
-  "@/assets/background5.jpg",
-  "@/assets/background4.jpg",
-]); // 为每个div设置不同的背景颜色
-
-const currentIndex = ref(0);
-const booljus = ref(true);
+//第二页动画
 const cycleAnimations = () => {
   setTimeout(() => {
-    setActive(currentIndex.value+1);
-    }, 0);
-  
+    setActive(currentIndex.value + 1);
+  }, 0);
+
   const newWidths = ["520px", "520px", "520px"]; // 重置宽度
   newWidths[currentIndex.value] = "1560px"; // 当前索引的div扩展
 
@@ -197,12 +192,14 @@ const cycleAnimations = () => {
   // 更新状态和宽度
   currentIndex.value = (currentIndex.value + 1) % 3;
   widths.value = newWidths;
-  console.debug( currentIndex.value);
+  console.debug(currentIndex.value);
 };
+
+//同时支持鼠标点击
 const cycleclick = (value) => {
   setTimeout(() => {
-      setActive(value + 1);
-    }, 0);
+    setActive(value + 1);
+  }, 0);
   const newWidths = ["520px", "520px", "520px"]; // 重置宽度
   newWidths[value] = "1560px"; // 当前索引的div扩展
 
@@ -214,22 +211,19 @@ const cycleclick = (value) => {
   console.debug(currentIndex.value);
   widths.value = newWidths;
 };
+
+
+//fullpage相关设置
 const options = reactive({
   licenseKey: "OPEN-SOURCE-GPLV3-LICENSE",
   //是否显示导航，默认为false
   navigation: false,
   controlArrows: false,
-  //为每个section设置背景色
-  // sectionsColor: [
-  //     "#BACEC6", "#BACEC6", "#BACEC6",
-  //     "#BACEC6", "#BACEC6", "#BACEC6",
-  //     "#BACEC6", "#BACEC6", "#BACEC6"
-  // ],
   afterLoad: (origin, destination, direction) => {
     index = destination.index + 1;
     //console.debug('!!!'+index.value);
     if (index === 1) {
-      testw(index);
+      videoplay(index);
     }
   },
   onLeave: (origin, destination, direction) => {
@@ -245,10 +239,14 @@ const options = reactive({
     }
   },
 });
-function testw(index) {
+
+//修复不在当页仍然播放的bug
+function videoplay(index) {
   videobackground.value.player.play();
 }
 
+
+//fullpage的相关api
 const upFn = () => {
   // 向上滚动一页
   fullpageRef?.value?.api.moveSectionUp();
@@ -279,13 +277,15 @@ const moveToFn = () => {
   // fullpage_api.moveTo(3);
 };
 
+
+//导航栏的跳转
 function loading() {
   router.push({ path: "/detail/mainmap" });
 }
 
-function test() {
-  console.debug(showmask.value);
-}
+// function test() {
+//   console.debug(showmask.value);
+// }
 
 function predictbegin() {
   router.push({ path: "/detail/analysis" });
@@ -300,13 +300,12 @@ function newsbegin() {
 // 创建响应式变量
 const initialIndex = ref(0); // 假设这是你的初始索引
 
-
 // 监听鼠标滚动事件
 function handleScroll(e) {
   // 判断滚动方向
   let direction = e.deltaY > 0 ? "down" : "up";
   //console.debug(e.deltaY);
-  // 处理滚动逻辑
+
   // if (direction === "down" && e.deltaY >= 100 && index === 2) {
   //   rightFn();
   // }
@@ -319,7 +318,6 @@ function handleScroll(e) {
   if (direction === "down" && e.deltaY >= 100 && index === 2 && booljus.value) {
     booljus.value = false;
     //console.debug("111111!!!!!!");
-
     cycleAnimations();
     setTimeout(() => {
       booljus.value = true;
@@ -327,7 +325,7 @@ function handleScroll(e) {
   }
 }
 
-// 组件挂载时添加事件监听器
+// fullpage使用滚轮
 onMounted(() => {
   window.addEventListener("wheel", handleScroll); // 注意：'mousewheel' 在某些浏览器中可能不被支持，建议使用 'wheel'
 });
@@ -689,5 +687,4 @@ onMounted(() => {
   /* 向上移动的距离，可以根据需要调整 */
   transform: translateY(50px);
 }
-
 </style>
